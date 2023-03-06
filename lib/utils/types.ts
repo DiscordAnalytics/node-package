@@ -19,7 +19,7 @@ export const ErrorCodes = {
 }
 
 export const ApiEndpoints = {
-    BASE_URL: 'https://discord-analytics.vercel.app/api',
+    BASE_URL: 'https://discord-analytics.com/api', // TODO: Change the URL when we have a domain
     TRACK_URL: '/track',
     ROUTES: {
         INTERACTIONS: '/interactions',
@@ -29,9 +29,5 @@ export const ApiEndpoints = {
         GUILD_DELETE: '/guild/delete',
         USER_COUNT: '/user/count',
         USER_LANGUAGE: '/user/language'
-    },
-    METHODS: {
-        POST: 'POST',
-        GET: 'GET'
     }
 }

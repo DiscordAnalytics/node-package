@@ -1,6 +1,6 @@
 import { Client as DJSClient } from 'discord.js';
-import { Client as ErisClient } from 'eris';
-import { EventsToTrack, LibType, ErrorCodes } from '../utils/types';
+import { Client as ErisClient, PingInteraction } from 'eris';
+import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types';
 
 /**
  * @class DiscordAnalytics
@@ -83,14 +83,69 @@ export default class DiscordAnalytics {
         if (this._client instanceof DJSClient) {
             if (this._eventsToTrack.trackInteractions) {
                 this._client.on('interactionCreate', (interaction) => {
-                    
+                    fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.TRACK_URL}${ApiEndpoints.ROUTES.INTERACTIONS}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: this._eventsToTrack.trackUserCount ?
+                            this._eventsToTrack.trackUserLanguage ?
+                                JSON.stringify({
+                                    id: interaction.id,
+                                    type: interaction.type,
+                                    user: {
+                                        id: interaction.user.id,
+                                        locale: interaction.locale,
+                                        bot: interaction.user.bot
+                                    },
+                                    guild: interaction.guild ? {
+                                        id: interaction.guild.id,
+                                        memberCount: interaction.guild.memberCount
+                                    } : null
+                                }) :
+                                JSON.stringify({
+                                    id: interaction.id,
+                                    type: interaction.type,
+                                    user: {
+                                        id: interaction.user.id,
+                                        bot: interaction.user.bot
+                                    },
+                                    guild: interaction.guild ? {
+                                        id: interaction.guild.id,
+                                        memberCount: interaction.guild.memberCount
+                                    } : null
+                                }) :
+                            this._eventsToTrack.trackUserLanguage ?
+                                JSON.stringify({
+                                    id: interaction.id,
+                                    type: interaction.type,
+                                    user: {
+                                        id: interaction.user.id,
+                                        locale: interaction.locale,
+                                        bot: interaction.user.bot
+                                    },
+                                    guild: interaction.guild ? {
+                                        id: interaction.guild.id
+                                    } : null
+                                }) :
+                                JSON.stringify({
+                                    id: interaction.id,
+                                    type: interaction.type,
+                                    user: {
+                                        id: interaction.user.id,
+                                        bot: interaction.user.bot
+                                    },
+                                    guild: interaction.guild ? {
+                                        id: interaction.guild.id
+                                    } : null
+                                })
+                    });
                 });
             }
         }
     }
 
     private trackErisEvents(): void {
-        if (this._client instanceof ErisClient) {
-        }
+        console.log('Eris events are not yet supported.');
     }
 }

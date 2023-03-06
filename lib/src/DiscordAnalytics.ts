@@ -1,5 +1,5 @@
 import { Client as DJSClient } from 'discord.js';
-import { Client as ErisClient, PingInteraction } from 'eris';
+import { Client as ErisClient } from 'eris';
 import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types';
 
 /**

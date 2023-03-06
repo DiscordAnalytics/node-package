@@ -1,0 +1,35 @@
+{
+  "name": "discord-analytics",
+  "version": "1.0.0",
+  "description": "A discord bot analytics to send your bot data",
+  "main": "dist/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ValDesign22/discord-analytics-js.git"
+  },
+  "keywords": [
+    "Javascript",
+    "Discord",
+    "Discord.js",
+    "Eris",
+    "API",
+    "Analytics"
+  ],
+  "author": "ValDesign Nolhan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ValDesign22/discord-analytics-js/issues"
+  },
+  "homepage": "https://github.com/ValDesign22/discord-analytics-js#readme",
+  "dependencies": {
+    "axios": "^1.3.4",
+    "discord.js": "^14.7.1",
+    "eris": "^0.17.1"
+  }
+}

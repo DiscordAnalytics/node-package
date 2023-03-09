@@ -19,7 +19,7 @@ import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types
  *   trackGuildDelete: true,
  *   trackGuildCreate: true,
  *   trackUserCount: true
- * });
+ * }, "YOUR_API_TOKEN");
  * client.on('ready', () => {
  *   da.trackEvents();
  * });
@@ -28,13 +28,15 @@ import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types
 export default class DiscordAnalytics {
   private readonly _client: DJSClient | ErisClient;
   private _eventsToTrack: EventsToTrack;
+  private _apiToken: string;
 
-  constructor(client: DJSClient | ErisClient, type: LibType, eventsToTrack: EventsToTrack) {
+  constructor(client: DJSClient | ErisClient, type: LibType, eventsToTrack: EventsToTrack, apiToken: string) {
     if (type === LibType.DJS && client instanceof DJSClient) this._client = client;
     if (type === LibType.ERIS && client instanceof ErisClient) this._client = client;
     else throw new Error(ErrorCodes.INVALID_CLIENT_TYPE);
 
     this._eventsToTrack = eventsToTrack;
+    this._apiToken = apiToken;
   }
 
   /**
@@ -69,7 +71,8 @@ export default class DiscordAnalytics {
           fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.TRACK_URL}${ApiEndpoints.ROUTES.INTERACTIONS}`, {
             method: 'POST',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': this._apiToken
               },
               body: this._eventsToTrack.trackUserCount ?
                 this._eventsToTrack.trackUserLanguage ?

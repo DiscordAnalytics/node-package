@@ -22,11 +22,6 @@ export const ApiEndpoints = {
   TRACK_URL: '/track',
   ROUTES: {
     INTERACTIONS: '/interactions',
-    MESSAGE_CREATE: '/message/create',
-    MESSAGE_DELETE: '/message/delete',
-    GUILD_CREATE: '/guild/create',
-    GUILD_DELETE: '/guild/delete',
-    USER_COUNT: '/user/count',
-    USER_LANGUAGE: '/user/language'
+    GUILDS: '/guilds',
   }
 }

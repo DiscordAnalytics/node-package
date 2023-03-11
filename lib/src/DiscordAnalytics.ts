@@ -66,8 +66,9 @@ export default class DiscordAnalytics {
 
   private trackDJSEvents(): void {
     if (this._client instanceof DJSClient) {
+      const client = this._client as DJSClient;
       if (this._eventsToTrack.trackInteractions) {
-        this._client.on('interactionCreate', (interaction) => {
+        client.on('interactionCreate', (interaction) => {
           fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.TRACK_URL}${ApiEndpoints.ROUTES.INTERACTIONS}`, {
             method: 'POST',
               headers: {
@@ -77,15 +78,55 @@ export default class DiscordAnalytics {
               body: JSON.stringify({
                 type: interaction.type,
                 userLocale: this._eventsToTrack.trackUserLanguage ? interaction.locale : null,
-                guild: {
-                  memberCount: this._eventsToTrack.trackUserCount ? interaction.guild.memberCount : null,
-                  locale: this._eventsToTrack.trackGuildsLocale ? interaction.guild.preferredLocale : null
+                guildLocale: this._eventsToTrack.trackGuildsLocale ? interaction.guild.preferredLocale : null,
+                includedInfos: {
+                  userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
+                  guildCount: this._eventsToTrack.trackGuilds ? client.guilds.cache.size : null
                 }
               })
           }).then(r => {
             if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
           });
         });
+      }
+      if (this._eventsToTrack.trackGuilds) {
+        client.on("guildCreate", (guild) => {
+          fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.TRACK_URL}${ApiEndpoints.ROUTES.GUILDS}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': this._apiToken
+            },
+            body: JSON.stringify({
+              guildLocale: this._eventsToTrack.trackGuildsLocale ? guild.preferredLocale : null,
+              includedInfos: {
+                userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
+                guildCount: this._eventsToTrack.trackGuilds ? client.guilds.cache.size : null
+              }
+            })
+          }).then(r => {
+            if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+          });
+        })
+
+        client.on("guildDelete", (guild) => {
+          fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.TRACK_URL}${ApiEndpoints.ROUTES.GUILDS}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': this._apiToken
+            },
+            body: JSON.stringify({
+              guildLocale: this._eventsToTrack.trackGuildsLocale ? guild.preferredLocale : null,
+              includedInfos: {
+                userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
+                guildCount: this._eventsToTrack.trackGuilds ? client.guilds.cache.size : null
+              }
+            })
+          }).then(r => {
+            if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+          });
+        })
       }
     }
   }

@@ -5,10 +5,7 @@ export enum LibType {
 
 export interface EventsToTrack {
   trackInteractions: boolean;
-  trackMessageCreate: boolean;
-  trackMessageDelete: boolean;
-  trackGuildDelete: boolean;
-  trackGuildCreate: boolean;
+  trackGuilds: boolean;
   trackUserCount: boolean;
   trackUserLanguage: boolean;
   trackGuildsLocale: boolean;

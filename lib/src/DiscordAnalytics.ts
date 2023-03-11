@@ -14,11 +14,10 @@ import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types
  * const client = new Client();
  * const da = new DiscordAnalytics(client, LibType.DJS, {
  *   trackInteractions: true,
- *   trackMessageCreate: true,
- *   trackMessageDelete: true,
- *   trackGuildDelete: true,
- *   trackGuildCreate: true,
- *   trackUserCount: true
+ *   trackGuilds: true,
+ *   trackUserCount: true,
+ *   trackUserLanguage: true,
+ *   trackGuildsLocale: true,
  * }, "YOUR_API_TOKEN");
  * client.on('ready', () => {
  *   da.trackEvents();
@@ -53,6 +52,29 @@ export default class DiscordAnalytics {
    * @returns {void}
    */
   public trackEvents(): void {
+
+    fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_SETTINGS_URL}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': this._apiToken
+      },
+      body: JSON.stringify({
+        tracks: {
+          interactions: this._eventsToTrack.trackInteractions,
+          guilds: this._eventsToTrack.trackGuilds,
+          userCount: this._eventsToTrack.trackUserCount,
+          userLanguage: this._eventsToTrack.trackUserLanguage,
+          guildsLocale: this._eventsToTrack.trackGuildsLocale
+        },
+        lib: this._client instanceof DJSClient ? 'djs' : 'eris',
+        botId: this._client.user.id
+      })
+    }).then(r => {
+      if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+      if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+    });
+
     if (this._client instanceof DJSClient) {
       if (!this._client.isReady()) throw new Error(ErrorCodes.CLIENT_NOT_READY);
       else this.trackDJSEvents();
@@ -77,6 +99,7 @@ export default class DiscordAnalytics {
               },
               body: JSON.stringify({
                 type: interaction.type,
+                commandName: interaction.isChatInputCommand() ? interaction.commandName : null,
                 userLocale: this._eventsToTrack.trackUserLanguage ? interaction.locale : null,
                 guildLocale: this._eventsToTrack.trackGuildsLocale ? interaction.guild.preferredLocale : null,
                 includedInfos: {

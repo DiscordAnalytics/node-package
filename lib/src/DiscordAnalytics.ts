@@ -74,57 +74,14 @@ export default class DiscordAnalytics {
                 'Content-Type': 'application/json',
                 'Authorization': this._apiToken
               },
-              body: this._eventsToTrack.trackUserCount ?
-                this._eventsToTrack.trackUserLanguage ?
-                  JSON.stringify({
-                    id: interaction.id,
-                    type: interaction.type,
-                    user: {
-                      id: interaction.user.id,
-                      locale: interaction.locale,
-                      bot: interaction.user.bot
-                    },
-                    guild: interaction.guild ? {
-                      id: interaction.guild.id,
-                      memberCount: interaction.guild.memberCount
-                    } : null
-                  }) :
-                  JSON.stringify({
-                    id: interaction.id,
-                    type: interaction.type,
-                    user: {
-                      id: interaction.user.id,
-                      bot: interaction.user.bot
-                    },
-                    guild: interaction.guild ? {
-                      id: interaction.guild.id,
-                      memberCount: interaction.guild.memberCount
-                    } : null
-                  }) :
-                  this._eventsToTrack.trackUserLanguage ?
-                    JSON.stringify({
-                      id: interaction.id,
-                      type: interaction.type,
-                      user: {
-                        id: interaction.user.id,
-                        locale: interaction.locale,
-                        bot: interaction.user.bot
-                      },
-                      guild: interaction.guild ? {
-                        id: interaction.guild.id
-                      } : null
-                    }) :
-                    JSON.stringify({
-                      id: interaction.id,
-                      type: interaction.type,
-                      user: {
-                        id: interaction.user.id,
-                        bot: interaction.user.bot
-                      },
-                      guild: interaction.guild ? {
-                        id: interaction.guild.id
-                      } : null
-                    })
+              body: JSON.stringify({
+                type: interaction.type,
+                userLocale: this._eventsToTrack.trackUserLanguage ? interaction.locale : null,
+                guild: {
+                  memberCount: this._eventsToTrack.trackUserCount ? interaction.guild.memberCount : null,
+                  locale: this._eventsToTrack.trackGuildsLocale ? interaction.guild.preferredLocale : null
+                }
+              })
           }).then(r => {
             if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
           });

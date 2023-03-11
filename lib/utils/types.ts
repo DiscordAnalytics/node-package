@@ -11,6 +11,7 @@ export interface EventsToTrack {
   trackGuildCreate: boolean;
   trackUserCount: boolean;
   trackUserLanguage: boolean;
+  trackGuildsLocale: boolean;
 }
 
 export const ErrorCodes = {

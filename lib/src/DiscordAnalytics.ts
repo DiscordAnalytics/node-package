@@ -105,10 +105,22 @@ export default class DiscordAnalytics {
           }).then(r => {
             if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
             if (r.status !== 200) return;
+            else dataNotSent.interactions = [];
           });
         }
         if (dataNotSent.guilds.length > 0) {
-
+          fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.TRACK_URL}${ApiEndpoints.ROUTES.GUILDS}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': this._apiToken
+            },
+            body: JSON.stringify(dataNotSent.guilds)
+          }).then(r => {
+            if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+            if (r.status !== 200) return;
+            else dataNotSent.guilds = [];
+          });
         }
       }
 

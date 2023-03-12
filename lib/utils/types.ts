@@ -25,4 +25,5 @@ export const ErrorCodes = {
   CLIENT_NOT_READY: 'Client is not ready, please start the client first.',
   INVALID_RESPONSE: 'Invalid response from the API, please try again later.',
   INVALID_API_TOKEN: 'Invalid API token, please gen one at ' + ApiEndpoints.BASE_URL.split('/api')[0] + 'and try again.',
+  DATA_NOT_SENT: "Data cannot be sent to the API, I will try again later."
 }

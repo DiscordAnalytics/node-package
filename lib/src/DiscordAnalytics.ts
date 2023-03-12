@@ -1,5 +1,5 @@
-import { Client as DJSClient } from 'discord.js';
-import { Client as ErisClient } from 'eris';
+import { Client as DJSClient, Guild as DJSGuild } from 'discord.js';
+import { Client as ErisClient, Guild as ErisGuild } from 'eris';
 import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types';
 
 /**
@@ -52,7 +52,6 @@ export default class DiscordAnalytics {
    * @returns {void}
    */
   public trackEvents(): void {
-
     fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_SETTINGS_URL}`, {
       method: 'POST',
       headers: {
@@ -88,6 +87,31 @@ export default class DiscordAnalytics {
 
   private trackDJSEvents(): void {
     if (this._client instanceof DJSClient) {
+
+      let dataNotSent = {
+        interactions: [],
+        guilds: []
+      }
+
+      const updateNotSentData = () => {
+        if (dataNotSent.interactions.length > 0) {
+          fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.TRACK_URL}${ApiEndpoints.ROUTES.INTERACTIONS}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': this._apiToken
+            },
+            body: JSON.stringify(dataNotSent.interactions)
+          }).then(r => {
+            if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+            if (r.status !== 200) return;
+          });
+        }
+        if (dataNotSent.guilds.length > 0) {
+
+        }
+      }
+
       const client = this._client as DJSClient;
       if (this._eventsToTrack.trackInteractions) {
         client.on('interactionCreate', (interaction) => {
@@ -105,10 +129,26 @@ export default class DiscordAnalytics {
                 includedInfos: {
                   userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
                   guildCount: this._eventsToTrack.trackGuilds ? client.guilds.cache.size : null
-                }
+                },
+                date: Date.now()
               })
           }).then(r => {
-            if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+            if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+            if (r.status !== 200) {
+              if (dataNotSent.interactions.length === 0 && dataNotSent.guilds.length === 0) new Error(ErrorCodes.DATA_NOT_SENT);
+              dataNotSent.interactions.push({
+                type: interaction.type,
+                commandName: interaction.isChatInputCommand() ? interaction.commandName : null,
+                userLocale: this._eventsToTrack.trackUserLanguage ? interaction.locale : null,
+                guildLocale: this._eventsToTrack.trackGuildsLocale ? interaction.guild.preferredLocale : null,
+                includedInfos: {
+                  userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
+                  guildCount: this._eventsToTrack.trackGuilds ? client.guilds.cache.size : null
+                },
+                date: Date.now()
+              })
+            }
+            if (r.status === 200 && dataNotSent.interactions.length > 0 || dataNotSent.guilds.length > 0) updateNotSentData();
           });
         });
       }
@@ -125,10 +165,23 @@ export default class DiscordAnalytics {
               includedInfos: {
                 userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
                 guildCount: this._eventsToTrack.trackGuilds ? client.guilds.cache.size : null
-              }
+              },
+              date: Date.now()
             })
           }).then(r => {
-            if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+            if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+            if (r.status !== 200) {
+              if (dataNotSent.interactions.length === 0 && dataNotSent.guilds.length === 0) new Error(ErrorCodes.DATA_NOT_SENT);
+              dataNotSent.interactions.push({
+                guildLocale: this._eventsToTrack.trackGuildsLocale ? guild.preferredLocale : null,
+                includedInfos: {
+                  userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
+                  guildCount: this._eventsToTrack.trackGuilds ? client.guilds.cache.size : null
+                },
+                date: Date.now()
+              })
+            }
+            if (r.status === 200 && dataNotSent.interactions.length > 0 || dataNotSent.guilds.length > 0) updateNotSentData();
           });
         })
 
@@ -144,10 +197,23 @@ export default class DiscordAnalytics {
               includedInfos: {
                 userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
                 guildCount: this._eventsToTrack.trackGuilds ? client.guilds.cache.size : null
-              }
+              },
+              date: Date.now()
             })
           }).then(r => {
-            if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+            if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+            if (r.status !== 200) {
+              if (dataNotSent.interactions.length === 0 && dataNotSent.guilds.length === 0) new Error(ErrorCodes.DATA_NOT_SENT);
+              dataNotSent.interactions.push({
+                guildLocale: this._eventsToTrack.trackGuildsLocale ? guild.preferredLocale : null,
+                includedInfos: {
+                  userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
+                  guildCount: this._eventsToTrack.trackGuilds ? client.guilds.cache.size : null
+                },
+                date: Date.now()
+              })
+            }
+            if (r.status === 200 && dataNotSent.interactions.length > 0 || dataNotSent.guilds.length > 0) updateNotSentData();
           });
         })
       }

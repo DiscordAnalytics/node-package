@@ -11,7 +11,7 @@ export interface EventsToTrack {
   trackGuildsLocale: boolean;
 }
 export const ApiEndpoints = {
-  BASE_URL: 'http://localhost:3000/api', // TODO: Change the URL when we have a domain
+  BASE_URL: 'http://discordanalytics.xyz/api',
   EDIT_SETTINGS_URL: '/bot/:id/track',
   ROUTES: {
     INTERACTIONS: '/bot/:id/track/interactions',

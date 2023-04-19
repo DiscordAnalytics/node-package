@@ -66,8 +66,11 @@ export default class DiscordAnalytics {
           userLanguage: this._eventsToTrack.trackUserLanguage,
           guildsLocale: this._eventsToTrack.trackGuildsLocale
         },
-        lib: this._client instanceof DJSClient ? 'djs' : 'eris',
-        botId: this._client.user.id
+        lib: this._client instanceof DJSClient ? 'discord.js' : 'eris',
+        botId: this._client.user.id,
+        username: this._client.user.username,
+        discriminator: this._client.user.discriminator,
+        avatar: this._client.user.avatar
       })
     }).then(r => {
       if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);

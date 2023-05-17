@@ -11,12 +11,9 @@ export interface EventsToTrack {
   trackGuildsLocale: boolean;
 }
 export const ApiEndpoints = {
-  BASE_URL: 'http://discordanalytics.xyz/api',
-  EDIT_SETTINGS_URL: '/bot/:id/track',
-  ROUTES: {
-    INTERACTIONS: '/bot/:id/track/interactions',
-    GUILDS: '/bot/:id/track/guilds',
-  }
+  BASE_URL: 'http://localhost:3000/api',
+  EDIT_SETTINGS_URL: '/bot/:id',
+  EDIT_STATS_URL: '/bot/:id/stats',
 }
 
 export const ErrorCodes = {

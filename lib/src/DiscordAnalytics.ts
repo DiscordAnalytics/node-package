@@ -1,4 +1,4 @@
-import { Client as DJSClient, Guild as DJSGuild } from 'discord.js';
+import { Client as DJSClient, Guild as DJSGuild, InteractionType, Locale } from 'discord.js';
 import { Client as ErisClient, Guild as ErisGuild } from 'eris';
 import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types';
 
@@ -28,6 +28,7 @@ export default class DiscordAnalytics {
   private readonly _client: DJSClient | ErisClient;
   private _eventsToTrack: EventsToTrack;
   private _apiToken: string;
+  private _libType: LibType;
 
   constructor(client: DJSClient | ErisClient, type: LibType, eventsToTrack: EventsToTrack, apiToken: string) {
     if (type === LibType.DJS && client instanceof DJSClient) this._client = client;
@@ -36,6 +37,7 @@ export default class DiscordAnalytics {
 
     this._eventsToTrack = eventsToTrack;
     this._apiToken = apiToken;
+    this._libType = type;
   }
 
   /**
@@ -53,24 +55,17 @@ export default class DiscordAnalytics {
    */
   public trackEvents(): void {
     fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_SETTINGS_URL}`, {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': this._apiToken
+        'Authorization': `Bot ${this._apiToken}`
       },
       body: JSON.stringify({
-        tracks: {
-          interactions: this._eventsToTrack.trackInteractions,
-          guilds: this._eventsToTrack.trackGuilds,
-          userCount: this._eventsToTrack.trackUserCount,
-          userLanguage: this._eventsToTrack.trackUserLanguage,
-          guildsLocale: this._eventsToTrack.trackGuildsLocale
-        },
-        lib: this._client instanceof DJSClient ? 'discord.js' : 'eris',
-        botId: this._client.user.id,
-        username: this._client.user.username,
-        discriminator: this._client.user.discriminator,
-        avatar: this._client.user.avatar
+        id: this._client.user!.id,
+        username: this._client.user!.username,
+        avatar: this._client.user!.avatar,
+        framework: this._libType,
+        settings: this._eventsToTrack
       })
     }).then(r => {
       if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
@@ -90,146 +85,59 @@ export default class DiscordAnalytics {
 
   private trackDJSEvents(): void {
     if (this._client instanceof DJSClient) {
-
-      let dataNotSent = {
-        interactions: [],
-        guilds: []
-      }
-
-      const updateNotSentData = () => {
-        if (dataNotSent.interactions.length > 0) {
-          fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.ROUTES.INTERACTIONS.replace(/:id/g, this._client.user.id)}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': this._apiToken
-            },
-            body: JSON.stringify(dataNotSent.interactions)
-          }).then(r => {
-            if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
-            if (r.status === 451) throw new Error(ErrorCodes.SUSPENDED_BOT);
-            if (r.status !== 200) return;
-            else dataNotSent.interactions = [];
-          });
-        }
-        if (dataNotSent.guilds.length > 0) {
-          fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.ROUTES.GUILDS.replace(/:id/g, this._client.user.id)}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': this._apiToken
-            },
-            body: JSON.stringify(dataNotSent.guilds)
-          }).then(r => {
-            if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
-            if (r.status === 451) throw new Error(ErrorCodes.SUSPENDED_BOT);
-            if (r.status !== 200) return;
-            else dataNotSent.guilds = [];
-          });
-        }
-      }
-
       const client = this._client as DJSClient;
+
+      let data = {
+        date: new Date().toISOString().slice(0, 10),
+        guilds: client.guilds.cache.size,
+        users: client.guilds.cache.reduce((a, g) => a + g.memberCount, 0),
+        interactions: [] as { name: string, number: number, type: InteractionType }[],
+        locales: [] as { locale: Locale, number: number }[],
+        guildsLocale: [] as { locale: Locale, number: number }[]
+      }
+
+      setInterval(() => {
+        fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(/:id/g, client.user!.id)}}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bot ${this._apiToken}`
+          },
+          body: JSON.stringify(data)
+        }).then((res) => {
+          if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+          if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+          if (res.status === 200) {
+            data = {
+              date: new Date().toISOString().slice(0, 10),
+              guilds: client.guilds.cache.size,
+              users: client.guilds.cache.reduce((a, g) => a + g.memberCount, 0),
+              interactions: [] as { name: string, number: number, type: InteractionType }[],
+              locales: [] as { locale: Locale, number: number }[],
+              guildsLocale: [] as { locale: Locale, number: number }[]
+            }
+          }
+        }).catch((err) => {
+          new Error(err);
+        })
+      }, 30000) // c'est pas 15 mins ?
+
       if (this._eventsToTrack.trackInteractions) {
         client.on('interactionCreate', (interaction) => {
-          let guilds = []
-          client.guilds.cache.reduce((array, current) => guilds.find(x => x.locale === current.preferredLocale) ? guilds.find(x => x.locale === current.preferredLocale).count++ : guilds.push({ locale: current.preferredLocale, count: 1 }))
-          guilds.find(x => x.locale === client.guilds.cache.first().preferredLocale) ? guilds.find(x => x.locale === client.guilds.cache.first().preferredLocale).count++ : guilds.push({ locale: client.guilds.cache.first().preferredLocale, count: 1 })
+          let guilds: { locale: Locale, number: number }[] = []
+          client.guilds.cache.map((current) => guilds.find((x) => x.locale === current.preferredLocale) ? guilds.find((x) => x.locale === current.preferredLocale)!.number++ : guilds.push({ locale: current.preferredLocale, number: 1 }))
 
-          fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.ROUTES.INTERACTIONS.replace(/:id/g, this._client.user.id)}`, {
-            method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': this._apiToken
-              },
-              body: JSON.stringify({
-                type: interaction.type,
-                name: interaction.isCommand() ? interaction.commandName : interaction.isMessageComponent() ? interaction.customId : null,
-                userLocale: this._eventsToTrack.trackUserLanguage ? interaction.locale : null,
-                userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
-                guildCount: this._eventsToTrack.trackGuilds ? guilds : null,
-                date: Date.now()
-              })
-          }).then(r => {
-            if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
-            if (r.status === 451) throw new Error(ErrorCodes.SUSPENDED_BOT);
-            if (r.status !== 200) {
-              if (dataNotSent.interactions.length === 0 && dataNotSent.guilds.length === 0) new Error(ErrorCodes.DATA_NOT_SENT);
-              dataNotSent.interactions.push({
-                type: interaction.type,
-                name: interaction.isCommand() ? interaction.commandName : interaction.isMessageComponent() ? interaction.customId : null,
-                userLocale: this._eventsToTrack.trackUserLanguage ? interaction.locale : null,
-                userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
-                guildCount: this._eventsToTrack.trackGuilds ? guilds : null,
-                date: Date.now()
-              })
-            }
-            if (r.status === 200 && dataNotSent.interactions.length > 0 || dataNotSent.guilds.length > 0) updateNotSentData();
-          });
+          if (this._eventsToTrack.trackGuildsLocale) data.guildsLocale = guilds
+
+          if (this._eventsToTrack.trackUserLanguage) data.locales.find((x) => x.locale === interaction.locale) ? data.locales.find((x) => x.locale === interaction.locale)!.number++ : data.locales.push({ locale: interaction.locale, number: 1 })
+
+          if (this._eventsToTrack.trackInteractions) {
+            if (interaction.type === InteractionType.ApplicationCommand || interaction.type === InteractionType.ApplicationCommandAutocomplete)
+              data.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type) ? data.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type)!.number++ : data.interactions.push({ name: interaction.commandName, number: 1, type: interaction.type })
+            else if (interaction.type === InteractionType.MessageComponent || interaction.type === InteractionType.ModalSubmit)
+              data.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type) ? data.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type)!.number++ : data.interactions.push({ name: interaction.customId, number: 1, type: interaction.type })
+          }
         });
-      }
-      if (this._eventsToTrack.trackGuilds) {
-        client.on("guildCreate", (guild) => {
-          let guilds = []
-          client.guilds.cache.reduce((array, current) => guilds.find(x => x.locale === current.preferredLocale) ? guilds.find(x => x.locale === current.preferredLocale).count++ : guilds.push({ locale: current.preferredLocale, count: 1 }))
-          guilds.find(x => x.locale === client.guilds.cache.first().preferredLocale) ? guilds.find(x => x.locale === client.guilds.cache.first().preferredLocale).count++ : guilds.push({ locale: client.guilds.cache.first().preferredLocale, count: 1 })
-
-          fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.ROUTES.GUILDS.replace(/:id/g, this._client.user.id)}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': this._apiToken
-            },
-            body: JSON.stringify({
-              userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
-              guildCount: this._eventsToTrack.trackGuilds ? guilds : null,
-              date: Date.now()
-            })
-          }).then(r => {
-            if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
-            if (r.status === 451) throw new Error(ErrorCodes.SUSPENDED_BOT);
-            if (r.status !== 200) {
-              if (dataNotSent.interactions.length === 0 && dataNotSent.guilds.length === 0) new Error(ErrorCodes.DATA_NOT_SENT);
-              dataNotSent.interactions.push({
-                userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
-                guildCount: this._eventsToTrack.trackGuilds ? guilds : null,
-                date: Date.now()
-              })
-            }
-            if (r.status === 200 && dataNotSent.interactions.length > 0 || dataNotSent.guilds.length > 0) updateNotSentData();
-          });
-        })
-
-        client.on("guildDelete", (guild) => {
-          let guilds = []
-          client.guilds.cache.reduce((array, current) => guilds.find(x => x.locale === current.preferredLocale) ? guilds.find(x => x.locale === current.preferredLocale).count++ : guilds.push({ locale: current.preferredLocale, count: 1 }))
-          guilds.find(x => x.locale === client.guilds.cache.first().preferredLocale) ? guilds.find(x => x.locale === client.guilds.cache.first().preferredLocale).count++ : guilds.push({ locale: client.guilds.cache.first().preferredLocale, count: 1 })
-
-          fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.ROUTES.GUILDS.replace(/:id/g, this._client.user.id)}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': this._apiToken
-            },
-            body: JSON.stringify({
-              userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
-              guildCount: this._eventsToTrack.trackGuilds ? guilds : null,
-              date: Date.now()
-            })
-          }).then(r => {
-            if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
-            if (r.status === 451) throw new Error(ErrorCodes.SUSPENDED_BOT);
-            if (r.status !== 200) {
-              if (dataNotSent.interactions.length === 0 && dataNotSent.guilds.length === 0) new Error(ErrorCodes.DATA_NOT_SENT);
-              dataNotSent.interactions.push({
-                userCount: this._eventsToTrack.trackUserCount ? client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) : null,
-                guildCount: this._eventsToTrack.trackGuilds ? guilds : null,
-                date: Date.now()
-              })
-            }
-            if (r.status === 200 && dataNotSent.interactions.length > 0 || dataNotSent.guilds.length > 0) updateNotSentData();
-          });
-        })
       }
     }
   }

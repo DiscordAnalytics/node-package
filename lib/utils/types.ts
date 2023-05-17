@@ -1,6 +1,6 @@
 export enum LibType {
-  DJS,
-  ERIS
+  DJS = "discord.js",
+  ERIS = "eris"
 }
 
 export interface EventsToTrack {
@@ -11,9 +11,9 @@ export interface EventsToTrack {
   trackGuildsLocale: boolean;
 }
 export const ApiEndpoints = {
-  BASE_URL: 'http://localhost:3000/api',
-  EDIT_SETTINGS_URL: '/bot/:id',
-  EDIT_STATS_URL: '/bot/:id/stats',
+  BASE_URL: 'https://discordanalytics.xyz/api',
+  EDIT_SETTINGS_URL: '/bots/:id',
+  EDIT_STATS_URL: '/bots/:id/stats',
 }
 
 export const ErrorCodes = {

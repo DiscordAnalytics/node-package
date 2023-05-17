@@ -1,6 +1,7 @@
-import { Client as DJSClient, Guild as DJSGuild, InteractionType, Locale } from 'discord.js';
-import { Client as ErisClient, Guild as ErisGuild } from 'eris';
+import { Client as DJSClient, InteractionType, Locale } from 'discord.js';
+import { Client as ErisClient } from 'eris';
 import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types';
+import axios from 'axios';
 
 /**
  * @class DiscordAnalytics
@@ -12,14 +13,14 @@ import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types
  * const DiscordAnalytics, { LibType } = require('discord-analytics');
  * const { Client } = require('discord.js');
  * const client = new Client();
- * const da = new DiscordAnalytics(client, LibType.DJS, {
- *   trackInteractions: true,
- *   trackGuilds: true,
- *   trackUserCount: true,
- *   trackUserLanguage: true,
- *   trackGuildsLocale: true,
- * }, "YOUR_API_TOKEN");
  * client.on('ready', () => {
+ * const da = new DiscordAnalytics(client, LibType.DJS, {
+ *     trackInteractions: true,
+ *     trackGuilds: true,
+ *     trackUserCount: true,
+ *     trackUserLanguage: true,
+ *     trackGuildsLocale: true,
+ *   }, "YOUR_API_TOKEN");
  *   da.trackEvents();
  * });
  * client.login('token');
@@ -32,7 +33,7 @@ export default class DiscordAnalytics {
 
   constructor(client: DJSClient | ErisClient, type: LibType, eventsToTrack: EventsToTrack, apiToken: string) {
     if (type === LibType.DJS && client instanceof DJSClient) this._client = client;
-    if (type === LibType.ERIS && client instanceof ErisClient) this._client = client;
+    else if (type === LibType.ERIS && client instanceof ErisClient) this._client = client;
     else throw new Error(ErrorCodes.INVALID_CLIENT_TYPE);
 
     this._eventsToTrack = eventsToTrack;
@@ -54,19 +55,16 @@ export default class DiscordAnalytics {
    * @returns {void}
    */
   public trackEvents(): void {
-    fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_SETTINGS_URL}`, {
-      method: 'PATCH',
+    axios.patch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_SETTINGS_URL.replace(':id', this._client.user!.id)}`, {
+      username: this._client.user!.username,
+      avatar: this._client.user!.avatar,
+      framework: this._libType,
+      settings: this._eventsToTrack
+    }, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bot ${this._apiToken}`
-      },
-      body: JSON.stringify({
-        id: this._client.user!.id,
-        username: this._client.user!.username,
-        avatar: this._client.user!.avatar,
-        framework: this._libType,
-        settings: this._eventsToTrack
-      })
+      }
     }).then(r => {
       if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
       if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
@@ -97,13 +95,11 @@ export default class DiscordAnalytics {
       }
 
       setInterval(() => {
-        fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(/:id/g, client.user!.id)}}`, {
-          method: 'POST',
+        axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bot ${this._apiToken}`
-          },
-          body: JSON.stringify(data)
+          }
         }).then((res) => {
           if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
           if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
@@ -120,7 +116,7 @@ export default class DiscordAnalytics {
         }).catch((err) => {
           new Error(err);
         })
-      }, 30000) // c'est pas 15 mins ?
+      }, 30000);
 
       if (this._eventsToTrack.trackInteractions) {
         client.on('interactionCreate', (interaction) => {

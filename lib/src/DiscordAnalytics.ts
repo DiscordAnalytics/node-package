@@ -88,10 +88,10 @@ export default class DiscordAnalytics {
       let data = {
         date: new Date().toISOString().slice(0, 10),
         guilds: client.guilds.cache.size,
-        users: client.guilds.cache.reduce((a, g) => a + g.memberCount, 0),
+        users: client.users.cache.size,
         interactions: [] as { name: string, number: number, type: InteractionType }[],
         locales: [] as { locale: Locale, number: number }[],
-        guildsLocale: [] as { locale: Locale, number: number }[]
+        guildsLocales: [] as { locale: Locale, number: number }[]
       }
 
       setInterval(() => {
@@ -110,28 +110,37 @@ export default class DiscordAnalytics {
               users: client.guilds.cache.reduce((a, g) => a + g.memberCount, 0),
               interactions: [] as { name: string, number: number, type: InteractionType }[],
               locales: [] as { locale: Locale, number: number }[],
-              guildsLocale: [] as { locale: Locale, number: number }[]
+              guildsLocales: [] as { locale: Locale, number: number }[]
             }
           }
         }).catch((err) => {
           new Error(err);
-        })
+        });
       }, 30000);
 
       if (this._eventsToTrack.trackInteractions) {
         client.on('interactionCreate', (interaction) => {
           let guilds: { locale: Locale, number: number }[] = []
-          client.guilds.cache.map((current) => guilds.find((x) => x.locale === current.preferredLocale) ? guilds.find((x) => x.locale === current.preferredLocale)!.number++ : guilds.push({ locale: current.preferredLocale, number: 1 }))
+          client.guilds.cache.map((current) => guilds.find((x) => x.locale === current.preferredLocale) ?
+            ++guilds.find((x) => x.locale === current.preferredLocale)!.number :
+            guilds.push({ locale: current.preferredLocale, number: 1 }));
 
-          if (this._eventsToTrack.trackGuildsLocale) data.guildsLocale = guilds
+          if (this._eventsToTrack.trackGuildsLocale) data.guildsLocales = guilds
 
-          if (this._eventsToTrack.trackUserLanguage) data.locales.find((x) => x.locale === interaction.locale) ? data.locales.find((x) => x.locale === interaction.locale)!.number++ : data.locales.push({ locale: interaction.locale, number: 1 })
+          if (this._eventsToTrack.trackUserLanguage) data.locales.find((x) => x.locale === interaction.locale) ?
+            ++data.locales.find((x) => x.locale === interaction.locale)!.number :
+            data.locales.push({ locale: interaction.locale, number: 1 });
 
           if (this._eventsToTrack.trackInteractions) {
             if (interaction.type === InteractionType.ApplicationCommand || interaction.type === InteractionType.ApplicationCommandAutocomplete)
-              data.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type) ? data.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type)!.number++ : data.interactions.push({ name: interaction.commandName, number: 1, type: interaction.type })
+              data.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type) ?
+                ++data.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type)!.number :
+                data.interactions.push({ name: interaction.commandName, number: 1, type: interaction.type });
+
             else if (interaction.type === InteractionType.MessageComponent || interaction.type === InteractionType.ModalSubmit)
-              data.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type) ? data.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type)!.number++ : data.interactions.push({ name: interaction.customId, number: 1, type: interaction.type })
+              data.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type) ?
+                ++data.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type)!.number :
+                data.interactions.push({ name: interaction.customId, number: 1, type: interaction.type });
           }
         });
       }

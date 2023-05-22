@@ -1,5 +1,5 @@
 import DiscordAnalytics, {LibType} from  "../../lib";
-import { Client, Interaction } from "discord.js";
+import { ActionRowBuilder, Client, Interaction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 
 const client = new Client({
   intents: []
@@ -7,8 +7,24 @@ const client = new Client({
 
 client.on("ready", () => {
   client.application?.commands.set([{
-    name: "ping",
-    description: "Pong!"
+    name: "test",
+    description: "Send test message",
+    options: [{
+      name: "test",
+      description: "Test option",
+      type: 3,
+      required: false,
+      choices: [{
+        name: "button",
+        value: "button"
+      }, {
+        name: "select",
+        value: "select"
+      }, {
+        name: "modal",
+        value: "modal"
+      }]
+    }]
   }])
   
   const analytics = new DiscordAnalytics(client, LibType.DJS, {
@@ -17,7 +33,7 @@ client.on("ready", () => {
     trackInteractions: true,
     trackUserCount: true,
     trackUserLanguage: true,
-  }, "YOUR_API_TOKEN");
+  }, "token");
   
   analytics.trackEvents();
 
@@ -26,10 +42,82 @@ client.on("ready", () => {
 
 client.on("interactionCreate", async (interaction: Interaction) => {
   if (interaction.isChatInputCommand()) {
-    if (interaction.commandName === "ping") interaction.reply("Pong!")
+    if (interaction.commandName === "test") {
+      const option = interaction.options.getString("test");
+      if (option === "button") interaction.reply({
+        content: "Test button",
+        components: [{
+          type: 1,
+          components: [{
+            type: 2,
+            style: 1,
+            label: "Test button",
+            custom_id: "test_button"
+          }]
+        }]
+      })
+      else if (option === "select") interaction.reply({
+        content: "Test select",
+        components: [{
+          type: 1,
+          components: [{
+            type: 3,
+            custom_id: "test_select",
+            options: [{
+              label: "Test select",
+              value: "test_select"
+            }]
+          }]
+        }]
+      })
+      else if (option === "modal") {
+        const modal = new ModalBuilder()
+        .setCustomId('myModal')
+        .setTitle('My Modal');
+  
+        // Add components to modal
+    
+        // Create the text input components
+        const favoriteColorInput = new TextInputBuilder()
+          .setCustomId('favoriteColorInput')
+            // The label is the prompt the user sees for this input
+          .setLabel("What's your favorite color?")
+            // Short means only a single line of text
+          .setStyle(TextInputStyle.Short);
+    
+        // An action row only holds one text input,
+        // so you need one action row per text input.
+        const firstActionRow = new ActionRowBuilder().addComponents(favoriteColorInput) as ActionRowBuilder<TextInputBuilder>;
+    
+        // Add inputs to the modal
+        modal.addComponents(firstActionRow);
+    
+        // Show the modal to the user
+        await interaction.showModal(modal);
+      }
+      else interaction.reply({
+        content: "Test message",
+        ephemeral: true
+      })
+    }
   }
+
+  if (interaction.isButton()) interaction.reply({
+    content: "Button clicked!",
+    ephemeral: true
+  })
+
+  if (interaction.isStringSelectMenu()) interaction.reply({
+    content: "Select clicked!",
+    ephemeral: true
+  })
+
+  if (interaction.isModalSubmit()) interaction.reply({
+    content: "Modal submitted!",
+    ephemeral: true
+  })
 })
 
-client.login("YOUR_DISCORD_BOT_TOKEN");
+client.login("token");
 
 

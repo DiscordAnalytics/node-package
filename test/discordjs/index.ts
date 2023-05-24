@@ -14,16 +14,7 @@ client.on("ready", () => {
       description: "Test option",
       type: 3,
       required: false,
-      choices: [{
-        name: "button",
-        value: "button"
-      }, {
-        name: "select",
-        value: "select"
-      }, {
-        name: "modal",
-        value: "modal"
-      }]
+      autocomplete: true
     }]
   }])
   
@@ -33,7 +24,7 @@ client.on("ready", () => {
     trackInteractions: true,
     trackUserCount: true,
     trackUserLanguage: true,
-  }, "YOUR_API_TOKEN");
+  }, "");
   
   analytics.trackEvents();
 
@@ -94,12 +85,20 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     
         // Show the modal to the user
         await interaction.showModal(modal);
-      }
-      else interaction.reply({
+      } else interaction.reply({
         content: "Test message",
         ephemeral: true
       })
     }
+  }
+
+  if (interaction.isAutocomplete()) {
+    const focusedValue = interaction.options.getFocused();
+		const choices = ["button", "select", "modal"];
+		const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice, value: choice })),
+		);
   }
 
   if (interaction.isButton()) interaction.reply({
@@ -118,4 +117,4 @@ client.on("interactionCreate", async (interaction: Interaction) => {
   })
 })
 
-client.login("YOUR_CLIENT_TOKEN");
+client.login("");

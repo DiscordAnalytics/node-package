@@ -68,6 +68,13 @@ export default class DiscordAnalytics {
     }).then(r => {
       if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
       if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+    }).catch(e => {
+      console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
+      new Error(e)
+
+      return setTimeout(() => {
+        this.trackEvents();
+      }, 60000)
     });
 
     if (this._client instanceof DJSClient) {
@@ -82,6 +89,7 @@ export default class DiscordAnalytics {
   }
 
   private trackDJSEvents(): void {
+    console.log("[DISCORDANALYTICS] Tracking events for discord.js client.")
     if (this._client instanceof DJSClient) {
       const client = this._client as DJSClient;
 
@@ -95,6 +103,9 @@ export default class DiscordAnalytics {
       }
 
       setInterval(() => {
+        let guildCount = client.guilds.cache.size;
+        let userCount = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
+        if (data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) return;
         axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {
           headers: {
             'Content-Type': 'application/json',
@@ -106,17 +117,18 @@ export default class DiscordAnalytics {
           if (res.status === 200) {
             data = {
               date: new Date().toISOString().slice(0, 10),
-              guilds: client.guilds.cache.size,
-              users: client.guilds.cache.reduce((a, g) => a + g.memberCount, 0),
+              guilds: guildCount,
+              users: userCount,
               interactions: [] as { name: string, number: number, type: InteractionType }[],
               locales: [] as { locale: Locale, number: number }[],
               guildsLocales: [] as { locale: Locale, number: number }[]
             }
           }
-        }).catch((err) => {
-          new Error(err);
+        }).catch(e => {
+          console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
+          new Error(e)
         });
-      }, 30000);
+      }, 60000);
 
       if (this._eventsToTrack.trackInteractions) {
         client.on('interactionCreate', (interaction) => {

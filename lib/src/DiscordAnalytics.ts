@@ -89,7 +89,6 @@ export default class DiscordAnalytics {
   }
 
   private trackDJSEvents(): void {
-    console.log("[DISCORDANALYTICS] Tracking events for discord.js client.")
     if (this._client instanceof DJSClient) {
       const client = this._client as DJSClient;
 

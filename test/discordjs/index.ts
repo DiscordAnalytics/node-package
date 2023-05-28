@@ -24,7 +24,7 @@ client.on("ready", () => {
     trackInteractions: true,
     trackUserCount: true,
     trackUserLanguage: true,
-  }, "");
+  }, "API_TOKEN");
   
   analytics.trackEvents();
 
@@ -117,4 +117,4 @@ client.on("interactionCreate", async (interaction: Interaction) => {
   })
 })
 
-client.login("");
+client.login("DISCORD_CLIENT_TOKEN");

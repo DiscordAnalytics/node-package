@@ -95,7 +95,7 @@ export default class DiscordAnalytics {
       let data = {
         date: new Date().toISOString().slice(0, 10),
         guilds: client.guilds.cache.size,
-        users: client.users.cache.size,
+        users: client.guilds.cache.reduce((a, g) => a + g.memberCount, 0),
         interactions: [] as { name: string, number: number, type: InteractionType }[],
         locales: [] as { locale: Locale, number: number }[],
         guildsLocales: [] as { locale: Locale, number: number }[]

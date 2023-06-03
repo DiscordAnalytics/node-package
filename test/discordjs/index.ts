@@ -24,7 +24,7 @@ client.on("ready", () => {
     trackInteractions: true,
     trackUserCount: true,
     trackUserLanguage: true,
-  }, "API_TOKEN");
+  }, "98bc82253d607bb787f48fba77717ad11be574d6724f607b9c");
   
   analytics.trackEvents();
 
@@ -117,4 +117,4 @@ client.on("interactionCreate", async (interaction: Interaction) => {
   })
 })
 
-client.login("DISCORD_CLIENT_TOKEN");
+client.login("MTA4MjYxNTc3NTYxOTE5OTA1Nw.GXrcMj.j2caJVZ65YhGL8ioLyuSUtJkL1htZd_kpYpDrU");

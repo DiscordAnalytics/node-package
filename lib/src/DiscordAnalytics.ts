@@ -30,8 +30,9 @@ export default class DiscordAnalytics {
   private _eventsToTrack: EventsToTrack;
   private _apiToken: string;
   private _libType: LibType;
+  private _disableErisWarnings: boolean;
 
-  constructor(client: DJSClient | ErisClient, type: LibType, eventsToTrack: EventsToTrack, apiToken: string) {
+  constructor(client: DJSClient | ErisClient, type: LibType, eventsToTrack: EventsToTrack, apiToken: string, disableErisWarnings?: boolean) {
     if (type === LibType.DJS && client instanceof DJSClient) this._client = client;
     else if (type === LibType.ERIS && client instanceof ErisClient) this._client = client;
     else throw new Error(ErrorCodes.INVALID_CLIENT_TYPE);
@@ -39,6 +40,7 @@ export default class DiscordAnalytics {
     this._eventsToTrack = eventsToTrack;
     this._apiToken = apiToken;
     this._libType = type;
+    this._disableErisWarnings = disableErisWarnings || false;
   }
 
   /**
@@ -55,6 +57,11 @@ export default class DiscordAnalytics {
    * @returns {void}
    */
   public trackEvents(): void {
+    let events = this._eventsToTrack;
+    if (!events.trackInteractions && !events.trackGuilds && !events.trackUserCount && !events.trackUserLanguage && !events.trackGuildsLocale) throw new Error(ErrorCodes.INVALID_EVENTS_COUNT);
+
+    if (this._client instanceof ErisClient && !this._disableErisWarnings) console.warn("[DISCORDANALYTICS] You are using Eris, please note that some events are not supported by Eris. Please check the documentation for more information.")
+
     axios.patch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_SETTINGS_URL.replace(':id', this._client.user!.id)}`, {
       username: this._client.user!.username,
       avatar: this._client.user!.avatar,
@@ -159,6 +166,67 @@ export default class DiscordAnalytics {
   }
 
   private trackErisEvents(): void {
-    console.log('Eris events are not yet supported.');
+    if (this._client instanceof ErisClient) {
+      const client = this._client as ErisClient;
+
+      let data = {
+        date: new Date().toISOString().slice(0, 10),
+        guilds: client.guilds.size,
+        users: client.guilds.reduce((a, g) => a + g.memberCount, 0),
+        interactions: [] as { name: string, number: number, type: InteractionType }[],
+        locales: [] as { locale: Locale, number: number }[],
+        guildsLocales: [] as { locale: string, number: number }[]
+      }
+
+      setInterval(() => {
+        let guildCount = client.guilds.size;
+        let userCount = client.guilds.reduce((a, g) => a + g.memberCount, 0);
+        if (data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) return;
+        axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bot ${this._apiToken}`
+          }
+        }).then((res) => {
+          if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+          if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+          if (res.status === 200) {
+            data = {
+              date: new Date().toISOString().slice(0, 10),
+              guilds: guildCount,
+              users: userCount,
+              interactions: [] as { name: string, number: number, type: InteractionType }[],
+              locales: [] as { locale: Locale, number: number }[],
+              guildsLocales: [] as { locale: string, number: number }[]
+            }
+          }
+        }).catch(e => {
+          console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
+          new Error(e)
+        });
+      }, 60000);
+
+      if (this._eventsToTrack.trackInteractions) {
+        client.on('interactionCreate', (interaction) => {
+          let guilds: { locale: string, number: number }[] = []
+          client.guilds.map((current) => guilds.find((x) => x.locale === current.preferredLocale) ?
+            ++guilds.find((x) => x.locale === current.preferredLocale)!.number :
+            guilds.push({ locale: current.preferredLocale, number: 1 }));
+
+          if (this._eventsToTrack.trackGuildsLocale) data.guildsLocales = guilds;
+
+          if (this._eventsToTrack.trackInteractions) {
+            if (interaction.type === 2) {
+              /*data.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type) ?
+                ++data.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type)!.number :
+                data.interactions.push({name: interaction.commandName, number: 1, type: interaction.type});*/
+            }/* else if (interaction.type === InteractionType.MessageComponent)
+              data.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type) ?
+                ++data.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type)!.number :
+                data.interactions.push({ name: interaction.customId, number: 1, type: interaction.type });*/
+          }
+        });
+      }
+    }
   }
 }

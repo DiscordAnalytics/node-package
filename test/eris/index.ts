@@ -1,7 +1,7 @@
-import {Client, Constants, Interaction, CommandInteraction} from "eris";
+import {Client, Constants, CommandInteraction, ComponentInteraction} from "eris";
 import DiscordAnalytics, {LibType} from "../../lib";
 
-const bot = new Client("MTA4MjYxNTc3NTYxOTE5OTA1Nw.GXrcMj.j2caJVZ65YhGL8ioLyuSUtJkL1htZd_kpYpDrU");
+const bot = new Client("");
 bot.on("ready", () => {
   bot.createCommand({
     name: "test",
@@ -28,47 +28,68 @@ bot.on("ready", () => {
     trackInteractions: true,
     trackUserCount: true,
     trackUserLanguage: true
-  }, "98bc82253d607bb787f48fba77717ad11be574d6724f607b9c")
+  }, "")
 
   analytics.trackEvents();
 
   console.log("Ready!");
 });
+
+bot.connect();
+
 bot.on("interactionCreate", async (interaction) => {
   if (interaction instanceof CommandInteraction) {
     if (interaction.data.name == "test") {
-      const option = interaction.data.options?.find((x) => x.name === "test") as any;
-      if (option && option.value) {
-        if (option.value === "button") interaction.createMessage({
-          content: "Test button",
-          components: [{
-            type: 1,
+      if (interaction.data.options) {
+        const option = interaction.data.options.find((option) => option.name === "test") as { value: string, type: number, name: string } | undefined;
+        if (option) {
+          if (option.value === "button") interaction.createMessage({
+            content: "Test button",
             components: [{
-              type: 2,
-              style: 1,
-              label: "Test button",
-              custom_id: "test_button"
-            }]
-          }]
-        })
-        else if (option.value === "select") interaction.createMessage({
-          content: "Test select",
-          components: [{
-            type: 1,
-            components: [{
-              type: 3,
-              custom_id: "test_select",
-              options: [{
-                label: "Test select",
-                value: "test_select"
+              type: 1,
+              components: [{
+                type: 2,
+                style: 1,
+                label: "Test button",
+                custom_id: "test_button"
               }]
             }]
-          }]
-        })
-        else interaction.createMessage({
-            content: "Test message"
           })
-      }
+          else if (option.value === "select") interaction.createMessage({
+            content: "Test select",
+            components: [{
+              type: 1,
+              components: [{
+                type: 3,
+                custom_id: "test_select",
+                options: [{
+                  label: "Test select",
+                  value: "test_select"
+                }]
+              }]
+            }]
+          })
+        } else interaction.createMessage({
+          content: "Test message",
+          flags: 64
+        })
+      } else interaction.createMessage({
+        content: "Test message",
+        flags: 64
+      })
+    }
+  }
+
+  if (interaction instanceof ComponentInteraction) {
+    if (interaction.data && interaction.data.component_type) {
+      if (interaction.data.component_type === 2) interaction.createMessage({
+        content: "Button clicked!",
+        flags: 64
+      })
+      else if (interaction.data.component_type === 3) interaction.createMessage({
+        content: "Select clicked!",
+        flags: 64
+      })
     }
   }
 
@@ -87,5 +108,3 @@ bot.on("interactionCreate", async (interaction) => {
     ephemeral: true
   })*/
 })
-
-bot.connect();

@@ -1,7 +1,9 @@
 import { Client as DJSClient, InteractionType, Locale } from 'discord.js';
-import { Client as ErisClient } from 'eris';
+import { CommandInteraction, ComponentInteraction, Client as ErisClient } from 'eris';
 import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types';
 import axios from 'axios';
+
+
 
 /**
  * @class DiscordAnalytics
@@ -216,14 +218,15 @@ export default class DiscordAnalytics {
           if (this._eventsToTrack.trackGuildsLocale) data.guildsLocales = guilds;
 
           if (this._eventsToTrack.trackInteractions) {
-            if (interaction.type === 2) {
-              /*data.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type) ?
-                ++data.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type)!.number :
-                data.interactions.push({name: interaction.commandName, number: 1, type: interaction.type});*/
-            }/* else if (interaction.type === InteractionType.MessageComponent)
-              data.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type) ?
-                ++data.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type)!.number :
-                data.interactions.push({ name: interaction.customId, number: 1, type: interaction.type });*/
+            if (interaction instanceof CommandInteraction) {
+              data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type) ?
+                ++data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type)!.number :
+                data.interactions.push({name: interaction.data.name, number: 1, type: interaction.type});
+            } else if (interaction instanceof ComponentInteraction) {
+              data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type) ?
+                ++data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type)!.number :
+                data.interactions.push({ name: interaction.data.custom_id, number: 1, type: interaction.type });
+            }
           }
         });
       }

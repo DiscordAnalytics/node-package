@@ -24,7 +24,7 @@ client.on("ready", () => {
     trackInteractions: true,
     trackUserCount: true,
     trackUserLanguage: true,
-  }, "98bc82253d607bb787f48fba77717ad11be574d6724f607b9c");
+  }, "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"); // token npm
   
   analytics.trackEvents();
 

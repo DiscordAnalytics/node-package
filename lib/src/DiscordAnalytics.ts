@@ -12,18 +12,18 @@ import axios from 'axios';
  * @param {LibType} type The type of client to track.
  * @param {EventsToTrack} eventsToTrack The events to track.
  * @example
- * const DiscordAnalytics, { LibType } = require('discord-analytics');
+ * const { LibType, default: DiscordAnalytics } = require('discord-analytics');
  * const { Client } = require('discord.js');
  * const client = new Client();
  * client.on('ready', () => {
- * const da = new DiscordAnalytics(client, LibType.DJS, {
+ *  const analytics = new DiscordAnalytics(client, LibType.DJS, {
  *     trackInteractions: true,
  *     trackGuilds: true,
  *     trackUserCount: true,
  *     trackUserLanguage: true,
  *     trackGuildsLocale: true,
  *   }, "YOUR_API_TOKEN");
- *   da.trackEvents();
+ *   analytics.trackEvents();
  * });
  * client.login('token');
  */
@@ -33,6 +33,7 @@ export default class DiscordAnalytics {
   private _apiToken: string;
   private _libType: LibType;
   private _disableErisWarnings: boolean;
+  private _headers: { 'Content-Type': string; Authorization: string; };
 
   constructor(client: DJSClient | ErisClient, type: LibType, eventsToTrack: EventsToTrack, apiToken: string, disableErisWarnings?: boolean) {
     if (type === LibType.DJS && client instanceof DJSClient) this._client = client;
@@ -43,6 +44,10 @@ export default class DiscordAnalytics {
     this._apiToken = apiToken;
     this._libType = type;
     this._disableErisWarnings = disableErisWarnings || false;
+    this._headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bot ${this._apiToken}`
+    }
   }
 
   /**
@@ -51,7 +56,7 @@ export default class DiscordAnalytics {
    * @readonly
    */
   public get client(): DJSClient | ErisClient {
-      return this._client;
+    return this._client;
   }
 
   /**
@@ -70,10 +75,7 @@ export default class DiscordAnalytics {
       framework: this._libType,
       settings: this._eventsToTrack
     }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bot ${this._apiToken}`
-      }
+      headers: this._headers
     }).then(r => {
       if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
       if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
@@ -81,9 +83,7 @@ export default class DiscordAnalytics {
       console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
       new Error(e)
 
-      return setTimeout(() => {
-        this.trackEvents();
-      }, 60000)
+      return setTimeout(() => this.trackEvents(), 60000);
     });
 
     if (this._client instanceof DJSClient) {
@@ -114,12 +114,7 @@ export default class DiscordAnalytics {
         let guildCount = client.guilds.cache.size;
         let userCount = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
         if (data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) return;
-        axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bot ${this._apiToken}`
-          }
-        }).then((res) => {
+        axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {headers: this._headers}).then((res) => {
           if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
           if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
           if (res.status === 200) {
@@ -184,12 +179,7 @@ export default class DiscordAnalytics {
         let guildCount = client.guilds.size;
         let userCount = client.guilds.reduce((a, g) => a + g.memberCount, 0);
         if (data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) return;
-        axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bot ${this._apiToken}`
-          }
-        }).then((res) => {
+        axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {headers: this._headers}).then((res) => {
           if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
           if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
           if (res.status === 200) {
@@ -218,15 +208,12 @@ export default class DiscordAnalytics {
           if (this._eventsToTrack.trackGuildsLocale) data.guildsLocales = guilds;
 
           if (this._eventsToTrack.trackInteractions) {
-            if (interaction instanceof CommandInteraction) {
-              data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type) ?
-                ++data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type)!.number :
-                data.interactions.push({name: interaction.data.name, number: 1, type: interaction.type});
-            } else if (interaction instanceof ComponentInteraction) {
-              data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type) ?
-                ++data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type)!.number :
-                data.interactions.push({ name: interaction.data.custom_id, number: 1, type: interaction.type });
-            }
+            if (interaction instanceof CommandInteraction) data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type) ?
+              ++data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type)!.number :
+              data.interactions.push({name: interaction.data.name, number: 1, type: interaction.type});
+            else if (interaction instanceof ComponentInteraction) data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type) ?
+              ++data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type)!.number :
+              data.interactions.push({ name: interaction.data.custom_id, number: 1, type: interaction.type });
           }
         });
       }

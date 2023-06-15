@@ -3,6 +3,7 @@
   "version": "1.0.2",
   "description": "A discord bot analytics to send your bot data",
   "main": "dist/index.js",
+  "types": "lib/index.d.ts",
   "directories": {
     "lib": "lib"
   },

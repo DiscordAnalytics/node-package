@@ -24,7 +24,7 @@ client.on("ready", () => {
     trackInteractions: true,
     trackUserCount: true,
     trackUserLanguage: true,
-  }, "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"); // token npm
+  }, "YOUR_API_KEY");
   
   analytics.trackEvents();
 
@@ -117,4 +117,4 @@ client.on("interactionCreate", async (interaction: Interaction) => {
   })
 })
 
-client.login("MTA4MjYxNTc3NTYxOTE5OTA1Nw.GXrcMj.j2caJVZ65YhGL8ioLyuSUtJkL1htZd_kpYpDrU");
+client.login("YOUR_DISCORD_CLIENT_TOKEN");

@@ -1,7 +1,7 @@
 import {Client, Constants, CommandInteraction, ComponentInteraction} from "eris";
 import DiscordAnalytics, {LibType} from "../../lib";
 
-const bot = new Client("");
+const bot = new Client("YOUR_DISCORD_CLIENT_TOKEN");
 bot.on("ready", () => {
   bot.createCommand({
     name: "test",
@@ -28,7 +28,7 @@ bot.on("ready", () => {
     trackInteractions: true,
     trackUserCount: true,
     trackUserLanguage: true
-  }, "")
+  }, "YOUR_API_KEY");
 
   analytics.trackEvents();
 

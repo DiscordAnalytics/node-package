@@ -1,5 +1,5 @@
 node_modules
-test
-lib
+src
+dist/test
 .idea
 .github

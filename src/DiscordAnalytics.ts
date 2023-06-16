@@ -1,6 +1,6 @@
 import { Client as DJSClient, InteractionType, Locale } from 'discord.js';
 import { CommandInteraction, ComponentInteraction, Client as ErisClient } from 'eris';
-import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from '../utils/types';
+import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from './utils/types';
 import axios from 'axios';
 
 

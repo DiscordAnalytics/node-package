@@ -1,5 +1,5 @@
 import {Client, Constants, CommandInteraction, ComponentInteraction} from "eris";
-import DiscordAnalytics, {LibType} from "../../lib";
+import DiscordAnalytics, {LibType} from "../..";
 
 const bot = new Client("YOUR_DISCORD_CLIENT_TOKEN");
 bot.on("ready", () => {

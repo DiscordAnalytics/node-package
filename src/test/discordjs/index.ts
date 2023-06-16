@@ -1,4 +1,4 @@
-import DiscordAnalytics, {LibType} from  "../../lib";
+import DiscordAnalytics, {LibType} from  "../..";
 import { ActionRowBuilder, Client, Interaction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 
 const client = new Client({

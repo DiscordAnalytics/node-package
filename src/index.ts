@@ -1,4 +1,4 @@
-import DiscordAnalytics from "./src/DiscordAnalytics";
+import DiscordAnalytics from "./DiscordAnalytics";
 
 export default DiscordAnalytics;
 

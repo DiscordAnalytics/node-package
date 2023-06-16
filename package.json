@@ -1,14 +1,13 @@
 {
   "name": "discord-analytics",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A discord bot analytics to send your bot data",
   "main": "dist/index.js",
-  "types": "lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init": "tsc --init",
-    "test:djs": "nodemon test/discordjs/index.ts",
-    "test:eris": "nodemon test/eris/index.ts",
+    "test:djs": "nodemon src/test/discordjs/index.ts",
+    "test:eris": "nodemon src/test/eris/index.ts",
     "build": "tsc"
   },
   "repository": {

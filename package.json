@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ValDesign22/discord-analytics-js.git"
+    "url": "git+https://github.com/DiscordAnalytics/node-package.git"
   },
   "keywords": [
     "Javascript",
@@ -28,9 +28,9 @@
   "author": "ValDesign Nolhan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ValDesign22/discord-analytics-js/issues"
+    "url": "https://github.com/DiscordAnalytics/node-package/issues"
   },
-  "homepage": "https://github.com/ValDesign22/discord-analytics-js#readme",
+  "homepage": "https://discordanalytics.xyz",
   "dependencies": {
     "@types/node": "^20.1.7",
     "axios": "^1.4.0",

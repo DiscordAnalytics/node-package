@@ -11,7 +11,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "init": "tsc --init",
     "test:djs": "nodemon test/discordjs/index.ts",
-    "test:eris": "nodemon test/eris/index.ts"
+    "test:eris": "nodemon test/eris/index.ts",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

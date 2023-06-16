@@ -28,6 +28,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install Dependencies
         run: npm ci
+      - name: Build the package
+        run: npm run build
       - name: Publish to NPM
         run: npm publish
         env:

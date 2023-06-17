@@ -78,6 +78,7 @@ export default class DiscordAnalytics {
       headers: this._headers
     }).then(r => {
       if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+      if (r.status === 423) throw new Error(ErrorCodes.SUSPENDED_BOT);
       if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
     }).catch(e => {
       console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
@@ -116,6 +117,7 @@ export default class DiscordAnalytics {
         if (data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) return;
         axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {headers: this._headers}).then((res) => {
           if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+          if (res.status === 423) throw new Error(ErrorCodes.SUSPENDED_BOT);
           if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
           if (res.status === 200) {
             data = {

@@ -34,6 +34,7 @@ export default class DiscordAnalytics {
   private _libType: LibType;
   private _disableErisWarnings: boolean;
   private _headers: { 'Content-Type': string; Authorization: string; };
+  private _lastStatsPush: number;
 
   constructor(client: DJSClient | ErisClient, type: LibType, eventsToTrack: EventsToTrack, apiToken: string, disableErisWarnings?: boolean) {
     if (type === LibType.DJS && client instanceof DJSClient) this._client = client;
@@ -48,6 +49,7 @@ export default class DiscordAnalytics {
       'Content-Type': 'application/json',
       'Authorization': `Bot ${this._apiToken}`
     }
+    this._lastStatsPush = Date.now()
   }
 
   /**
@@ -114,12 +116,13 @@ export default class DiscordAnalytics {
       setInterval(() => {
         let guildCount = client.guilds.cache.size;
         let userCount = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
-        if (data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) return;
+        if ((data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) || (this._lastStatsPush + 43200000/* 12h */) > Date.now()) return;
         axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {headers: this._headers}).then((res) => {
           if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
           if (res.status === 423) throw new Error(ErrorCodes.SUSPENDED_BOT);
           if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
           if (res.status === 200) {
+            this._lastStatsPush = Date.now()
             data = {
               date: new Date().toISOString().slice(0, 10),
               guilds: guildCount,
@@ -180,11 +183,12 @@ export default class DiscordAnalytics {
       setInterval(() => {
         let guildCount = client.guilds.size;
         let userCount = client.guilds.reduce((a, g) => a + g.memberCount, 0);
-        if (data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) return;
+        if ((data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) || (this._lastStatsPush + 43200000/* 12h */) > Date.now()) return;
         axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {headers: this._headers}).then((res) => {
           if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
           if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
           if (res.status === 200) {
+            this._lastStatsPush = Date.now()
             data = {
               date: new Date().toISOString().slice(0, 10),
               guilds: guildCount,

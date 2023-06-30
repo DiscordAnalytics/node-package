@@ -82,22 +82,20 @@ export default class DiscordAnalytics {
       if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
       if (r.status === 423) throw new Error(ErrorCodes.SUSPENDED_BOT);
       if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+
+      if (this._client instanceof DJSClient) {
+        if (!this._client.isReady()) throw new Error(ErrorCodes.CLIENT_NOT_READY);
+        else this.trackDJSEvents();
+      }
+      else if (this._client instanceof ErisClient) {
+        if (!this._client.ready) throw new Error(ErrorCodes.CLIENT_NOT_READY);
+        else this.trackErisEvents();
+      }
+      else throw new Error(ErrorCodes.INVALID_CLIENT_TYPE);
     }).catch(e => {
       console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
-      new Error(e)
-
       return setTimeout(() => this.trackEvents(), 60000);
     });
-
-    if (this._client instanceof DJSClient) {
-      if (!this._client.isReady()) throw new Error(ErrorCodes.CLIENT_NOT_READY);
-      else this.trackDJSEvents();
-    }
-    else if (this._client instanceof ErisClient) {
-      if (!this._client.ready) throw new Error(ErrorCodes.CLIENT_NOT_READY);
-      else this.trackErisEvents();
-    }
-    else throw new Error(ErrorCodes.INVALID_CLIENT_TYPE);
   }
 
   private trackDJSEvents(): void {
@@ -107,7 +105,7 @@ export default class DiscordAnalytics {
       let data = {
         date: new Date().toISOString().slice(0, 10),
         guilds: client.guilds.cache.size,
-        users: client.guilds.cache.reduce((a, g) => a + g.memberCount, 0),
+        users: client.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0),
         interactions: [] as { name: string, number: number, type: InteractionType }[],
         locales: [] as { locale: Locale, number: number }[],
         guildsLocales: [] as { locale: Locale, number: number }[]
@@ -115,8 +113,8 @@ export default class DiscordAnalytics {
 
       setInterval(() => {
         let guildCount = client.guilds.cache.size;
-        let userCount = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
-        if ((data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) || (this._lastStatsPush + 43200000/* 12h */) > Date.now()) return;
+        let userCount = client.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0);
+        if ((data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) || (this._lastStatsPush + 43200000/* 10s */) > Date.now()) return;
         axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {headers: this._headers}).then((res) => {
           if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
           if (res.status === 423) throw new Error(ErrorCodes.SUSPENDED_BOT);
@@ -134,7 +132,7 @@ export default class DiscordAnalytics {
           }
         }).catch(e => {
           console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
-          new Error(e)
+          console.error(e)
         });
       }, 60000);
 
@@ -200,7 +198,7 @@ export default class DiscordAnalytics {
           }
         }).catch(e => {
           console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
-          new Error(e)
+          console.error(e)
         });
       }, 60000);
 

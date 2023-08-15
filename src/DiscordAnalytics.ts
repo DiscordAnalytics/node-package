@@ -3,8 +3,6 @@ import { CommandInteraction, ComponentInteraction, Client as ErisClient } from '
 import { EventsToTrack, LibType, ErrorCodes, ApiEndpoints } from './utils/types';
 import axios from 'axios';
 
-
-
 /**
  * @class DiscordAnalytics
  * @description The main class for the DiscordAnalytics library.
@@ -34,8 +32,9 @@ export default class DiscordAnalytics {
   private _libType: LibType;
   private _disableErisWarnings: boolean;
   private _headers: { 'Content-Type': string; Authorization: string; };
+  private _sharded: boolean = false;
 
-  constructor(client: DJSClient | ErisClient, type: LibType, eventsToTrack: EventsToTrack, apiToken: string, disableErisWarnings?: boolean) {
+  constructor(client: DJSClient | ErisClient, type: LibType, eventsToTrack: EventsToTrack, apiToken: string, disableErisWarnings?: boolean, sharded?: boolean) {
     if (type === LibType.DJS && client instanceof DJSClient) this._client = client;
     else if (type === LibType.ERIS && client instanceof ErisClient) this._client = client;
     else throw new Error(ErrorCodes.INVALID_CLIENT_TYPE);
@@ -48,6 +47,7 @@ export default class DiscordAnalytics {
       'Content-Type': 'application/json',
       'Authorization': `Bot ${this._apiToken}`
     }
+    this._sharded = sharded || false;
   }
 
   /**
@@ -90,27 +90,29 @@ export default class DiscordAnalytics {
         else this.trackErisEvents();
       }
       else throw new Error(ErrorCodes.INVALID_CLIENT_TYPE);
-    }).catch(e => {
+    }).catch(_e => {
       console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
       return setTimeout(() => this.trackEvents(), 60000);
     });
   }
 
-  private trackDJSEvents(): void {
+  private async trackDJSEvents(): Promise<void> {
     if (this._client instanceof DJSClient) {
       const client = this._client as DJSClient;
 
       let data = {
         date: new Date().toISOString().slice(0, 10),
-        guilds: client.guilds.cache.size,
+        guilds: this._sharded ? ((await (client.shard?.broadcastEval(c => c.guilds.cache.size)))?.reduce((a, b) => a + b, 0) || 0) : client.guilds.cache.size,
         users: client.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0),
         interactions: [] as { name: string, number: number, type: InteractionType }[],
         locales: [] as { locale: Locale, number: number }[],
         guildsLocales: [] as { locale: Locale, number: number }[]
       }
 
-      setInterval(() => {
-        let guildCount = client.guilds.cache.size;
+      setInterval(async () => {
+        let guildCount = this._sharded ?
+          ((await client.shard?.broadcastEval(c => c.guilds.cache.size))?.reduce((a, b) => a + b, 0) || 0) :
+          client.guilds.cache.size;
         let userCount = client.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0);
         if (data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) return;
         axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {headers: this._headers}).then((res) => {

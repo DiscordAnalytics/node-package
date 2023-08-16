@@ -103,7 +103,7 @@ export default class DiscordAnalytics {
       let data = {
         date: new Date().toISOString().slice(0, 10),
         guilds: this._sharded ? ((await (client.shard?.broadcastEval(c => c.guilds.cache.size)))?.reduce((a, b) => a + b, 0) || 0) : client.guilds.cache.size,
-        users: client.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0),
+        users: this._sharded ? ((await (client.shard?.broadcastEval(c => c.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0))))?.reduce((a, b) => a + b, 0) || 0) : client.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0),
         interactions: [] as { name: string, number: number, type: InteractionType }[],
         locales: [] as { locale: Locale, number: number }[],
         guildsLocales: [] as { locale: Locale, number: number }[]
@@ -113,7 +113,9 @@ export default class DiscordAnalytics {
         let guildCount = this._sharded ?
           ((await client.shard?.broadcastEval(c => c.guilds.cache.size))?.reduce((a, b) => a + b, 0) || 0) :
           client.guilds.cache.size;
-        let userCount = client.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0);
+        let userCount = this._sharded ?
+          ((await client.shard?.broadcastEval(c => c.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0)))?.reduce((a, b) => a + b, 0) || 0) :
+          client.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0);
         if (data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) return;
         axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client.user!.id)}`, JSON.stringify(data), {headers: this._headers}).then((res) => {
           if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);

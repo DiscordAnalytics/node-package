@@ -92,6 +92,7 @@ export default class DiscordAnalytics {
       else throw new Error(ErrorCodes.INVALID_CLIENT_TYPE);
     }).catch(_e => {
       console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
+      console.log(_e)
       return setTimeout(() => this.trackEvents(), 60000);
     });
   }

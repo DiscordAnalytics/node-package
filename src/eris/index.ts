@@ -1,6 +1,5 @@
 import { EventsToTrack, ErrorCodes, ApiEndpoints, Locale, InteractionType } from '../utils/types';
 import axios from 'axios';
-import {CommandInteraction, ComponentInteraction} from "eris";
 
 /**
  * @class DiscordAnalytics
@@ -111,10 +110,10 @@ export default class DiscordAnalytics {
           if (this._eventsToTrack.trackGuildsLocale) data.guildsLocales = guilds;
 
           if (this._eventsToTrack.trackInteractions) {
-            if (interaction instanceof CommandInteraction) data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type) ?
+            if (interaction.type === 2) data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type) ?
               ++data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type)!.number :
               data.interactions.push({name: interaction.data.name, number: 1, type: interaction.type});
-            else if (interaction instanceof ComponentInteraction) data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type) ?
+            else if (interaction.type === 3) data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type) ?
               ++data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type)!.number :
               data.interactions.push({ name: interaction.data.custom_id, number: 1, type: interaction.type });
           }

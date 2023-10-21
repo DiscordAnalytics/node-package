@@ -1,4 +1,4 @@
-import DiscordAnalytics, {LibType} from  "../..";
+import DiscordAnalytics from "../../discordjs";
 import { ActionRowBuilder, Client, Interaction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 
 const client = new Client({
@@ -18,13 +18,18 @@ client.on("ready", () => {
     }]
   }])
   
-  const analytics = new DiscordAnalytics(client, LibType.DJS, {
-    trackGuilds: true,
-    trackGuildsLocale: true,
-    trackInteractions: true,
-    trackUserCount: true,
-    trackUserLanguage: true,
-  }, "YOUR_API_KEY");
+  const analytics = new DiscordAnalytics({
+    client: client,
+    eventsToTrack: {
+      trackGuilds: true,
+      trackGuildsLocale: true,
+      trackInteractions: true,
+      trackUserCount: true,
+      trackUserLanguage: true
+    },
+    apiToken: "YOUR_API_TOKEN",
+    sharded: false
+  });
   
   analytics.trackEvents();
 

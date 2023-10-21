@@ -3,6 +3,8 @@ name: Test TS
 on:
   pull_request:
     types: [opened, reopened, synchronize]
+    paths-ignore:
+      - 'src/test/**'
 
 jobs:
   build:

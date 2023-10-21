@@ -1,8 +1,3 @@
-export enum LibType {
-  DJS = "discord.js",
-  ERIS = "eris"
-}
-
 export interface EventsToTrack {
   trackInteractions: boolean;
   trackGuilds: boolean;
@@ -24,4 +19,14 @@ export const ErrorCodes = {
   DATA_NOT_SENT: "Data cannot be sent to the API, I will try again in a minute.",
   SUSPENDED_BOT: "Your bot has been suspended, please check your mailbox for more information.",
   INVALID_EVENTS_COUNT: "Invalid events count. Please enable at least one event to track.",
+}
+
+export type Locale = 'id' | 'en-US' | 'en-GB' | 'bg' | 'zh-CN' | 'zh-TW' | 'hr' | 'cs' | 'da' | 'nl' | 'fi' | 'fr' | 'de' | 'el' | 'hi' | 'hu' | 'it' | 'ja' | 'ko' | 'lt' | 'no' | 'pl' | 'pt-BR' | 'ro' | 'ru' | 'es-ES' | 'sv-SE' | 'th' | 'tr' | 'uk' | 'vi';
+
+export enum InteractionType {
+  Ping = 1,
+  ApplicationCommand,
+  MessageComponent,
+  ApplicationCommandAutocomplete,
+  ModalSubmit,
 }

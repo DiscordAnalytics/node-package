@@ -1,5 +1,7 @@
+// @ts-nocheck
+
 import {Client, Constants, CommandInteraction, ComponentInteraction} from "eris";
-import DiscordAnalytics, {LibType} from "../..";
+import DiscordAnalytics from "../../eris";
 
 const bot = new Client("YOUR_DISCORD_CLIENT_TOKEN");
 bot.on("ready", () => {
@@ -22,13 +24,18 @@ bot.on("ready", () => {
     }]
   })
 
-  const analytics = new DiscordAnalytics(bot, LibType.ERIS, {
-    trackGuilds: true,
-    trackGuildsLocale: true,
-    trackInteractions: true,
-    trackUserCount: true,
-    trackUserLanguage: true
-  }, "YOUR_API_KEY");
+  const analytics = new DiscordAnalytics({
+    client: bot,
+    eventsToTrack: {
+      trackGuilds: true,
+      trackGuildsLocale: true,
+      trackInteractions: true,
+      trackUserCount: true,
+      trackUserLanguage: false
+    },
+    apiToken: 'YOUR_API_TOKEN',
+    sharded: false
+  });
 
   analytics.trackEvents();
 

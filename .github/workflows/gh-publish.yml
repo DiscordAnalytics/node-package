@@ -6,8 +6,6 @@ name: Github Actions NPM Publish
 on:
   release:
     types: [created]
-    paths-ignore:
-      - 'src/test/**'
 
 jobs:
   build:

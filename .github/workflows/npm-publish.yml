@@ -6,8 +6,6 @@ name: Node.js Package
 on:
   release:
     types: [published]
-    paths-ignore:
-      - 'src/test/**'
 
 jobs:
   build:

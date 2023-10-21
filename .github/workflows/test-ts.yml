@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
     paths-ignore:
-      - 'src/test/**'
+      - 'src/test/**/*.ts'
 
 jobs:
   build:

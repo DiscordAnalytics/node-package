@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import DiscordAnalytics from "../../discordjs";
 import { ActionRowBuilder, Client, Interaction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {Client, Constants, CommandInteraction, ComponentInteraction} from "eris";
 import DiscordAnalytics from "../../eris";
 

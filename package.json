@@ -30,7 +30,7 @@
   "homepage": "https://discordanalytics.xyz",
   "dependencies": {
     "@types/node": "^20.5.0",
-    "axios": "^1.4.0",
+    "axios": "^1.6.3",
     "discord-api-types": "^0.37.60",
     "typescript": "^5.0.4"
   },

@@ -11,7 +11,7 @@ import npmPackageData from "../../package.json"
  * @property {boolean} options.debug - Enable or not the debug mode /!\ MUST BE USED ONLY FOR DEVELOPMENT PURPOSES /!\
  * @example
  * const { default: DiscordAnalytics } = require('discord-analytics/oceanic');
- * const { Client, IntentsBitField } = require('discord.js');
+ * const { Client } = require('oceanic.js');
  * const client = new Client({
  *   auth: "Bot <YOUR_BOT_TOKEN>",
  *   gateway: {

@@ -1,13 +1,24 @@
 // @ts-nocheck
 
 import DiscordAnalytics from "../../discordjs";
-import { ActionRowBuilder, Client, Interaction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ActionRowBuilder, Client, IntentsBitField, Interaction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 
 const client = new Client({
-  intents: []
+  intents: [IntentsBitField.Flags.Guilds]
 })
 
-client.on("ready", () => {
+client.on("error", (e) => {
+  console.log(e)
+})
+
+const analytics = new DiscordAnalytics({
+  client: client,
+  apiToken: "YOUR_API_TOKEN",
+  sharded: false,
+  debug: true
+});
+
+client.on("ready", async () => {
   client.application?.commands.set([{
     name: "test",
     description: "Send test message",
@@ -19,26 +30,14 @@ client.on("ready", () => {
       autocomplete: true
     }]
   }])
-  
-  const analytics = new DiscordAnalytics({
-    client: client,
-    eventsToTrack: {
-      trackGuilds: true,
-      trackGuildsLocale: true,
-      trackInteractions: true,
-      trackUserCount: true,
-      trackUserLanguage: true
-    },
-    apiToken: "YOUR_API_TOKEN",
-    sharded: false
-  });
-  
-  analytics.trackEvents();
 
   console.log("Bot is ready!");
+
+  await analytics.init()
 });
 
 client.on("interactionCreate", async (interaction: Interaction) => {
+  await analytics.trackInteractions(interaction)
   if (interaction.isChatInputCommand()) {
     if (interaction.commandName === "test") {
       const option = interaction.options.getString("test");
@@ -50,7 +49,7 @@ client.on("interactionCreate", async (interaction: Interaction) => {
             type: 2,
             style: 1,
             label: "Test button",
-            custom_id: "test_button"
+            custom_id: "✅"
           }]
         }]
       })
@@ -72,9 +71,9 @@ client.on("interactionCreate", async (interaction: Interaction) => {
         const modal = new ModalBuilder()
         .setCustomId('myModal')
         .setTitle('My Modal');
-  
+
         // Add components to modal
-    
+
         // Create the text input components
         const favoriteColorInput = new TextInputBuilder()
           .setCustomId('favoriteColorInput')
@@ -82,14 +81,14 @@ client.on("interactionCreate", async (interaction: Interaction) => {
           .setLabel("What's your favorite color?")
             // Short means only a single line of text
           .setStyle(TextInputStyle.Short);
-    
+
         // An action row only holds one text input,
         // so you need one action row per text input.
         const firstActionRow = new ActionRowBuilder().addComponents(favoriteColorInput) as ActionRowBuilder<TextInputBuilder>;
-    
+
         // Add inputs to the modal
         modal.addComponents(firstActionRow);
-    
+
         // Show the modal to the user
         await interaction.showModal(modal);
       } else interaction.reply({
@@ -113,10 +112,13 @@ client.on("interactionCreate", async (interaction: Interaction) => {
     ephemeral: true
   })
 
-  if (interaction.isStringSelectMenu()) interaction.reply({
-    content: "Select clicked!",
-    ephemeral: true
-  })
+  if (interaction.isStringSelectMenu()) {
+    await interaction.reply({
+      content: "Select clicked!",
+      ephemeral: true
+    })
+    await interaction.message.edit()
+  }
 
   if (interaction.isModalSubmit()) interaction.reply({
     content: "Modal submitted!",
@@ -124,4 +126,4 @@ client.on("interactionCreate", async (interaction: Interaction) => {
   })
 })
 
-client.login("YOUR_DISCORD_CLIENT_TOKEN");
+client.login("YOUR_DISCORD_TOKEN");

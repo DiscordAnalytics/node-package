@@ -3,7 +3,16 @@
 import {Client, Constants, CommandInteraction, ComponentInteraction} from "eris";
 import DiscordAnalytics from "../../eris";
 
-const bot = new Client("YOUR_DISCORD_CLIENT_TOKEN");
+const bot = new Client("YOUR_DISCORD_TOKEN", {
+  intents: ["guilds"]
+});
+
+const analytics = new DiscordAnalytics({
+  client: bot,
+  apiToken: 'YOUR_API_TOKEN',
+  debug: true
+});
+
 bot.on("ready", () => {
   bot.createCommand({
     name: "test",
@@ -24,20 +33,7 @@ bot.on("ready", () => {
     }]
   })
 
-  const analytics = new DiscordAnalytics({
-    client: bot,
-    eventsToTrack: {
-      trackGuilds: true,
-      trackGuildsLocale: true,
-      trackInteractions: true,
-      trackUserCount: true,
-      trackUserLanguage: false
-    },
-    apiToken: 'YOUR_API_TOKEN',
-    sharded: false
-  });
-
-  analytics.trackEvents();
+  analytics.init()
 
   console.log("Ready!");
 });
@@ -45,12 +41,13 @@ bot.on("ready", () => {
 bot.connect();
 
 bot.on("interactionCreate", async (interaction) => {
+  await analytics.trackInteractions(interaction)
   if (interaction instanceof CommandInteraction) {
     if (interaction.data.name == "test") {
       if (interaction.data.options) {
         const option = interaction.data.options.find((option) => option.name === "test") as { value: string, type: number, name: string } | undefined;
         if (option) {
-          if (option.value === "button") interaction.createMessage({
+          if (option.value === "button") await interaction.createMessage({
             content: "Test button",
             components: [{
               type: 1,
@@ -62,7 +59,7 @@ bot.on("interactionCreate", async (interaction) => {
               }]
             }]
           })
-          else if (option.value === "select") interaction.createMessage({
+          else if (option.value === "select") await interaction.createMessage({
             content: "Test select",
             components: [{
               type: 1,
@@ -76,11 +73,11 @@ bot.on("interactionCreate", async (interaction) => {
               }]
             }]
           })
-        } else interaction.createMessage({
+        } else await interaction.createMessage({
           content: "Test message",
           flags: 64
         })
-      } else interaction.createMessage({
+      } else await interaction.createMessage({
         content: "Test message",
         flags: 64
       })
@@ -89,29 +86,14 @@ bot.on("interactionCreate", async (interaction) => {
 
   if (interaction instanceof ComponentInteraction) {
     if (interaction.data && interaction.data.component_type) {
-      if (interaction.data.component_type === 2) interaction.createMessage({
+      if (interaction.data.component_type === 2) await interaction.createMessage({
         content: "Button clicked!",
         flags: 64
       })
-      else if (interaction.data.component_type === 3) interaction.createMessage({
+      else if (interaction.data.component_type === 3) await interaction.createMessage({
         content: "Select clicked!",
         flags: 64
       })
     }
   }
-
-/*  if (interaction.isButton()) interaction.createMessage({
-    content: "Button clicked!",
-    ephemeral: true
-  })
-
-  if (interaction.isStringSelectMenu()) interaction.createMessage({
-    content: "Select clicked!",
-    ephemeral: true
-  })
-
-  if (interaction.isModalSubmit()) interaction.createMessage({
-    content: "Modal submitted!",
-    ephemeral: true
-  })*/
 })

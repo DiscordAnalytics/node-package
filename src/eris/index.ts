@@ -1,128 +1,187 @@
-import { EventsToTrack, ErrorCodes, ApiEndpoints, Locale, InteractionType } from '../utils/types';
-import axios from 'axios';
+import {ApiEndpoints, DiscordAnalyticsOptions, ErrorCodes, InteractionType, Locale} from "../utils/types";
+import npmPackageData from "../../package.json"
 
 /**
  * @class DiscordAnalytics
- * @description The DiscordAnalytics class for the Eris library.
- * @param {Object} options - Configuration options.
+ * @description The Eris class for the DiscordAnalytics library.
+ * @param {DiscordAnalyticsOptions} options - Configuration options.
  * @property {any} options.client - The Eris client to track events for.
- * @property {EventsToTrack} options.eventsToTrack - An object specifying which events to track.
  * @property {string} options.apiToken - The API token for DiscordAnalytics.
- * @property {boolean} options.sharded - Whether the Eris client is sharded.
+ * @property {boolean} options.sharded - /!\ Not compatible with Eris
+ * @property {boolean} options.debug - Enable or not the debug mode /!\ MUST BE USED ONLY FOR DEVELOPMENT PURPOSES /!\
  * @example
- * const { EventsToTrack } = require('discord-analytics');
- * const DiscordAnalytics = require('discord-analytics/eris').default;
+ * const { default: DiscordAnalytics } = require('discord-analytics/eris');
  * const Eris = require('eris');
- * const client = new Eris('YOUR_BOT_TOKEN');
+ * const client = new Client("YOUR_BOT_TOKEN", {
+ *   intents: ["guilds"]
+ * })
  * client.on('ready', () => {
  *   const analytics = new DiscordAnalytics({
  *     client: client,
- *     eventsToTrack: {
- *       trackGuilds: true,
- *       trackGuildsLocale: true,
- *       trackInteractions: true,
- *       trackUserCount: true,
- *       trackUserLanguage: false
- *     },
- *     apiToken: 'YOUR_API_TOKEN',
- *     sharded: false
+ *     apiToken: 'YOUR_API_TOKEN'
  *   });
  *   analytics.trackEvents();
  * });
- * client.connect();
+ * client.connect()
+ *
+ * // Check docs for more informations about advanced usages : https://docs.discordanalytics.xyz/get-started/installation/eris
  */
 export default class DiscordAnalytics {
   private readonly _client: any;
-  private readonly _eventsToTrack: EventsToTrack;
   private readonly _apiToken: string;
-  private _headers: { 'Content-Type': string; Authorization: string; };
-  private _sharded: boolean = false;
+  private readonly _sharded: boolean = false;
+  private readonly _debug: boolean
+  private readonly _headers: { 'Content-Type': string; Authorization: string; };
+  private _isReady: boolean
 
-  constructor(options: {client: any, eventsToTrack: EventsToTrack, apiToken: string, sharded: boolean }) {
+  constructor(options: DiscordAnalyticsOptions) {
     this._client = options.client;
-    this._eventsToTrack = options.eventsToTrack;
     this._apiToken = options.apiToken;
     this._headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bot ${this._apiToken}`
     }
-    this._sharded = options.sharded || false;
+    this._isReady = false
+    this._debug = options.debug || false
+
+    if (options.sharded === true) throw new Error("Discord Analytics is not compatible with eris shards.")
   }
 
   /**
-   * @description Track events
-   * @returns {void}
+   * Initialize DiscordAnalytics on your bot
+   * /!\ Advanced users only
+   * /!\ Required to use DiscordAnalytics (except if you use the trackEvents function)
+   * /!\ Must be used when the client is ready (recommended to use in ready event to prevent problems)
    */
-  public async trackEvents(): Promise<void> {
-    if (!this._eventsToTrack.trackInteractions && !this._eventsToTrack.trackGuilds && !this._eventsToTrack.trackUserCount && !this._eventsToTrack.trackUserLanguage && !this._eventsToTrack.trackGuildsLocale) throw new Error(ErrorCodes.INVALID_EVENTS_COUNT);
+  public async init () {
+    fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_SETTINGS_URL.replace(':id', this._client.user.id)}`, {
+      headers: this._headers,
+      body: JSON.stringify({
+        username: this._client.user.username,
+        avatar: this._client.user.avatar,
+        framework: "eris",
+        version: npmPackageData.version,
+      }),
+      method: "PATCH"
+    }).then(async (res) => {
+      if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+      if (res.status === 423) throw new Error(ErrorCodes.SUSPENDED_BOT);
+      if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
 
-    axios.patch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_SETTINGS_URL.replace(':id', this._client.user!.id)}`, {
-      username: this._client.user!.username,
-      avatar: this._client.user!.avatar,
-      framework: "eris",
-      settings: this._eventsToTrack
-    }, {
-      headers: this._headers
-    }).then(async r => {
-      if (r.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
-      if (r.status === 423) throw new Error(ErrorCodes.SUSPENDED_BOT);
-      if (r.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+      if (this._debug) console.debug("[DISCORDANALYTICS] Instance successfully initialized")
+      this._isReady = true
 
-      let data = {
-        date: new Date().toISOString().slice(0, 10),
-        guilds: this._client.guilds.size,
-        users: this._client.guilds.reduce((a: number, g: any) => a + g.memberCount, 0),
-        interactions: [] as { name: string, number: number, type: InteractionType }[],
-        locales: [] as { locale: Locale, number: number }[],
-        guildsLocales: [] as { locale: string, number: number }[]
+      if (this._debug) {
+        if (process.argv[2] === "--dev") console.debug("[DISCORDANALYTICS] DevMode is enabled. Stats will be sent every 30s.")
+        else console.debug("[DISCORDANALYTICS] DevMode is disabled. Stats will be sent every 5min.")
       }
 
-      setInterval(() => {
-        let guildCount = this._client.guilds.size;
-        let userCount = this._client.guilds.reduce((a: number, g: any) => a + g.memberCount, 0);
-        if (data.guilds === guildCount && data.users === userCount && data.guildsLocales.length === 0 && data.locales.length === 0 && data.interactions.length === 0) return;
-        axios.post(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', this._client.user!.id)}`, JSON.stringify(data), {headers: this._headers}).then((res) => {
+      setInterval(async () => {
+        if (this._debug) console.debug("[DISCORDANALYTICS] Sending stats...")
+
+        let guildCount = this._client.guilds.size
+        let userCount = this._client.guilds.reduce((a: number, g: any) => a + g.memberCount, 0)
+
+        fetch(`${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', this._client.user!.id)}`, {
+          headers: this._headers,
+          body: JSON.stringify(this.statsData),
+          method: "POST"
+        }).then(async (res) => {
           if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
+          if (res.status === 423) throw new Error(ErrorCodes.SUSPENDED_BOT);
           if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
           if (res.status === 200) {
-            data = {
+            if (this._debug) console.debug(`[DISCORDANALYTICS] Stats ${JSON.stringify(this.statsData)} sent to the API`)
+
+            this.statsData = {
               date: new Date().toISOString().slice(0, 10),
               guilds: guildCount,
               users: userCount,
               interactions: [] as { name: string, number: number, type: InteractionType }[],
               locales: [] as { locale: Locale, number: number }[],
-              guildsLocales: [] as { locale: string, number: number }[]
+              guildsLocales: [] as { locale: Locale, number: number }[],
+              guildMembers: await this.calculateGuildMembersRepartition()
             }
           }
         }).catch(e => {
-          console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
-          console.error(e)
-        });
-      }, 60000 * 5);
-
-      if (this._eventsToTrack.trackInteractions) {
-        this._client.on('interactionCreate', (interaction: any) => {
-          let guilds: { locale: string, number: number }[] = []
-          this._client.guilds.map((current: any) => guilds.find((x) => x.locale === current.preferredLocale) ?
-            ++guilds.find((x) => x.locale === current.preferredLocale)!.number :
-            guilds.push({ locale: current.preferredLocale, number: 1 }));
-
-          if (this._eventsToTrack.trackGuildsLocale) data.guildsLocales = guilds;
-
-          if (this._eventsToTrack.trackInteractions) {
-            if (interaction.type === 2) data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type) ?
-              ++data.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type)!.number :
-              data.interactions.push({name: interaction.data.name, number: 1, type: interaction.type});
-            else if (interaction.type === 3) data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type) ?
-              ++data.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type)!.number :
-              data.interactions.push({ name: interaction.data.custom_id, number: 1, type: interaction.type });
+          if (this._debug) {
+            console.debug("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
+            console.error(e)
           }
         });
-      }
-    }).catch(_e => {
-      console.log("[DISCORDANALYTICS] " + ErrorCodes.DATA_NOT_SENT);
-      console.error(_e);
-      return setTimeout(() => this.trackEvents(), 60000);
-    });
+      }, process.argv[2] === "--dev" ? 30000 : 5 * 60000);
+    })
+  }
+
+  private statsData = {
+    date: new Date().toISOString().slice(0, 10),
+    guilds: 0,
+    users: 0,
+    interactions: [] as { name: string, number: number, type: InteractionType }[],
+    locales: [] as { locale: Locale, number: number }[],
+    guildsLocales: [] as { locale: Locale, number: number }[],
+    guildMembers: {
+      little: 0,
+      medium: 0,
+      big: 0,
+      huge: 0
+    }
+  }
+
+  private async calculateGuildMembersRepartition (): Promise<{ little: number, medium: number, big: number, huge: number }> {
+    const res = {
+      little: 0,
+      medium: 0,
+      big: 0,
+      huge: 0
+    }
+
+    let guildsMembers: number[] = this._client.guilds.map((guild: any) => guild.memberCount)
+
+
+    for (const guild of guildsMembers) {
+      if (guild <= 100) res.little++
+      else if (guild > 100 && guild <= 500) res.medium++
+      else if (guild > 500 && guild <= 1500) res.big++
+      else if (guild > 1500) res.huge++
+    }
+
+    return res
+  }
+
+  /**
+   * Track interactions
+   * /!\ Advanced users only
+   * /!\ You need to initialize the class first
+   * @param interaction - BaseInteraction class and its extensions only
+   */
+  public async trackInteractions (interaction: any) {
+    console.log("[DISCORDANALYTICS] tackInteractions() triggered")
+    if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED)
+
+    let guilds: { locale: string, number: number }[] = []
+    this._client.guilds.map((current: any) => guilds.find((x) => x.locale === current.preferredLocale) ?
+      ++guilds.find((x) => x.locale === current.preferredLocale)!.number :
+      guilds.push({ locale: current.preferredLocale, number: 1 }));
+
+    this.statsData.guildsLocales = guilds as { locale: Locale, number: number }[];
+
+      if (interaction.type === 2) this.statsData.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type) ?
+        ++this.statsData.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type)!.number :
+        this.statsData.interactions.push({name: interaction.data.name, number: 1, type: interaction.type});
+      else if (interaction.type === 3) this.statsData.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type) ?
+        ++this.statsData.interactions.find((x) => x.name === interaction.data.custom_id && x.type === interaction.type)!.number :
+        this.statsData.interactions.push({ name: interaction.data.custom_id, number: 1, type: interaction.type });
+  }
+
+  /**
+   * Let DiscordAnalytics declare the events necessary for its operation.
+   * /!\ Not recommended for big bots
+   * /!\ Not compatible with other functions
+   */
+  public trackEvents () {
+    if (!this._client.ready) this._client.on("ready", async () => await this.init())
+    else this.init()
+    this._client.on("interactionCreate", async (interaction: any) => await this.trackInteractions(interaction))
   }
 }

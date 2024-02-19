@@ -6,7 +6,7 @@ export interface EventsToTrack {
   trackGuildsLocale: boolean;
 }
 export const ApiEndpoints = {
-  BASE_URL: 'https://beta.discordanalytics.xyz/api',
+  BASE_URL: 'https://discordanalytics.xyz/api',
   EDIT_SETTINGS_URL: '/bots/:id',
   EDIT_STATS_URL: '/bots/:id/stats',
 }

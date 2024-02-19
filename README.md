@@ -14,29 +14,29 @@ npm install discord-analytics
 
 ```js
 // Import Discord.js's client and intents
-const { Client, GatewayIntentBits.Guilds } = require("discord.js")
+const { Client, IntentsBitField } = require("discord.js")
 // import discord-analytics
-const { LibType, default: DiscordAnalytics } = require("discord-analytics")
+const { default: DiscordAnalytics } = require("discord-analytics/discordjs")
 
 // Create Discord client
-const client = new Client();
+const client = new Client({
+    intents: [IntentsBitField.Flags.Guilds] // This intent is required
+});
+
+// Create Discord Analytics instance
+// Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
+const analytics = new DiscordAnalytics({
+    client: client,
+    apiToken: 'YOUR_API_TOKEN',
+    sharded: false // Set it to true if your bot use shards
+});
+
+// start tracking selected events
+analytics.trackEvents();
 
 // When Discord client is ready
 client.on('ready', () => {
-  // Create Discord Analytics instance
-  // Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
-  const analytics = new DiscordAnalytics(client, LibType.DJS, {
-    trackGuilds: true,
-    trackGuildsLocale: true,
-    trackInteractions: true,
-    trackUserCount: true,
-    trackUserLanguage: true,
-  }, "YOUR_API_TOKEN");
-  
-  // start tracking selected events
-  analytics.trackEvents();
-
-  console.log("Bot is ready!");
+    console.log("Bot is ready!");
 });
 
 // Login to Discord
@@ -47,31 +47,64 @@ client.login('token');
 **With Eris:**
 
 ```js
-const {Client, Constants, CommandInteraction, ComponentInteraction} from "eris";
-const {LibType, default: DiscordAnalytics} = require("../../lib");
+const {Client} = require("eris");
+const {default: DiscordAnalytics} = require("discord-analytics/eris");
 
 // Create Eris client.
 // Don't forget to replace token by your Discord bot token !
 const bot = new Client("token");
 
 bot.on("ready", () => {
-  // Create Discord Analytics instance
-  // Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
-  const analytics = new DiscordAnalytics(client, LibType.ERIS, {
-    trackGuilds: true,
-    trackGuildsLocale: true,
-    trackInteractions: true,
-    trackUserCount: true,
-    trackUserLanguage: false, // not supported
-  }, "YOUR_API_TOKEN");
+    // Create Discord Analytics instance
+    // Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
+    const analytics = new DiscordAnalytics({
+        client: client,
+        apiToken: 'YOUR_API_TOKEN'
+    });
 
-  // start tracking selected events
-  analytics.trackEvents();
+    // start tracking selected events
+    analytics.trackEvents();
 
-  console.log("Ready!");
+    console.log("Ready!");
 });
 
 // Login to Discord
 bot.connect();
 ```
 
+**With Oceanic.js:**
+```js
+// Import Discord.js's client and intents
+const { Client } = require("oceanic.js")
+// import discord-analytics
+const { default: DiscordAnalytics } = require("discord-analytics/oceanic")
+
+// Create Discord client
+const client = new Client({
+  auth: "Bot <YOUR_BOT_TOKEN>",
+  gateway: {
+    intents: ["GUILDS"] // This intent is required
+  }
+})
+
+// Create Discord Analytics instance
+// Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
+const analytics = new DiscordAnalytics({
+  client: client,
+  apiToken: 'YOUR_API_TOKEN'
+});
+
+// start tracking selected events
+analytics.trackEvents();
+
+// When Discord client is ready
+client.on('ready', () => {
+  console.log("Bot is ready!");
+});
+
+// Login to Discord
+// Don't forget to replace token by your Discord bot token !
+client.login('token');
+```
+
+> For advanced usages and updated docs, please check https://docs.discordanalytics.xyz/get-started/installation

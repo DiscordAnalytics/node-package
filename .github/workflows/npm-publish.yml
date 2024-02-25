@@ -33,7 +33,7 @@ jobs:
       - name: Move files
         run: rm -r ./src && mv ./dist/src/* ./ && rm -r ./dist
       - name: Edit package.json imports
-        run: sed -i 's#../../package.json#../package.json#' src/discordjs/index.ts && sed -i 's#../../package.json#../package.json#' src/eris/index.ts && sed -i 's#../../package.json#../package.json#' src/oceanic/index.ts
+        run: sed -i 's#../../package.json#../package.json#' src/discordjs/index.js && sed -i 's#../../package.json#../package.json#' src/eris/index.js && sed -i 's#../../package.json#../package.json#' src/oceanic/index.js
       - name: Publish to NPM
         run: npm publish
         env:

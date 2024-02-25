@@ -32,6 +32,8 @@ jobs:
         run: npm run build
       - name: Move files
         run: rm -r ./src && mv ./dist/src/* ./ && rm -r ./dist
+      - name: Edit package.json imports
+        run: sed -i 's#../../package.json#../package.json#' src/discordjs/index.ts && sed -i 's#../../package.json#../package.json#' src/eris/index.ts && sed -i 's#../../package.json#../package.json#' src/oceanic/index.ts
       - name: Publish to NPM
         run: npm publish
         env:

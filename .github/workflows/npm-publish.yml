@@ -31,7 +31,7 @@ jobs:
       - name: Build the package
         run: npm run build
       - name: Move files
-        run: rm -r ./src && mv ./dist/* ./ && rm -r ./dist
+        run: rm -r ./src && mv ./dist/src/* ./ && rm -r ./dist
       - name: Publish to NPM
         run: npm publish
         env:

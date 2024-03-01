@@ -1,5 +1,6 @@
 import {ApiEndpoints, DiscordAnalyticsOptions, ErrorCodes, InteractionType, Locale} from "../utils/types";
-import npmPackageData from "../../package.json"
+import npmPackageData from "../../package.json";
+import fetch from "node-fetch";
 
 /**
  * @class DiscordAnalytics

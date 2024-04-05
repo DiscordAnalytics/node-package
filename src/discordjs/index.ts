@@ -163,7 +163,7 @@ export default class DiscordAnalytics {
    * @param interaction - BaseInteraction class and its extensions only
    */
   public async trackInteractions (interaction: any) {
-    console.log("[DISCORDANALYTICS] tackInteractions() triggered")
+    if (this._debug) console.log("[DISCORDANALYTICS] tackInteractions() triggered")
     if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED)
 
     let guilds: { locale: Locale, number: number }[] = []

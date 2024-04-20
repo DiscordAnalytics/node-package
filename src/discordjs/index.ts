@@ -130,7 +130,10 @@ export default class DiscordAnalytics {
       medium: 0,
       big: 0,
       huge: 0
-    }
+    },
+    guildsStats: [] as { guildId: string, name: string, icon: string, members: number, interactions: number }[],
+    addedGuilds: 0,
+    removedGuilds: 0
   }
 
   private async calculateGuildMembersRepartition (): Promise<{ little: number, medium: number, big: number, huge: number }> {
@@ -177,7 +180,7 @@ export default class DiscordAnalytics {
       ++this.statsData.locales.find((x) => x.locale === interaction.locale)!.number :
       this.statsData.locales.push({ locale: interaction.locale, number: 1 });
 
-    if (interaction.type === InteractionType.ApplicationCommand || interaction.type === InteractionType.ApplicationCommandAutocomplete)
+    if (interaction.type === InteractionType.ApplicationCommand)
       this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type) ?
         ++this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type)!.number :
         this.statsData.interactions.push({ name: interaction.commandName, number: 1, type: interaction.type });

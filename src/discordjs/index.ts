@@ -1,4 +1,11 @@
-import {ApiEndpoints, DiscordAnalyticsOptions, ErrorCodes, InteractionType, Locale} from "../utils/types";
+import {
+  ApiEndpoints,
+  DiscordAnalyticsOptions,
+  ErrorCodes,
+  InteractionType,
+  Locale,
+  TrackGuildType
+} from "../utils/types";
 import npmPackageData from "../../package.json";
 import fetch from "node-fetch";
 
@@ -102,10 +109,13 @@ export default class DiscordAnalytics {
               date: new Date().toISOString().slice(0, 10),
               guilds: guildCount,
               users: userCount,
-              interactions: [] as { name: string, number: number, type: InteractionType }[],
-              locales: [] as { locale: Locale, number: number }[],
-              guildsLocales: [] as { locale: Locale, number: number }[],
-              guildMembers: await this.calculateGuildMembersRepartition()
+              interactions: [],
+              locales: [],
+              guildsLocales: [],
+              guildMembers: await this.calculateGuildMembersRepartition(),
+              guildsStats: [],
+              addedGuilds: 0,
+              removedGuilds: 0
             }
           }
         }).catch(e => {
@@ -189,6 +199,28 @@ export default class DiscordAnalytics {
       this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type) ?
         ++this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type)!.number :
         this.statsData.interactions.push({ name: interaction.customId, number: 1, type: interaction.type });
+
+    const guildData = this.statsData.guildsStats.find(guild => guild.guildId === interaction.guild.id)
+    if (guildData) this.statsData.guildsStats.filter(guild => guild.guildId !== guildData.guildId)
+    this.statsData.guildsStats.push({
+      guildId: interaction.guild.id,
+      name: interaction.guild.name,
+      icon: interaction.guild.icon || null,
+      interactions: guildData ? guildData.interactions++ : 1,
+      members: interaction.guild.memberCount
+    })
+  }
+
+  /**
+   * Track guilds
+   * /!\ Advanced users only
+   * /!\ You need to initialize the class first
+   * @param {TrackGuildType} type - "create" if the event is guildCreate and "delete" if is guildDelete
+   */
+  public async trackGuilds (type: TrackGuildType) {
+    if (this._debug) console.log(`[DISCORDANALYTICS] trackGuilds(${type}) triggered`)
+    if (type === "create") this.statsData.addedGuilds++
+    else this.statsData.removedGuilds++
   }
 
   /**
@@ -200,5 +232,7 @@ export default class DiscordAnalytics {
     if (!this._client.isReady()) this._client.on("ready", async () => await this.init())
     else this.init()
     this._client.on("interactionCreate", async (interaction: any) => await this.trackInteractions(interaction))
+    this._client.on("guildCreate", () => this.trackGuilds("create"))
+    this._client.on("guildDelete", () => this.trackGuilds("delete"))
   }
 }

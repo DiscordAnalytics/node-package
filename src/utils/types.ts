@@ -38,3 +38,5 @@ export interface DiscordAnalyticsOptions {
   sharded?: boolean;
   debug?: boolean;
 }
+
+export type TrackGuildType = "create" | "delete"

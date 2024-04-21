@@ -142,4 +142,8 @@ client.on("interactionCreate", async (interaction) => {
   }
 })
 
+client.on("guildCreate", async (guild) => await analytics.trackGuilds(guild, "create"))
+
+client.on("guildDelete", async (guild) => await analytics.trackGuilds(guild, "delete"))
+
 client.connect()

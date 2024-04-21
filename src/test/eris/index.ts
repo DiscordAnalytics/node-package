@@ -97,3 +97,7 @@ bot.on("interactionCreate", async (interaction) => {
     }
   }
 })
+
+bot.on("guildCreate", async (guild) => await analytics.trackGuilds(guild, "create"))
+
+bot.on("guildDelete", async (guild) => await analytics.trackGuilds(guild, "delete"))

@@ -126,4 +126,8 @@ client.on("interactionCreate", async (interaction: Interaction) => {
   })
 })
 
+client.on("guildCreate", async (guild) => await analytics.trackGuilds(guild, "create"))
+
+client.on("guildDelete", async (guild) => await analytics.trackGuilds(guild, "delete"))
+
 client.login("YOUR_DISCORD_TOKEN");

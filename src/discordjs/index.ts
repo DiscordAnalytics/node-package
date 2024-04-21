@@ -215,9 +215,10 @@ export default class DiscordAnalytics {
    * Track guilds
    * /!\ Advanced users only
    * /!\ You need to initialize the class first
+   * @param guild - The Guild instance only
    * @param {TrackGuildType} type - "create" if the event is guildCreate and "delete" if is guildDelete
    */
-  public async trackGuilds (type: TrackGuildType) {
+  public async trackGuilds (guild: any, type: TrackGuildType) {
     if (this._debug) console.log(`[DISCORDANALYTICS] trackGuilds(${type}) triggered`)
     if (type === "create") this.statsData.addedGuilds++
     else this.statsData.removedGuilds++
@@ -232,7 +233,7 @@ export default class DiscordAnalytics {
     if (!this._client.isReady()) this._client.on("ready", async () => await this.init())
     else this.init()
     this._client.on("interactionCreate", async (interaction: any) => await this.trackInteractions(interaction))
-    this._client.on("guildCreate", () => this.trackGuilds("create"))
-    this._client.on("guildDelete", () => this.trackGuilds("delete"))
+    this._client.on("guildCreate", (guild: any) => this.trackGuilds(guild, "create"))
+    this._client.on("guildDelete", (guild: any) => this.trackGuilds(guild, "delete"))
   }
 }

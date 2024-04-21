@@ -1,4 +1,11 @@
-import {ApiEndpoints, DiscordAnalyticsOptions, ErrorCodes, InteractionType, Locale} from "../utils/types";
+import {
+  ApiEndpoints,
+  DiscordAnalyticsOptions,
+  ErrorCodes,
+  InteractionType,
+  Locale,
+  TrackGuildType
+} from "../utils/types";
 import npmPackageData from "../../package.json";
 import fetch from "node-fetch";
 
@@ -101,10 +108,13 @@ export default class DiscordAnalytics {
               date: new Date().toISOString().slice(0, 10),
               guilds: guildCount,
               users: userCount,
-              interactions: [] as { name: string, number: number, type: InteractionType }[],
-              locales: [] as { locale: Locale, number: number }[],
-              guildsLocales: [] as { locale: Locale, number: number }[],
-              guildMembers: await this.calculateGuildMembersRepartition()
+              interactions: [],
+              locales: [],
+              guildsLocales: [],
+              guildMembers: await this.calculateGuildMembersRepartition(),
+              guildsStats: [],
+              addedGuilds: 0,
+              removedGuilds: 0
             }
           }
         }).catch(e => {
@@ -129,7 +139,10 @@ export default class DiscordAnalytics {
       medium: 0,
       big: 0,
       huge: 0
-    }
+    },
+    guildsStats: [] as { guildId: string, name: string, icon: string, members: number, interactions: number }[],
+    addedGuilds: 0,
+    removedGuilds: 0
   }
 
   private async calculateGuildMembersRepartition (): Promise<{ little: number, medium: number, big: number, huge: number }> {
@@ -173,15 +186,40 @@ export default class DiscordAnalytics {
       ++this.statsData.locales.find((x) => x.locale === interaction.locale)!.number :
       this.statsData.locales.push({ locale: interaction.locale, number: 1 });
 
-    if (interaction.type === InteractionType.ApplicationCommand || interaction.type === InteractionType.ApplicationCommandAutocomplete)
-      this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type) ?
-        ++this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type)!.number :
-        this.statsData.interactions.push({ name: interaction.commandName, number: 1, type: interaction.type });
+    if (interaction.type === InteractionType.ApplicationCommand)
+      this.statsData.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type) ?
+        ++this.statsData.interactions.find((x) => x.name === interaction.data.name && x.type === interaction.type)!.number :
+        this.statsData.interactions.push({ name: interaction.data.name, number: 1, type: interaction.type });
 
     else if (interaction.type === InteractionType.MessageComponent || interaction.type === InteractionType.ModalSubmit)
       this.statsData.interactions.find((x) => x.name === interaction.data.customID && x.type === interaction.type) ?
         ++this.statsData.interactions.find((x) => x.name === interaction.data.customID && x.type === interaction.type)!.number :
         this.statsData.interactions.push({ name: interaction.data.customID, number: 1, type: interaction.type });
+
+    const guildData = this.statsData.guildsStats.find(guild => guild.guildId === interaction.guildID)
+    if (guildData) this.statsData.guildsStats.filter(guild => guild.guildId !== guildData.guildId)
+
+    const guild = this._client.guilds.find((guild: any) => guild.id === interaction.guildID)
+    this.statsData.guildsStats.push({
+      guildId: interaction.guildID,
+      name: guild.name,
+      icon: guild.icon || null,
+      interactions: guildData ? guildData.interactions++ : 1,
+      members: guild.memberCount
+    })
+  }
+
+  /**
+   * Track guilds
+   * /!\ Advanced users only
+   * /!\ You need to initialize the class first
+   * @param guild - The Guild instance only
+   * @param {TrackGuildType} type - "create" if the event is guildCreate and "delete" if is guildDelete
+   */
+  public async trackGuilds (guild: any, type: TrackGuildType) {
+    if (this._debug) console.log(`[DISCORDANALYTICS] trackGuilds(${type}) triggered`)
+    if (type === "create") this.statsData.addedGuilds++
+    else this.statsData.removedGuilds++
   }
 
   /**

@@ -2,6 +2,9 @@
 
 import DiscordAnalytics from "../../discordjs";
 import { ActionRowBuilder, Client, IntentsBitField, Interaction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import {config} from "dotenv";
+
+config()
 
 const client = new Client({
   intents: [IntentsBitField.Flags.Guilds]
@@ -13,7 +16,7 @@ client.on("error", (e) => {
 
 const analytics = new DiscordAnalytics({
   client: client,
-  apiToken: "YOUR_API_TOKEN",
+  apiToken: process.env.DA_TOKEN,
   sharded: false,
   debug: true
 });
@@ -22,6 +25,7 @@ client.on("ready", async () => {
   client.application?.commands.set([{
     name: "test",
     description: "Send test message",
+    dmPermission: true,
     options: [{
       name: "test",
       description: "Test option",
@@ -130,4 +134,4 @@ client.on("guildCreate", async (guild) => await analytics.trackGuilds(guild, "cr
 
 client.on("guildDelete", async (guild) => await analytics.trackGuilds(guild, "delete"))
 
-client.login("YOUR_DISCORD_TOKEN");
+client.login(process.env.DISCORD_TOKEN);

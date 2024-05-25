@@ -2,14 +2,17 @@
 
 import {Client, Constants, CommandInteraction, ComponentInteraction} from "eris";
 import DiscordAnalytics from "../../eris";
+import {config} from "dotenv";
 
-const bot = new Client("YOUR_DISCORD_TOKEN", {
+config()
+
+const bot = new Client(process.env.DISCORD_TOKEN, {
   intents: ["guilds"]
 });
 
 const analytics = new DiscordAnalytics({
   client: bot,
-  apiToken: 'YOUR_API_TOKEN',
+  apiToken: process.env.DA_TOKEN,
   debug: true
 });
 

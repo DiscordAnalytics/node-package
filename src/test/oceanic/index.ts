@@ -9,9 +9,12 @@ import {
   TextInputStyles,
 } from "oceanic.js";
 import DiscordAnalytics from "../../oceanic";
+import {config} from "dotenv";
+
+config()
 
 const client = new Client({
-  auth: "Bot YOUR_DISCORD_TOKEN",
+  auth: `Bot ${process.env.DISCORD_TOKEN}`,
   gateway: {
     intents: ["GUILDS"]
   }
@@ -19,7 +22,7 @@ const client = new Client({
 
 const analytics = new DiscordAnalytics({
   client: client,
-  apiToken: "YOUR_API_TOKEN",
+  apiToken: process.env.DA_TOKEN,
   debug: true
 })
 

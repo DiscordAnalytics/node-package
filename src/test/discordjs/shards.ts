@@ -1,6 +1,9 @@
 import { ShardingManager } from 'discord.js';
+import {config} from "dotenv";
 
-const manager = new ShardingManager('./dist/src/test/discordjs/index.js', { token: 'YOUR_DISCORD_TOKEN' });
+config()
+
+const manager = new ShardingManager('./dist/src/test/discordjs/index.js', { token: process.env.DISCORD_TOKEN });
 
 manager.on('shardCreate', shard => console.log(`Launched shard ${shard.id}`));
 

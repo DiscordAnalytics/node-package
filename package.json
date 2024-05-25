@@ -31,15 +31,15 @@
   },
   "homepage": "https://discordanalytics.xyz",
   "devDependencies": {
-    "@types/node": "^20.12.4",
+    "@types/node": "^20.12.12",
     "@types/node-fetch": "^2.6.11",
-    "discord.js": "^14.14.1",
+    "discord.js": "^14.15.2",
     "dotenv": "^16.4.5",
     "eris": "^0.17.2",
-    "nodemon": "^3.1.0",
-    "oceanic.js": "^1.10.0",
+    "nodemon": "^3.1.1",
+    "oceanic.js": "^1.10.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "node-fetch": "^2.7.0"

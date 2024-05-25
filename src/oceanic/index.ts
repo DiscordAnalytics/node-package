@@ -196,16 +196,16 @@ export default class DiscordAnalytics {
         ++this.statsData.interactions.find((x) => x.name === interaction.data.customID && x.type === interaction.type)!.number :
         this.statsData.interactions.push({ name: interaction.data.customID, number: 1, type: interaction.type });
 
-    const guildData = this.statsData.guildsStats.find(guild => guild.guildId === interaction.guildID)
+    const guildData = this.statsData.guildsStats.find(guild => interaction.guildID ? guild.guildId === interaction.guildID : guild.guildId === "dm")
     if (guildData) this.statsData.guildsStats = this.statsData.guildsStats.filter(guild => guild.guildId === guildData.guildId)
 
     const guild = this._client.guilds.find((guild: any) => guild.id === interaction.guildID)
     this.statsData.guildsStats.push({
-      guildId: interaction.guildID,
-      name: guild.name,
-      icon: guild.icon || null,
+      guildId: interaction.guildID || "dm",
+      name: guild ? guild.name : "DM",
+      icon: guild && guild.icon ? guild.icon : undefined,
       interactions: guildData ? guildData.interactions + 1 : 1,
-      members: guild.memberCount
+      members: guild ? guild.memberCount : 0
     })
   }
 

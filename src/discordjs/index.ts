@@ -115,7 +115,14 @@ export default class DiscordAnalytics {
               guildMembers: await this.calculateGuildMembersRepartition(),
               guildsStats: [],
               addedGuilds: 0,
-              removedGuilds: 0
+              removedGuilds: 0,
+              users_type: {
+                admin: 0,
+                moderator: 0,
+                new_member: 0,
+                other: 0,
+                private_message: 0
+              }
             }
           }
         }).catch(e => {
@@ -143,7 +150,14 @@ export default class DiscordAnalytics {
     },
     guildsStats: [] as { guildId: string, name: string, icon: string, members: number, interactions: number }[],
     addedGuilds: 0,
-    removedGuilds: 0
+    removedGuilds: 0,
+    users_type: {
+      admin: 0,
+      moderator: 0,
+      new_member: 0,
+      other: 0,
+      private_message: 0
+    }
   }
 
   private async calculateGuildMembersRepartition (): Promise<{ little: number, medium: number, big: number, huge: number }> {
@@ -209,6 +223,14 @@ export default class DiscordAnalytics {
       interactions: guildData ? guildData.interactions + 1 : 1,
       members: interaction.guild ? interaction.guild.memberCount : 0
     })
+
+    const oneWeekAgo = new Date()
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+
+    if (!interaction.inGuild()) ++this.statsData.users_type.private_message
+    else if (interaction.member.permissions.has(8n) || interaction.member.permissions.has(32n)) ++this.statsData.users_type.admin
+    else if (interaction.member.permissions.has(8192n) || interaction.member.permissions.has(2n) || interaction.member.permissions.has(4n) || interaction.member.permissions.has(4194304n) || interaction.member.permissions.has(8388608n) || interaction.member.permissions.has(16777216n) || interaction.member.permissions.has(1099511627776n)) ++this.statsData.users_type.moderator
+    else if (interaction.member.joinedAt && interaction.member.joinedAt > oneWeekAgo) ++this.statsData.users_type.new_member
   }
 
   /**

@@ -42,7 +42,7 @@ export default class DiscordAnalytics {
   private readonly _headers: { 'Content-Type': string; Authorization: string; };
   private _isReady: boolean
 
-  constructor(options: DiscordAnalyticsOptions) {
+  constructor(options: Omit<DiscordAnalyticsOptions, "sharded">) {
     this._client = options.client;
     this._apiToken = options.apiToken;
     this._headers = {
@@ -51,8 +51,6 @@ export default class DiscordAnalytics {
     }
     this._isReady = false
     this._debug = options.debug || false
-
-    if (options.sharded === true) throw new Error("Discord Analytics is not compatible with eris shards.")
   }
 
   /**
@@ -111,7 +109,14 @@ export default class DiscordAnalytics {
               guildMembers: await this.calculateGuildMembersRepartition(),
               guildsStats: [],
               addedGuilds: 0,
-              removedGuilds: 0
+              removedGuilds: 0,
+              users_type: {
+                admin: 0,
+                moderator: 0,
+                new_member: 0,
+                other: 0,
+                private_message: 0
+              }
             }
           }
         }).catch(e => {
@@ -139,7 +144,14 @@ export default class DiscordAnalytics {
     },
     guildsStats: [] as { guildId: string, name: string, icon: string, members: number, interactions: number }[],
     addedGuilds: 0,
-    removedGuilds: 0
+    removedGuilds: 0,
+    users_type: {
+      admin: 0,
+      moderator: 0,
+      new_member: 0,
+      other: 0,
+      private_message: 0
+    }
   }
 
   private async calculateGuildMembersRepartition (): Promise<{ little: number, medium: number, big: number, huge: number }> {

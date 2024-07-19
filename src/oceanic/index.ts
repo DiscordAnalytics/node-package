@@ -45,14 +45,13 @@ export default class DiscordAnalytics {
   private readonly _headers: { 'Content-Type': string; Authorization: string; };
   private _isReady: boolean
 
-  constructor(options: DiscordAnalyticsOptions) {
+  constructor(options: Omit<DiscordAnalyticsOptions, "sharded">) {
     this._client = options.client;
     this._apiToken = options.apiToken;
     this._headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bot ${this._apiToken}`
     }
-    this._sharded = options.sharded || false;
     this._isReady = false
     this._debug = options.debug || false
   }

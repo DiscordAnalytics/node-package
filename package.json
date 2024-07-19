@@ -31,7 +31,7 @@
   },
   "homepage": "https://discordanalytics.xyz",
   "devDependencies": {
-    "@types/node": "^20.14.10",
+    "@types/node": "^20.14.11",
     "@types/node-fetch": "^2.6.11",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
@@ -43,5 +43,10 @@
   },
   "dependencies": {
     "node-fetch": "^2.7.0"
+  },
+  "peerDependencies": {
+    "discord.js": "14.x",
+    "eris": "0.17.2",
+    "oceanic.js": ">= 1.11.0 < 1.12.0"
   }
 }

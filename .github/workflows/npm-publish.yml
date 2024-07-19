@@ -24,19 +24,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
           registry-url: https://registry.npmjs.org/
+          cache: 'pnpm'
       - name: Install Dependencies
-        run: npm ci
+        run: pnpm install --frozen-lock
       - name: Build the package
-        run: npm run build
+        run: pnpm build
       - name: Move files
         run: rm -r ./src && mv ./dist/src/* ./ && rm -r ./dist
       - name: Edit package.json imports
         run: sed -i 's#../../package.json#../package.json#' discordjs/index.js && sed -i 's#../../package.json#../package.json#' eris/index.js && sed -i 's#../../package.json#../package.json#' oceanic/index.js
       - name: Publish to NPM
-        run: npm publish
+        run: pnpm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

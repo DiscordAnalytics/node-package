@@ -19,6 +19,7 @@
     "Javascript",
     "Discord",
     "Discord.js",
+    "Discord.js-Light",
     "Eris",
     "API",
     "Analytics",
@@ -42,6 +43,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
+    "discord.js-light": "^4.10.0",
     "node-fetch": "^2.7.0"
   },
   "peerDependencies": {

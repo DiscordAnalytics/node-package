@@ -1,17 +1,17 @@
-import { GuildMember, Interaction } from "discord.js-light";
 import npmPackageData from "../../package.json";
 import fetch from "node-fetch";
+import { ApiEndpoints, DiscordAnalyticsOptions, ErrorCodes, Locale, TrackGuildType } from "../utils/types";
 
 /**
  * @class DiscordAnalytics
- * @description The Discord.js class for the DiscordAnalytics library.
+ * @description The Discord.js-light class for the DiscordAnalytics library.
  * @param {DiscordAnalyticsOptions} options - Configuration options.
- * @property {any} options.client - The Discord.js client to track events for.
+ * @property {any} options.client - The Discord.js-light client to track events for.
  * @property {string} options.apiToken - The API token for DiscordAnalytics.
- * @property {boolean} options.sharded - Whether the Discord.js client is sharded.
+ * @property {boolean} options.sharded - Whether the Discord.js-light client is sharded.
  * @property {boolean} options.debug - Enable or not the debug mode /!\ MUST BE USED ONLY FOR DEVELOPMENT PURPOSES /!\
  * @example
- * const { default: DiscordAnalytics } = require('discord-analytics/discordjs');
+ * const { default: DiscordAnalytics } = require('discord-analytics/discord.js-light');
  * const { Client, IntentsBitField } = require('discord.js-light');
  * const client = new Client({
  *   intents: ["GUILDS"]
@@ -141,7 +141,7 @@ export default class DiscordAnalytics {
             big: 0,
             huge: 0
         },
-        guildsStats: [] as { guildId: string, name: string, icon: string, members: number, interactions: number }[],
+        guildsStats: [] as { guildId: string, name: string, icon: string | undefined, members: number, interactions: number }[],
         addedGuilds: 0,
         removedGuilds: 0,
         users_type: {
@@ -182,7 +182,7 @@ export default class DiscordAnalytics {
      * /!\ You need to initialize the class first
      * @param interaction - BaseInteraction class and its extensions only
      */
-    public async trackInteractions(interaction: Interaction) {
+    public async trackInteractions(interaction: any) {
         if (this._debug) console.log("[DISCORDANALYTICS] trackInteractions() triggered")
         if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED)
 
@@ -216,7 +216,7 @@ export default class DiscordAnalytics {
         this.statsData.guildsStats.push({
             guildId: interaction.guild ? interaction.guild.id : "dm",
             name: interaction.guild ? interaction.guild.name : "DM",
-            icon: interaction.guild && interaction.guild.icon ? interaction.guild.icon : "",
+            icon: interaction.guild && interaction.guild.icon ? interaction.guild.icon : undefined,
             interactions: guildData ? guildData.interactions + 1 : 1,
             members: interaction.guild ? interaction.guild.memberCount : 0
         })
@@ -224,7 +224,7 @@ export default class DiscordAnalytics {
         const oneWeekAgo = new Date()
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
 
-        let member = (interaction.member as GuildMember)
+        let member = interaction.member
         if (!interaction.inGuild()) ++this.statsData.users_type.private_message
         else if (member.permissions.has(8n) || member.permissions.has(32n)) ++this.statsData.users_type.admin
         else if (member.permissions.has(8192n) || member.permissions.has(2n) || member.permissions.has(4n) || member.permissions.has(4194304n) || member.permissions.has(8388608n) || member.permissions.has(16777216n) || member.permissions.has(1099511627776n)) ++this.statsData.users_type.moderator
@@ -243,30 +243,18 @@ export default class DiscordAnalytics {
         if (type === "create") this.statsData.addedGuilds++
         else this.statsData.removedGuilds++
     }
-}
-
-export interface EventsToTrack {
-    trackInteractions: boolean;
-    trackGuilds: boolean;
-    trackUserCount: boolean;
-    trackUserLanguage: boolean;
-    trackGuildsLocale: boolean;
-}
-export const ApiEndpoints = {
-    BASE_URL: 'https://discordanalytics.xyz/api',
-    EDIT_SETTINGS_URL: '/bots/:id',
-    EDIT_STATS_URL: '/bots/:id/stats',
-}
-
-export const ErrorCodes = {
-    INVALID_CLIENT_TYPE: 'Invalid client type, please use a valid client.',
-    CLIENT_NOT_READY: 'Client is not ready, please start the client first.',
-    INVALID_RESPONSE: 'Invalid response from the API, please try again later.',
-    INVALID_API_TOKEN: 'Invalid API token, please get one at ' + ApiEndpoints.BASE_URL.split('/api')[0] + ' and try again.',
-    DATA_NOT_SENT: "Data cannot be sent to the API, I will try again in a minute.",
-    SUSPENDED_BOT: "Your bot has been suspended, please check your mailbox for more information.",
-    INSTANCE_NOT_INITIALIZED: "It seem that you didn't initialize your instance. Please check the docs for more informations.",
-    INVALID_EVENTS_COUNT: "invalid events count"
+    /**
+  * Let DiscordAnalytics declare the events necessary for its operation.
+  * /!\ Not recommended for big bots
+  * /!\ Not compatible with other functions
+  */
+    public trackEvents() {
+        if (!this._client.isReady()) this._client.on("ready", async () => await this.init())
+        else this.init()
+        this._client.on("interactionCreate", async (interaction: any) => await this.trackInteractions(interaction))
+        this._client.on("guildCreate", (guild: any) => this.trackGuilds(guild, "create"))
+        this._client.on("guildDelete", (guild: any) => this.trackGuilds(guild, "delete"))
+    }
 }
 
 const enum InteractionType {
@@ -276,15 +264,3 @@ const enum InteractionType {
     APPLICATION_COMMAND_AUTOCOMPLETE = 4,
     MODAL_SUBMIT = 5,
 }
-
-
-export type Locale = 'id' | 'en-US' | 'en-GB' | 'bg' | 'zh-CN' | 'zh-TW' | 'hr' | 'cs' | 'da' | 'nl' | 'fi' | 'fr' | 'de' | 'el' | 'hi' | 'hu' | 'it' | 'ja' | 'ko' | 'lt' | 'no' | 'pl' | 'pt-BR' | 'ro' | 'ru' | 'es-ES' | 'sv-SE' | 'th' | 'tr' | 'uk' | 'vi';
-
-export interface DiscordAnalyticsOptions {
-    client: any;
-    apiToken: string;
-    sharded?: boolean;
-    debug?: boolean;
-}
-
-export type TrackGuildType = "create" | "delete"

@@ -46,7 +46,7 @@ jobs:
       - name: Move files
         run: rm -r ./src && mv ./dist/src/* ./ && rm -r ./dist
       - name: Edit package.json imports
-        run: sed -i 's#../../package.json#../package.json#' discordjs/index.js && sed -i 's#../../package.json#../package.json#' eris/index.js && sed -i 's#../../package.json#../package.json#' oceanic/index.js
+        run: sed -i 's#../../package.json#../package.json#' discordjs/index.js && sed -i 's#../../package.json#../package.json#' discordjs-light/index.js && sed -i 's#../../package.json#../package.json#' eris/index.js && sed -i 's#../../package.json#../package.json#' oceanic/index.js
       - name: Publish to NPM
         run: pnpm publish --no-git-checks
         env:

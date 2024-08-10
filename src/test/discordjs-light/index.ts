@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import DiscordAnalytics from "../../discordjs";
+import DiscordAnalytics from "../../discordjs-light";
 import { Client, Interaction, Message, MessageActionRow, Modal, TextInputComponent, TextInputStyle } from "discord.js-light";
 import { config } from "dotenv";
 

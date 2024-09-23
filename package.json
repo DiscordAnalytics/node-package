@@ -37,7 +37,7 @@
     "discord.js": "^14.15.3",
     "discord.js-light": "^4.10.0",
     "dotenv": "^16.4.5",
-    "eris": "^0.17.2",
+    "eris": "^0.18.0",
     "nodemon": "^3.1.4",
     "oceanic.js": "^1.11.1",
     "ts-node": "^10.9.2",

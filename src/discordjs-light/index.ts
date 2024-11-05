@@ -61,6 +61,11 @@ export default class DiscordAnalytics {
                 avatar: this._client.user.avatar,
                 framework: "discord.js-light",
                 version: npmPackageData.version,
+                team: this._client.application.owner
+                    ? this._client.application.owner.hasOwnProperty("members")
+                        ? this._client.application.owner.members.map((member: any) => member.user.id)
+                        : [this._client.application.owner.id]
+                    : [],
             }),
             method: "PATCH"
         }).then(async (res) => {

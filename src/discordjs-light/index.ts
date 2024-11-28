@@ -1,6 +1,6 @@
 import npmPackageData from "../../package.json";
 import fetch from "node-fetch";
-import { ApiEndpoints, DiscordAnalyticsOptions, ErrorCodes, Locale, TrackGuildType } from "../utils/types";
+import { ApiEndpoints, ApplicationCommandType, DiscordAnalyticsOptions, ErrorCodes, InteractionData, InteractionType, Locale, TrackGuildType } from "../utils/types";
 
 /**
  * @class DiscordAnalytics
@@ -137,7 +137,7 @@ export default class DiscordAnalytics {
         date: new Date().toISOString().slice(0, 10),
         guilds: 0,
         users: 0,
-        interactions: [] as { name: string, number: number, type: InteractionType }[],
+        interactions: [] as InteractionData[],
         locales: [] as { locale: Locale, number: number }[],
         guildsLocales: [] as { locale: Locale, number: number }[],
         guildMembers: {
@@ -203,17 +203,22 @@ export default class DiscordAnalytics {
             this.statsData.locales.push({ locale: interaction.locale as Locale, number: 1 });
 
         if (interaction.isCommand()) {
-            this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === InteractionType.APPLICATION_COMMAND) ?
-                ++this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === InteractionType.APPLICATION_COMMAND)!.number :
-                this.statsData.interactions.push({ name: interaction.commandName, number: 1, type: InteractionType.APPLICATION_COMMAND });
+            const commandType = interaction.command.type === "USER"
+                ? ApplicationCommandType.UserCommand
+                : interaction.command.type === "MESSAGE"
+                    ? ApplicationCommandType.MessageCommand
+                    : ApplicationCommandType.ChatInputCommand
+            this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === InteractionType.ApplicationCommand && x.command_type === commandType) ?
+                ++this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === InteractionType.ApplicationCommand)!.number :
+                this.statsData.interactions.push({ name: interaction.commandName, number: 1, type: InteractionType.ApplicationCommand, command_type: commandType });
         } else if (interaction.isMessageComponent()) {
-            this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === InteractionType.MESSAGE_COMPONENT) ?
-                ++this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === InteractionType.MESSAGE_COMPONENT)!.number :
-                this.statsData.interactions.push({ name: interaction.customId, number: 1, type: InteractionType.MESSAGE_COMPONENT });
+            this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === InteractionType.MessageComponent) ?
+                ++this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === InteractionType.MessageComponent)!.number :
+                this.statsData.interactions.push({ name: interaction.customId, number: 1, type: InteractionType.MessageComponent });
         } else if (interaction.isModalSubmit()) {
-            this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === InteractionType.MODAL_SUBMIT) ?
-                ++this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === InteractionType.MODAL_SUBMIT)!.number :
-                this.statsData.interactions.push({ name: interaction.customId, number: 1, type: InteractionType.MODAL_SUBMIT });
+            this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === InteractionType.ModalSubmit) ?
+                ++this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === InteractionType.ModalSubmit)!.number :
+                this.statsData.interactions.push({ name: interaction.customId, number: 1, type: InteractionType.ModalSubmit });
         }
 
         const guildData = this.statsData.guildsStats.find(guild => interaction.guild ? guild.guildId === interaction.guild.id : guild.guildId === "dm")
@@ -260,12 +265,4 @@ export default class DiscordAnalytics {
         this._client.on("guildCreate", (guild: any) => this.trackGuilds(guild, "create"))
         this._client.on("guildDelete", (guild: any) => this.trackGuilds(guild, "delete"))
     }
-}
-
-const enum InteractionType {
-    PING = 1,
-    APPLICATION_COMMAND = 2,
-    MESSAGE_COMPONENT = 3,
-    APPLICATION_COMMAND_AUTOCOMPLETE = 4,
-    MODAL_SUBMIT = 5,
 }

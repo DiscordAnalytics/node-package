@@ -32,6 +32,19 @@ export enum InteractionType {
   ModalSubmit,
 }
 
+export enum ApplicationCommandType {
+  ChatInputCommand = 1,
+  UserCommand,
+  MessageCommand,
+}
+
+export interface InteractionData {
+  name: string;
+  number: number;
+  type: InteractionType;
+  command_type?: ApplicationCommandType;
+}
+
 export interface DiscordAnalyticsOptions {
   client: any;
   apiToken: string;

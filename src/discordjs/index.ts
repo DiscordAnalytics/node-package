@@ -2,6 +2,7 @@ import {
   ApiEndpoints,
   DiscordAnalyticsOptions,
   ErrorCodes,
+  InteractionData,
   InteractionType,
   Locale,
   TrackGuildType
@@ -144,7 +145,7 @@ export default class DiscordAnalytics {
     date: new Date().toISOString().slice(0, 10),
     guilds: 0,
     users: 0,
-    interactions: [] as { name: string, number: number, type: InteractionType }[],
+    interactions: [] as InteractionData[],
     locales: [] as { locale: Locale, number: number }[],
     guildsLocales: [] as { locale: Locale, number: number }[],
     guildMembers: {
@@ -209,10 +210,12 @@ export default class DiscordAnalytics {
       ++this.statsData.locales.find((x) => x.locale === interaction.locale)!.number :
       this.statsData.locales.push({ locale: interaction.locale, number: 1 });
 
-    if (interaction.type === InteractionType.ApplicationCommand)
-      this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type) ?
-        ++this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type)!.number :
-        this.statsData.interactions.push({ name: interaction.commandName, number: 1, type: interaction.type });
+    if (interaction.type === InteractionType.ApplicationCommand) {
+      const commandType = interaction.command.type;
+      this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type && x.command_type === commandType) ?
+        ++this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type && x.command_type === commandType)!.number :
+        this.statsData.interactions.push({ name: interaction.commandName, number: 1, type: interaction.type as InteractionType, command_type: commandType });
+    }
 
     else if (interaction.type === InteractionType.MessageComponent || interaction.type === InteractionType.ModalSubmit)
       this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type) ?

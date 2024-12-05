@@ -203,11 +203,13 @@ export default class DiscordAnalytics {
             this.statsData.locales.push({ locale: interaction.locale as Locale, number: 1 });
 
         if (interaction.isCommand()) {
-            const commandType = interaction.command.type === "USER"
-                ? ApplicationCommandType.UserCommand
-                : interaction.command.type === "MESSAGE"
-                    ? ApplicationCommandType.MessageCommand
-                    : ApplicationCommandType.ChatInputCommand
+            const commandType = interaction.command ?
+                interaction.command.type === "USER"
+                    ? ApplicationCommandType.UserCommand
+                    : interaction.command.type === "MESSAGE"
+                        ? ApplicationCommandType.MessageCommand
+                        : ApplicationCommandType.ChatInputCommand
+                : ApplicationCommandType.ChatInputCommand
             this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === InteractionType.ApplicationCommand && x.command_type === commandType) ?
                 ++this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === InteractionType.ApplicationCommand)!.number :
                 this.statsData.interactions.push({ name: interaction.commandName, number: 1, type: InteractionType.ApplicationCommand, command_type: commandType });

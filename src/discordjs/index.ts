@@ -1,5 +1,6 @@
 import {
   ApiEndpoints,
+  ApplicationCommandType,
   DiscordAnalyticsOptions,
   ErrorCodes,
   InteractionData,
@@ -211,7 +212,7 @@ export default class DiscordAnalytics {
       this.statsData.locales.push({ locale: interaction.locale, number: 1 });
 
     if (interaction.type === InteractionType.ApplicationCommand) {
-      const commandType = interaction.command.type;
+      const commandType = interaction.command ? interaction.command.type : ApplicationCommandType.ChatInputCommand;
       this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type && x.command_type === commandType) ?
         ++this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type && x.command_type === commandType)!.number :
         this.statsData.interactions.push({ name: interaction.commandName, number: 1, type: interaction.type as InteractionType, command_type: commandType });

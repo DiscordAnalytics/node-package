@@ -70,9 +70,9 @@ export default class DiscordAnalytics {
       }),
       method: "PATCH"
     }).then(async (res) => {
-      if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
-      if (res.status === 423) throw new Error(ErrorCodes.SUSPENDED_BOT);
-      if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+      if (res.status === 401) return console.error(ErrorCodes.INVALID_API_TOKEN)
+      else if (res.status === 423) return console.error(ErrorCodes.SUSPENDED_BOT)
+      else if (res.status !== 200) return console.error(ErrorCodes.INVALID_RESPONSE)
 
       if (this._debug) console.debug("[DISCORDANALYTICS] Instance successfully initialized")
       this._isReady = true
@@ -93,9 +93,9 @@ export default class DiscordAnalytics {
           body: JSON.stringify(this.statsData),
           method: "POST"
         }).then(async (res) => {
-          if (res.status === 401) throw new Error(ErrorCodes.INVALID_API_TOKEN);
-          if (res.status === 423) throw new Error(ErrorCodes.SUSPENDED_BOT);
-          if (res.status !== 200) throw new Error(ErrorCodes.INVALID_RESPONSE);
+          if (res.status === 401) return console.error(ErrorCodes.INVALID_API_TOKEN)
+          else if (res.status === 423) return console.error(ErrorCodes.SUSPENDED_BOT)
+          else if (res.status !== 200) return console.error(ErrorCodes.INVALID_RESPONSE)
           if (res.status === 200) {
             if (this._debug) console.debug(`[DISCORDANALYTICS] Stats ${JSON.stringify(this.statsData)} sent to the API`)
 

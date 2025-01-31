@@ -238,9 +238,9 @@ export default class DiscordAnalytics {
 
         let member = interaction.member
         if (!interaction.inGuild()) ++this.statsData.users_type.private_message
-        else if (member.permissions.has(8n) || member.permissions.has(32n)) ++this.statsData.users_type.admin
-        else if (member.permissions.has(8192n) || member.permissions.has(2n) || member.permissions.has(4n) || member.permissions.has(4194304n) || member.permissions.has(8388608n) || member.permissions.has(16777216n) || member.permissions.has(1099511627776n)) ++this.statsData.users_type.moderator
-        else if (member.joinedAt && member.joinedAt > oneWeekAgo) ++this.statsData.users_type.new_member
+        else if (member && member.permissions && member.permissions.has(8n) || member.permissions.has(32n)) ++this.statsData.users_type.admin
+        else if (member && member.permissions && member.permissions.has(8192n) || member.permissions.has(2n) || member.permissions.has(4n) || member.permissions.has(4194304n) || member.permissions.has(8388608n) || member.permissions.has(16777216n) || member.permissions.has(1099511627776n)) ++this.statsData.users_type.moderator
+        else if (member && member.joinedAt && member.joinedAt > oneWeekAgo) ++this.statsData.users_type.new_member
     }
 
     /**

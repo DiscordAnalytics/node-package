@@ -3,6 +3,7 @@
 import DiscordAnalytics from "../../discordjs";
 import { ActionRowBuilder, Client, IntentsBitField, Interaction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import {config} from "dotenv";
+import {InteractionType} from "../../utils/types";
 
 config()
 
@@ -41,7 +42,15 @@ client.on("ready", async () => {
 });
 
 client.on("interactionCreate", async (interaction: Interaction) => {
-  await analytics.trackInteractions(interaction)
+  await analytics.trackInteractions(interaction, (int) => {
+    if (interaction.type === InteractionType.ApplicationCommand)
+      return interaction.commandName
+    else if (interaction.type === InteractionType.MessageComponent || interaction.type === InteractionType.ModalSubmit) {
+      if ((/\d{17,19}/g).test(interaction.customId)) return "this_awesome_button"
+      else return interaction.customId
+    }
+    return ""
+  })
   if (interaction.isChatInputCommand()) {
     if (interaction.commandName === "test") {
       const option = interaction.options.getString("test");
@@ -53,7 +62,7 @@ client.on("interactionCreate", async (interaction: Interaction) => {
             type: 2,
             style: 1,
             label: "Test button",
-            custom_id: "✅"
+            custom_id: `button_${interaction.user.id}`
           }]
         }]
       })

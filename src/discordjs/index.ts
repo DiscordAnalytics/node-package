@@ -195,8 +195,9 @@ export default class DiscordAnalytics {
    * /!\ Advanced users only
    * /!\ You need to initialize the class first
    * @param interaction - BaseInteraction class and its extensions only
+   * @param interactionNameResolver - A function that will resolve the name of the interaction
    */
-  public async trackInteractions(interaction: any) {
+  public async trackInteractions(interaction: any, interactionNameResolver?: (interaction: any) => string) {
     if (this._debug) console.log("[DISCORDANALYTICS] trackInteractions() triggered")
     if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED)
 
@@ -213,15 +214,19 @@ export default class DiscordAnalytics {
 
     if (interaction.type === InteractionType.ApplicationCommand) {
       const commandType = interaction.command ? interaction.command.type : ApplicationCommandType.ChatInputCommand;
-      this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type && x.command_type === commandType) ?
-        ++this.statsData.interactions.find((x) => x.name === interaction.commandName && x.type === interaction.type && x.command_type === commandType)!.number :
-        this.statsData.interactions.push({ name: interaction.commandName, number: 1, type: interaction.type as InteractionType, command_type: commandType });
+      const commandName = interactionNameResolver ? interactionNameResolver(interaction) : interaction.commandName;
+      this.statsData.interactions.find((x) => x.name === commandName && x.type === interaction.type && x.command_type === commandType) ?
+        ++this.statsData.interactions.find((x) => x.name === commandName && x.type === interaction.type && x.command_type === commandType)!.number :
+        this.statsData.interactions.push({ name: commandName, number: 1, type: interaction.type as InteractionType, command_type: commandType });
     }
 
-    else if (interaction.type === InteractionType.MessageComponent || interaction.type === InteractionType.ModalSubmit)
-      this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type) ?
-        ++this.statsData.interactions.find((x) => x.name === interaction.customId && x.type === interaction.type)!.number :
-        this.statsData.interactions.push({ name: interaction.customId, number: 1, type: interaction.type });
+    else if (interaction.type === InteractionType.MessageComponent || interaction.type === InteractionType.ModalSubmit) {
+      const interactionName = interactionNameResolver ? interactionNameResolver(interaction) : interaction.customId;
+
+      this.statsData.interactions.find((x) => x.name === interactionName && x.type === interaction.type) ?
+        ++this.statsData.interactions.find((x) => x.name === interactionName && x.type === interaction.type)!.number :
+        this.statsData.interactions.push({name: interactionName, number: 1, type: interaction.type});
+    }
 
     const guildData = this.statsData.guildsStats.find(guild => interaction.guild ? guild.guildId === interaction.guild.id : guild.guildId === "dm")
     if (guildData) this.statsData.guildsStats = this.statsData.guildsStats.filter(guild => guild.guildId !== guildData.guildId)
@@ -259,11 +264,12 @@ export default class DiscordAnalytics {
    * Let DiscordAnalytics declare the events necessary for its operation.
    * /!\ Not recommended for big bots
    * /!\ Not compatible with other functions
+   * @param interactionNameResolver - A function that will resolve the name of the interaction
    */
-  public trackEvents() {
+  public trackEvents(interactionNameResolver?: (interaction: any) => string) {
     if (!this._client.isReady()) this._client.on("ready", async () => await this.init())
     else this.init()
-    this._client.on("interactionCreate", async (interaction: any) => await this.trackInteractions(interaction))
+    this._client.on("interactionCreate", async (interaction: any) => await this.trackInteractions(interaction, interactionNameResolver))
     this._client.on("guildCreate", (guild: any) => this.trackGuilds(guild, "create"))
     this._client.on("guildDelete", (guild: any) => this.trackGuilds(guild, "delete"))
   }

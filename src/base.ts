@@ -1,10 +1,23 @@
 import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData, TrackGuildType } from "./utils/types";
 import fetch from "node-fetch";
 
+/**
+ * DiscordAnalytics Base Class
+ * @class AnalyticsBase
+ * @description Base class for DiscordAnalytics
+ * @param {string} api_key - The API key for DiscordAnalytics
+ * @param {boolean} debug - Optional flag to enable debug mode /!\ MUST BE USED ONLY FOR DEBUGGING PURPOSES
+ * @returns {AnalyticsBase} - An instance of the AnalyticsBase class
+ * @example
+ * const analytics = new AnalyticsBase('YOUR_API_KEY');
+ * analytics.sendStats('YOUR_CLIENT_ID', 0, 0);
+ * const customEvent = analytics.events('my_custom_event');
+ * customEvent.increment(1);
+ * analytics.trackGuilds(guild, 'create');
+ */
 export default class AnalyticsBase {
   private readonly _api_key: string;
   private readonly _headers: { 'Content-Type': string; Authorization: string; };
-  private is_ready: boolean = false;
   public readonly debug: boolean = false;
   public stats_data = {
     date: new Date().toISOString().slice(0, 10),
@@ -74,13 +87,13 @@ export default class AnalyticsBase {
     else this.stats_data.removedGuilds++;
   }
 
-  private async api_call_with_retries(
+  public async api_call_with_retries(
     method: string,
     url: string,
-    json: string,
+    body: string,
     max_retries: number = 5,
     backoff_factor: number = 0.5,
-  ): Promise<any> {
+  ) {
     let retries = 0;
     let response: fetch.Response;
 
@@ -89,7 +102,7 @@ export default class AnalyticsBase {
         response = await fetch(url, {
           method,
           headers: this._headers,
-          body: JSON.stringify(json),
+          body,
         });
 
         if (response.ok) return response;
@@ -126,11 +139,11 @@ export default class AnalyticsBase {
 
     const method = 'POST';
     const url = `${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client_id)}`;
-    const json = JSON.stringify(this.stats_data);
+    const body = JSON.stringify(this.stats_data);
 
-    await this.api_call_with_retries(method, url, json);
+    await this.api_call_with_retries(method, url, body);
 
-    if (this.debug) console.debug(`[DISCORDANALYTICS] Stats ${json} sent to the API`);
+    if (this.debug) console.debug(`[DISCORDANALYTICS] Stats ${body} sent to the API`);
 
     this.stats_data = {
       date: new Date().toISOString().slice(0, 10),

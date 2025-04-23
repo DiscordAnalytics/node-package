@@ -111,6 +111,13 @@ export default class DiscordAnalytics extends AnalyticsBase {
     }, { little: 0, medium: 0, big: 0, huge: 0 });
   }
 
+  /**
+   * Track interactions
+   * /!\ Advanced users only
+   * /!\ You need to initialize the class first
+   * @param interaction - BaseInteraction class and its extensions only
+   * @param interactionNameResolver - A function that will resolve the name of the interaction
+   */
   public async trackInteractions(interaction: any, interactionNameResolver?: (interaction: any) => string): Promise<void> {
     if (this._debug) console.debug("[DISCORDANALYTICS] trackInteractions() triggered");
     if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED);

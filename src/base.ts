@@ -41,6 +41,18 @@ export default class AnalyticsBase {
     };
   }
 
+  /**
+   * Custom events
+   * /!\ Advanced users only
+   * /!\ You need to initialize the class first
+   * @param event_key - The event key to track
+   * @returns {CustomEvent} - The CustomEvent instance
+   * @example
+   * const event = analytics.events('my_custom_event');
+   * event.increment(1);
+   * event.decrement(1);
+   * event.set(10);
+   */
   public events(event_key: string): CustomEvent {
     if (this.debug) console.debug(`[DISCORDANALYTICS] Getting event ${event_key}`);
 
@@ -49,7 +61,14 @@ export default class AnalyticsBase {
     return new CustomEvent(this, event_key);
   }
 
-  public async trackGuilds(guild: any, type: TrackGuildType): Promise<void> {
+  /**
+   * Track guilds
+   * /!\ Advanced users only
+   * /!\ You need to initialize the class first
+   * @param guild - The Guild instance only
+   * @param {TrackGuildType} type - "create" if the event is guildCreate and "delete" if is guildDelete
+   */
+  public trackGuilds(guild: any, type: TrackGuildType): void {
     if (this.debug) console.log(`[DISCORDANALYTICS] trackGuilds(${type}) triggered`);
     if (type === 'create') this.stats_data.addedGuilds++;
     else this.stats_data.removedGuilds++;

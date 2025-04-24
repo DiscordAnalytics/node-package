@@ -9,6 +9,7 @@ export const api_url = 'https://discordanalytics.xyz/api';
 export const ApiEndpoints = {
   EDIT_SETTINGS_URL: `${api_url}/bots/:id`,
   EDIT_STATS_URL: `${api_url}/bots/:id/stats`,
+  EVENT_URL: `${api_url}/bots/:id/events/:event`,
 }
 
 export const ErrorCodes = {
@@ -21,6 +22,7 @@ export const ErrorCodes = {
   INSTANCE_NOT_INITIALIZED: "It seem that you didn't initialize your instance. Please check the docs for more informations.",
   INVALID_EVENTS_COUNT: "invalid events count",
   INVALID_VALUE_TYPE: "invalid value type",
+  INVALID_EVENT_KEY: "invalid event key",
 }
 
 export type Locale = 'id' | 'en-US' | 'en-GB' | 'bg' | 'zh-CN' | 'zh-TW' | 'hr' | 'cs' | 'da' | 'nl' | 'fi' | 'fr' | 'de' | 'el' | 'hi' | 'hu' | 'it' | 'ja' | 'ko' | 'lt' | 'no' | 'pl' | 'pt-BR' | 'ro' | 'ru' | 'es-ES' | 'sv-SE' | 'th' | 'tr' | 'uk' | 'vi';

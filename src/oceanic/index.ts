@@ -62,6 +62,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
     await this.api_call_with_retries('PATCH', url, body);
 
     this.debug('[DISCORDANALYTICS] Instance successfully initialized');
+    this.client_id = this._client.user.id;
     this._isReady = true;
 
     const dev_mode = process.argv[2] === '--dev';

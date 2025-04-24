@@ -44,6 +44,7 @@ export default class AnalyticsBase {
     },
     custom_events: {} as Record<string, number>,
   };
+  public client_id: string = '';
 
   constructor(api_key: string, debug: boolean = false) {
     this._api_key = api_key;
@@ -59,7 +60,7 @@ export default class AnalyticsBase {
   }
 
   public error(...args: any[]): void {
-    if (this.debug_mode) console.error(...args);
+    if (this.debug_mode) throw new Error(...args);
   }
 
   /**
@@ -135,9 +136,10 @@ export default class AnalyticsBase {
         });
 
         if (response.ok) return response;
-        else if (response.status === 401) return console.error(ErrorCodes.INVALID_API_TOKEN);
-        else if (response.status === 423) return console.error(ErrorCodes.SUSPENDED_BOT);
-        else if (response.status !== 200) return console.error(ErrorCodes.INVALID_RESPONSE);
+        else if (response.status === 401) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_API_TOKEN}`);
+        else if (response.status === 423) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.SUSPENDED_BOT}`);
+        else if (response.status === 404 && url.includes('events')) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENT_KEY}`);
+        else if (response.status !== 200) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_RESPONSE}`);
       } catch (error) {
         retries++;
         const retry_after = Math.pow(2, retries) * backoff_factor;
@@ -195,10 +197,17 @@ export class CustomEvent {
     this._event_key = event_key;
   }
 
-  private ensure() {
+  private async ensure() {
     this._analytics.debug(`[DISCORDANALYTICS] Ensuring event ${this._event_key} exists`);
 
+    const url = ApiEndpoints.EVENT_URL.replace(':id', this._analytics.client_id).replace(':event', this._event_key);
+    const body = JSON.stringify({ event: this._event_key, count: 0 });
+
+    await this._analytics.api_call_with_retries('POST', url, body);
+
     if (this._analytics.stats_data.custom_events[this._event_key] === undefined) this._analytics.stats_data.custom_events[this._event_key] = 0;
+
+    this._analytics.debug(`[DISCORDANALYTICS] Event ${this._event_key} ensured`);
   }
 
   public increment(value: number = 1): void {

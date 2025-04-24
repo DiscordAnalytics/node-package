@@ -21,7 +21,7 @@ import AnalyticsBase from "../base";
  *     client: client,
  *     apiToken: 'YOUR_API_TOKEN'
  *   });
- *   analytics.init(); // Initialize the DiscordAnalytics instance
+ *   analytics.init();
  *   analytics.trackEvents();
  * });
  * client.login('YOUR_BOT_TOKEN');

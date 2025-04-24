@@ -195,6 +195,8 @@ export class CustomEvent {
   constructor(analytics: AnalyticsBase, event_key: string) {
     this._analytics = analytics;
     this._event_key = event_key;
+    
+    this.ensure();
   }
 
   private async ensure() {

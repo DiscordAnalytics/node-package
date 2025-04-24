@@ -32,11 +32,12 @@ const analytics = new DiscordAnalytics({
 });
 
 // start tracking selected events
-analytics.trackEvents();
 
 // When Discord client is ready
 client.on('ready', () => {
     console.log("Bot is ready!");
+    analytics.init(); // Initialize the analytics
+    analytics.trackEvents(); // Start tracking events
 });
 
 // Login to Discord
@@ -63,6 +64,7 @@ bot.on("ready", () => {
     });
 
     // start tracking selected events
+    analytics.init(); // Initialize the analytics
     analytics.trackEvents();
 
     console.log("Ready!");
@@ -94,12 +96,12 @@ const analytics = new DiscordAnalytics({
   apiToken: 'YOUR_API_TOKEN'
 });
 
-// start tracking selected events
-analytics.trackEvents();
-
 // When Discord client is ready
 client.on('ready', () => {
   console.log("Bot is ready!");
+
+  analytics.init(); // Initialize the analytics
+  analytics.trackEvents(); // Start tracking events
 });
 
 // Login to Discord

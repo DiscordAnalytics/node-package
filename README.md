@@ -8,7 +8,7 @@ npm install discord-analytics
 
 ## Usage
 
-> **Note:** To use Discord Analytics, you need to have an API token. Check the docs for more informations : https://docs.discordanalytics.xyz/get-started/bot-registration
+> **Note:** To use Discord Analytics, you need to have an API token. Check the docs for more informations : https://discordanalytics.xyz/docs/main/get-started/bot-registration
 
 **With Discord.js:**
 
@@ -107,4 +107,4 @@ client.on('ready', () => {
 client.login('token');
 ```
 
-> For advanced usages and updated docs, please check https://docs.discordanalytics.xyz/get-started/installation
+> For advanced usages and updated docs, please check https://discordanalytics.xyz/docs/main/get-started/installation

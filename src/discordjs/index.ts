@@ -1,11 +1,4 @@
-import {
-  ApiEndpoints,
-  ApplicationCommandType,
-  DiscordAnalyticsOptions,
-  ErrorCodes,
-  InteractionType,
-  LocaleData,
-} from "../utils/types";
+import { ApiEndpoints, ApplicationCommandType, DiscordAnalyticsOptions, ErrorCodes, InteractionType } from "../utils/types";
 import npmPackageData from "../../package.json";
 import AnalyticsBase from "../base";
 
@@ -31,20 +24,17 @@ import AnalyticsBase from "../base";
  *   analytics.trackEvents();
  * });
  * client.login('YOUR_BOT_TOKEN');
- *
  * @link https://discordanalytics.xyz/docs/main/get-started/installation/discord.js - Check docs for more informations about advanced usages
  */
 export default class DiscordAnalytics extends AnalyticsBase {
   private readonly _client: any;
   private readonly _sharded: boolean = false;
-  private readonly _debug: boolean = false;
   private _isReady: boolean = false;
 
   constructor(options: DiscordAnalyticsOptions) {
     super(options.apiToken, options.debug);
     this._client = options.client;
     this._sharded = options.sharded || false;
-    this._debug = options.debug || false;
   }
 
   /**
@@ -54,7 +44,6 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * /!\ Must be used when the client is ready (recommended to use in ready event to prevent problems)
    */
   public async init(): Promise<void> {
-    const method = "PATCH";
     const url = `${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_SETTINGS_URL.replace(":id", this._client.user.id)}`;
     const body = JSON.stringify({
       username: this._client.user.username,
@@ -68,18 +57,18 @@ export default class DiscordAnalytics extends AnalyticsBase {
         : [],
     });
 
-    await this.api_call_with_retries(method, url, body);
+    await this.api_call_with_retries("PATCH", url, body);
 
-    if (this._debug) console.debug("[DISCORDANALYTICS] Instance successfully initialized");
+    if (this.debug) console.debug("[DISCORDANALYTICS] Instance successfully initialized");
     this._isReady = true;
 
-    if (this._debug) {
+    if (this.debug) {
       if (process.argv[2] === "--dev") console.debug("[DISCORDANALYTICS] DevMode is enabled. Stats will be sent every 30s.");
       else console.debug("[DISCORDANALYTICS] DevMode is disabled. Stats will be sent every 5min.");
     }
 
     setInterval(async () => {
-      if (this._debug) console.debug("[DISCORDANALYTICS] Sending stats...");
+      if (this.debug) console.debug("[DISCORDANALYTICS] Sending stats...");
 
       let guildCount = this._sharded
         ? ((await this._client.shard?.broadcastEval((c: any) => c.guilds.cache.size))?.reduce((a: number, b: number) => a + b, 0) || 0)
@@ -119,21 +108,22 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * @param interactionNameResolver - A function that will resolve the name of the interaction
    */
   public async trackInteractions(interaction: any, interactionNameResolver?: (interaction: any) => string): Promise<void> {
-    if (this._debug) console.debug("[DISCORDANALYTICS] trackInteractions() triggered");
+    if (this.debug) console.debug("[DISCORDANALYTICS] trackInteractions() triggered");
     if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
-    let guildsLocales: LocaleData[] = [];
-    this._client.guilds.cache.map(
-      (current: any) => guildsLocales.find((x) => x.locale === current.preferredLocale)
-        ? ++guildsLocales.find((x) => x.locale === current.preferredLocale)!.number
-        : guildsLocales.push({ locale: current.preferredLocale, number: 1 })
+    const guildsLocales = this._client.guilds.cache.reduce((map: Map<string, number>, guild: any) => {
+      const locale = guild.preferredLocale;
+      map.set(locale, (map.get(locale) ?? 0) + 1);
+      return map;
+    }, new Map<string, number>());
+    this.stats_data.guildsLocales = Array.from(guildsLocales, ([locale, number]) => ({ locale, number }));
+
+    this.updateOrInsert(
+      this.stats_data.locales,
+      (x) => x.locale === interaction.locale,
+      (x) => x.number++,
+      () => ({ locale: interaction.locale, number: 1 })
     );
-
-    this.stats_data.guildsLocales = guildsLocales;
-
-    this.stats_data.locales.find((x) => x.locale === interaction.locale)
-      ? ++this.stats_data.locales.find((x) => x.locale === interaction.locale)!.number
-      : this.stats_data.locales.push({ locale: interaction.locale, number: 1 });
 
     if (interaction.type === InteractionType.ApplicationCommand) {
       const commandType = interaction.command
@@ -142,32 +132,47 @@ export default class DiscordAnalytics extends AnalyticsBase {
       const commandName = interactionNameResolver
         ? interactionNameResolver(interaction)
         : interaction.commandName;
-      this.stats_data.interactions.find(
-        (x) => x.name === commandName && x.type === interaction.type && x.command_type === commandType
-      )
-        ? ++this.stats_data.interactions.find(
-            (x) => x.name === commandName && x.type === interaction.type && x.command_type === commandType
-          )!.number
-        : this.stats_data.interactions.push({ name: commandName, number: 1, type: interaction.type as InteractionType, command_type: commandType });
+      this.updateOrInsert(
+        this.stats_data.interactions,
+        (x) => x.name === commandName
+          && x.type === interaction.type
+          && x.command_type === commandType,
+        (x) => x.number++,
+        () => ({
+          name: commandName,
+          number: 1,
+          type: interaction.type,
+          command_type: commandType,
+        }),
+      );
     } else if (interaction.type === InteractionType.MessageComponent || interaction.type === InteractionType.ModalSubmit) {
-      const interactionName = interactionNameResolver ? interactionNameResolver(interaction) : interaction.customId;
-
-      this.stats_data.interactions.find((x) => x.name === interactionName && x.type === interaction.type)
-        ? ++this.stats_data.interactions.find((x) => x.name === interactionName && x.type === interaction.type)!.number
-        : this.stats_data.interactions.push({ name: interactionName, number: 1, type: interaction.type });
+      const interactionName = interactionNameResolver
+        ? interactionNameResolver(interaction)
+        : interaction.customId;
+      this.updateOrInsert(
+        this.stats_data.interactions,
+        (x) => x.name === interactionName && x.type === interaction.type,
+        (x) => x.number++,
+        () => ({
+          name: interactionName,
+          number: 1,
+          type: interaction.type,
+        }),
+      );
     }
 
-    const guildData = this.stats_data.guildsStats.find(
-      (guild) => interaction.guild ? guild.guildId === interaction.guild.id : guild.guildId === "dm"
+    this.updateOrInsert(
+      this.stats_data.guildsStats,
+      (x) => x.guildId === (interaction.guild ? interaction.guild.id : "dm"),
+      (x) => x.interactions++,
+      () => ({
+        guildId: interaction.guild ? interaction.guild.id : "dm",
+        name: interaction.guild ? interaction.guild.name : "DM",
+        icon: interaction.guild && interaction.guild.icon ? interaction.guild.icon : undefined,
+        interactions: 1,
+        members: interaction.guild ? interaction.guild.memberCount : 0,
+      }),
     );
-    if (guildData) this.stats_data.guildsStats = this.stats_data.guildsStats.filter((guild) => guild.guildId !== guildData.guildId);
-    this.stats_data.guildsStats.push({
-      guildId: interaction.guild ? interaction.guild.id : "dm",
-      name: interaction.guild ? interaction.guild.name : "DM",
-      icon: interaction.guild && interaction.guild.icon ? interaction.guild.icon : undefined,
-      interactions: guildData ? guildData.interactions + 1 : 1,
-      members: interaction.guild ? interaction.guild.memberCount : 0,
-    });
 
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
@@ -204,7 +209,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * @param interactionNameResolver - A function that will resolve the name of the interaction
    */
   public trackEvents(interactionNameResolver?: (interaction: any) => string): void {
-    if (this._debug) console.debug("[DISCORDANALYTICS] trackEvents() triggered");
+    if (this.debug) console.debug("[DISCORDANALYTICS] trackEvents() triggered");
     if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
     this._client.on("interactionCreate", async (interaction: any) => await this.trackInteractions(interaction, interactionNameResolver));

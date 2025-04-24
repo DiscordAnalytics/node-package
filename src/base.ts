@@ -18,7 +18,7 @@ import fetch from "node-fetch";
 export default class AnalyticsBase {
   private readonly _api_key: string;
   private readonly _headers: { 'Content-Type': string; Authorization: string; };
-  public readonly debug: boolean = false;
+  public debug: boolean = false;
   public stats_data = {
     date: new Date().toISOString().slice(0, 10),
     guilds: 0,
@@ -72,6 +72,17 @@ export default class AnalyticsBase {
     if (typeof event_key !== 'string') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
     return new CustomEvent(this, event_key);
+  }
+
+  public updateOrInsert<T>(
+    array: T[],
+    match: (item: T) => boolean,
+    update: (item: T) => void,
+    insert: () => T,
+  ): void {
+    const item = array.find(match);
+    if (item) update(item);
+    else array.push(insert());
   }
 
   /**

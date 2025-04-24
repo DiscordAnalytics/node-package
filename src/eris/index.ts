@@ -124,6 +124,33 @@ export default class DiscordAnalytics extends AnalyticsBase {
         members: interaction.guildID ? this._client.guilds.get(interaction.guildID)?.memberCount : 0,
       })
     );
+
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    if (!interaction.guildID) ++this.stats_data.users_type.private_message;
+    else if (
+      interaction.member
+      && interaction.member.permissions
+      && interaction.member.permissions.has(8n)
+      || interaction.member.permissions.has(32n)
+    ) ++this.stats_data.users_type.admin;
+    else if (
+      interaction.member
+      && interaction.member.permissions
+      && interaction.member.permissions.has(8192n)
+      || interaction.member.permissions.has(2n)
+      || interaction.member.permissions.has(4n)
+      || interaction.member.permissions.has(4194304n)
+      || interaction.member.permissions.has(8388608n)
+      || interaction.member.permissions.has(16777216n)
+      || interaction.member.permissions.has(1099511627776n)
+    ) ++this.stats_data.users_type.moderator;
+    else if (
+      interaction.member
+      && interaction.member.joinedAt
+      && interaction.member.joinedAt > oneWeekAgo
+    ) ++this.stats_data.users_type.new_member;
   }
 
   /**

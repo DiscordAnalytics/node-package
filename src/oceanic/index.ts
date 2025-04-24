@@ -1,6 +1,6 @@
-import { ApiEndpoints, DiscordAnalyticsOptions, ErrorCodes, InteractionType } from "../utils/types";
-import npmPackageData from "../../package.json";
-import AnalyticsBase from "../base";
+import { ApiEndpoints, DiscordAnalyticsOptions, ErrorCodes, InteractionType } from '../utils/types';
+import npmPackageData from '../../package.json';
+import AnalyticsBase from '../base';
 
 /**
  * @class DiscordAnalytics
@@ -13,9 +13,9 @@ import AnalyticsBase from "../base";
  * const { default: DiscordAnalytics } = require('discord-analytics/oceanic');
  * const { Client } = require('oceanic.js');
  * const client = new Client({
- *   auth: "Bot <YOUR_BOT_TOKEN>",
+ *   auth: 'Bot <YOUR_BOT_TOKEN>',
  *   gateway: {
- *     intents: ["GUILDS"]
+ *     intents: ['GUILDS']
  *   }
  * })
  * client.on('ready', () => {
@@ -33,7 +33,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
   private readonly _client: any;
   private _isReady: boolean = false;
 
-  constructor(options: Omit<DiscordAnalyticsOptions, "sharded">) {
+  constructor(options: Omit<DiscordAnalyticsOptions, 'sharded'>) {
     super(options.apiToken, options.debug);
     this._client = options.client;
   }
@@ -46,11 +46,11 @@ export default class DiscordAnalytics extends AnalyticsBase {
    */
   public async init(): Promise<void> {
     const app = await this._client.rest.applications.getCurrent();
-    const url = `${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_SETTINGS_URL.replace(":id", this._client.user.id)}`;
+    const url = ApiEndpoints.EDIT_SETTINGS_URL.replace(':id', this._client.user.id);
     const body = JSON.stringify({
       username: this._client.user.username,
       avatar: this._client.user.avatar,
-      framework: "oceanic",
+      framework: 'oceanic',
       version: npmPackageData.version,
       team: app.team
         ? app.team.members.map((member: any) => member.user.id)
@@ -59,25 +59,23 @@ export default class DiscordAnalytics extends AnalyticsBase {
           : [],
     });
 
-    await this.api_call_with_retries("PATCH", url, body);
+    await this.api_call_with_retries('PATCH', url, body);
 
-    if (this.debug) console.debug("[DISCORDANALYTICS] Instance successfully initialized");
+    this.debug('[DISCORDANALYTICS] Instance successfully initialized');
     this._isReady = true;
 
-    if (this.debug) {
-      if (process.argv[2] === "--dev") console.debug("[DISCORDANALYTICS] DevMode is enabled. Stats will be sent every 30s.");
-      else console.debug("[DISCORDANALYTICS] DevMode is disabled. Stats will be sent every 5min.");
-    }
+    const dev_mode = process.argv[2] === '--dev';
+    this.debug(`[DISCORDANALYTICS] DevMode is ${dev_mode ? 'enabled' : 'disabled'}. Stats will be sent every ${dev_mode ? '30s' : '5min'}.`);
 
     setInterval(async () => {
-      if (this.debug) console.debug("[DISCORDANALYTICS] Sending stats...");
+      this.debug('[DISCORDANALYTICS] Sending stats...');
 
       const guildCount = this._client.guilds.toArray().length;
       const userCount = this._client.guilds.reduce((a: number, g: any) => a + (g.memberCount || 0), 0);
       const guildMembers: number[] = this._client.guilds.map((guild: any) => guild.memberCount);
 
       await this.sendStats(this._client.user.id, guildCount, userCount, guildMembers);
-    }, process.argv[2] === "--dev" ? 30000 : 5 * 60000);
+    }, dev_mode ? 30000 : 300000);
   }
 
   /**
@@ -88,7 +86,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * @param interactionNameResolver - A function that will resolve the name of the interaction
    */
   public async trackInteractions(interaction: any, interactionNameResolver?: (interaction: any) => string): Promise<void> {
-    if (this.debug) console.log("[DISCORDANALYTICS] trackInteractions() triggered");
+    this.debug('[DISCORDANALYTICS] trackInteractions() triggered');
     if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
     this.updateOrInsert(
@@ -141,11 +139,11 @@ export default class DiscordAnalytics extends AnalyticsBase {
 
     this.updateOrInsert(
       this.stats_data.guildsStats,
-      (x) => x.guildId === (interaction.guild ? interaction.guildID : "dm"),
+      (x) => x.guildId === (interaction.guild ? interaction.guildID : 'dm'),
       (x) => x.interactions++,
       () => ({
-        guildId: interaction.guild ? interaction.guildID : "dm",
-        name: interaction.guild ? interaction.guild.name : "DM",
+        guildId: interaction.guild ? interaction.guildID : 'dm',
+        name: interaction.guild ? interaction.guild.name : 'DM',
         icon: interaction.guild && interaction.guild.icon ? interaction.guild.icon : undefined,
         interactions: 1,
         members: interaction.guild ? interaction.guild.memberCount : 0,
@@ -186,11 +184,11 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * @param interactionNameResolver - A function that will resolve the name of the interaction
    */
   public trackEvents(interactionNameResolver?: (interaction: any) => string): void {
-    if (this.debug) console.debug("[DISCORDANALYTICS] trackEvents() triggered");
+    this.debug('[DISCORDANALYTICS] trackEvents() triggered');
     if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
-    this._client.on("interactionCreate", async (interaction: any) => await this.trackInteractions(interaction, interactionNameResolver));
-    this._client.on("guildCreate", async (guild: any) => this.trackGuilds(guild, "create"));
-    this._client.on("guildDelete", async (guild: any) => this.trackGuilds(guild, "delete"));
+    this._client.on('interactionCreate', async (interaction: any) => await this.trackInteractions(interaction, interactionNameResolver));
+    this._client.on('guildCreate', async (guild: any) => this.trackGuilds(guild, 'create'));
+    this._client.on('guildDelete', async (guild: any) => this.trackGuilds(guild, 'delete'));
   }
 }

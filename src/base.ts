@@ -1,5 +1,5 @@
-import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData, TrackGuildType } from "./utils/types";
-import fetch from "node-fetch";
+import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData, TrackGuildType } from './utils/types';
+import fetch from 'node-fetch';
 
 /**
  * DiscordAnalytics Base Class
@@ -18,7 +18,7 @@ import fetch from "node-fetch";
 export default class AnalyticsBase {
   private readonly _api_key: string;
   private readonly _headers: { 'Content-Type': string; Authorization: string; };
-  public debug: boolean = false;
+  private readonly debug_mode: boolean = false;
   public stats_data = {
     date: new Date().toISOString().slice(0, 10),
     guilds: 0,
@@ -47,11 +47,19 @@ export default class AnalyticsBase {
 
   constructor(api_key: string, debug: boolean = false) {
     this._api_key = api_key;
-    this.debug = debug;
+    this.debug_mode = debug;
     this._headers = {
       'Content-Type': 'application/json',
       Authorization: `Bot ${this._api_key}`,
     };
+  }
+
+  public debug(...args: any[]): void {
+    if (this.debug_mode) console.debug(...args);
+  }
+
+  public error(...args: any[]): void {
+    if (this.debug_mode) console.error(...args);
   }
 
   /**
@@ -67,7 +75,7 @@ export default class AnalyticsBase {
    * event.set(10);
    */
   public events(event_key: string): CustomEvent {
-    if (this.debug) console.debug(`[DISCORDANALYTICS] Getting event ${event_key}`);
+    this.debug(`[DISCORDANALYTICS] Getting event ${event_key}`);
 
     if (typeof event_key !== 'string') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
@@ -100,10 +108,10 @@ export default class AnalyticsBase {
    * /!\ Advanced users only
    * /!\ You need to initialize the class first
    * @param guild - The Guild instance only
-   * @param {TrackGuildType} type - "create" if the event is guildCreate and "delete" if is guildDelete
+   * @param {TrackGuildType} type - 'create' if the event is guildCreate and 'delete' if is guildDelete
    */
   public trackGuilds(guild: any, type: TrackGuildType): void {
-    if (this.debug) console.log(`[DISCORDANALYTICS] trackGuilds(${type}) triggered`);
+    this.debug(`[DISCORDANALYTICS] trackGuilds(${type}) triggered`);
     if (type === 'create') this.stats_data.addedGuilds++;
     else this.stats_data.removedGuilds++;
   }
@@ -133,7 +141,7 @@ export default class AnalyticsBase {
       } catch (error) {
         retries++;
         const retry_after = Math.pow(2, retries) * backoff_factor;
-        if (this.debug) console.error(`[DISCORDANALYTICS] Error: ${error}. Retrying in ${retry_after} seconds...`);
+        this.error(`[DISCORDANALYTICS] Error: ${error}. Retrying in ${retry_after} seconds...`);
         if (retries >= max_retries) throw error;
         await new Promise((resolve) => setTimeout(resolve, retry_after * 1000));
       }
@@ -146,15 +154,14 @@ export default class AnalyticsBase {
     user_count: 0,
     guild_members: number[] = [],
   ): Promise<void> {
-    if (this.debug) console.debug('[DISCORDANALYTICS] Sending stats...');
+    this.debug('[DISCORDANALYTICS] Sending stats...');
 
-    const method = 'POST';
-    const url = `${ApiEndpoints.BASE_URL}${ApiEndpoints.EDIT_STATS_URL.replace(':id', client_id)}`;
+    const url = ApiEndpoints.EDIT_STATS_URL.replace(':id', client_id);
     const body = JSON.stringify(this.stats_data);
 
-    await this.api_call_with_retries(method, url, body);
+    await this.api_call_with_retries('POST', url, body);
 
-    if (this.debug) console.debug(`[DISCORDANALYTICS] Stats ${body} sent to the API`);
+    this.debug('[DISCORDANALYTICS] Stats sent to the API', body);
 
     this.stats_data = {
       date: new Date().toISOString().slice(0, 10),
@@ -189,15 +196,13 @@ export class CustomEvent {
   }
 
   private ensure() {
-    if (this._analytics.debug) console.debug(`[DISCORDANALYTICS] Ensuring event ${this._event_key} exists`);
+    this._analytics.debug(`[DISCORDANALYTICS] Ensuring event ${this._event_key} exists`);
 
-    if (this._analytics.stats_data.custom_events[this._event_key] === undefined) {
-      this._analytics.stats_data.custom_events[this._event_key] = 0;
-    }
+    if (this._analytics.stats_data.custom_events[this._event_key] === undefined) this._analytics.stats_data.custom_events[this._event_key] = 0;
   }
 
-  public increment(value: number): void {
-    if (this._analytics.debug) console.debug(`[DISCORDANALYTICS] Incrementing event ${this._event_key} by ${value}`);
+  public increment(value: number = 1): void {
+    this._analytics.debug(`[DISCORDANALYTICS] Incrementing event ${this._event_key} by ${value}`);
 
     if (typeof value !== 'number') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
@@ -207,8 +212,8 @@ export class CustomEvent {
     this._analytics.stats_data.custom_events[this._event_key] += value;
   }
 
-  public decrement(value: number): void {
-    if (this._analytics.debug) console.debug(`[DISCORDANALYTICS] Decrementing event ${this._event_key} by ${value}`);
+  public decrement(value: number = 1): void {
+    this._analytics.debug(`[DISCORDANALYTICS] Decrementing event ${this._event_key} by ${value}`);
 
     if (typeof value !== 'number') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
@@ -219,7 +224,7 @@ export class CustomEvent {
   }
 
   public set(value: number): void {
-    if (this._analytics.debug) console.debug(`[DISCORDANALYTICS] Setting event ${this._event_key} to ${value}`);
+    this._analytics.debug(`[DISCORDANALYTICS] Setting event ${this._event_key} to ${value}`);
 
     if (typeof value !== 'number') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
@@ -227,5 +232,12 @@ export class CustomEvent {
 
     this.ensure();
     this._analytics.stats_data.custom_events[this._event_key] = value;
+  }
+
+  public get(): number {
+    this._analytics.debug(`[DISCORDANALYTICS] Getting event ${this._event_key}`);
+
+    this.ensure();
+    return this._analytics.stats_data.custom_events[this._event_key];
   }
 }

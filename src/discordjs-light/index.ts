@@ -22,6 +22,7 @@ import AnalyticsBase from "../base";
  *     client: client,
  *     apiToken: 'YOUR_API_TOKEN'
  *   });
+ *   analytics.init();
  *   analytics.trackEvents();
  * });
  * client.login('YOUR_BOT_TOKEN');
@@ -41,7 +42,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
   /**
    * Initialize DiscordAnalytics on your bot
    * /!\ Advanced users only
-   * /!\ Required to use DiscordAnalytics (except if you use the trackEvents function)
+   * /!\ Required to use DiscordAnalytics
    * /!\ Must be used when the client is ready (recommended to use in ready event to prevent problems)
    */
   public async init(): Promise<void> {
@@ -70,34 +71,22 @@ export default class DiscordAnalytics extends AnalyticsBase {
     setInterval(async () => {
       if (this.debug) console.debug("[DISCORDANALYTICS] Sending stats...");
 
-      let guildCount = this._sharded
+      const guildCount = this._sharded
         ? ((await this._client.shard?.broadcastEval((c: any) => c.guilds.cache.size))?.reduce((a: number, b: number) => a + b, 0) || 0)
         : this._client.guilds.cache.size;
 
-      let userCount = this._sharded
+      const userCount = this._sharded
         ? ((await this._client.shard?.broadcastEval((c: any) => c.guilds.cache.reduce((a: number, g: any) => a + (g.memberCount || 0), 0)))?.reduce((a: number, b: number) => a + b, 0) || 0)
         : this._client.guilds.cache.reduce((a: number, g: any) => a + (g.memberCount || 0), 0);
 
-      let guildMembers = await this.calculateGuildMembersRepartition();
+      const guildMembers: number[] = !this._sharded
+        ? this._client.guilds.cache.map((guild: any) => guild.memberCount)
+        : ((await this._client.shard?.broadcastEval(
+          (c: any) => c.guilds.cache.map((guild: any) => guild.memberCount)
+        ))?.flat() ?? []);
 
       await this.sendStats(this._client.user.id, guildCount, userCount, guildMembers);
     }, process.argv[2] === "--dev" ? 30000 : 5 * 60000);
-  }
-
-  private async calculateGuildMembersRepartition(): Promise<{ little: number, medium: number, big: number, huge: number }> {
-      const guildsMembers: number[] = !this._sharded
-        ? this._client.guilds.cache.map((guild: any) => guild.memberCount)
-        : ((await this._client.shard?.broadcastEval(
-            (c: any) => c.guilds.cache.map((guild: any) => guild.memberCount)
-          ))?.flat() ?? []);
-      
-      return guildsMembers.reduce((acc, count) => {
-        if (count <= 100) acc.little++;
-        else if (count <= 500) acc.medium++;
-        else if (count <= 1500) acc.big++;
-        else acc.huge++;
-        return acc;
-      }, { little: 0, medium: 0, big: 0, huge: 0 });
   }
 
   /**
@@ -111,12 +100,12 @@ export default class DiscordAnalytics extends AnalyticsBase {
     if (this.debug) console.log("[DISCORDANALYTICS] trackInteractions() triggered");
     if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
-    const guildsLocales = this._client.guilds.cache.reduce((map: Map<string, number>, guild: any) => {
-      const locale = guild.preferredLocale;
-      map.set(locale, (map.get(locale) ?? 0) + 1);
-      return map;
-    }, new Map<string, number>());
-    this.stats_data.guildsLocales = Array.from(guildsLocales, ([locale, number]) => ({ locale, number }));
+    this.updateOrInsert(
+      this.stats_data.guildsLocales,
+      (x) => x.locale === interaction.guild?.preferredLocale,
+      (x) => x.number++,
+      () => ({ locale: interaction.guild?.preferredLocale, number: 1 }),
+    );
 
     this.updateOrInsert(
       this.stats_data.locales,

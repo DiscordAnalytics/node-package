@@ -85,6 +85,16 @@ export default class AnalyticsBase {
     else array.push(insert());
   }
 
+  public calculateGuildMembers(guildMembers: number[]): { little: number; medium: number; big: number; huge: number } {
+    return guildMembers.reduce((acc, count) => {
+      if (count <= 100) acc.little++;
+      else if (count <= 500) acc.medium++;
+      else if (count <= 1500) acc.big++;
+      else acc.huge++;
+      return acc;
+    }, { little: 0, medium: 0, big: 0, huge: 0 });
+  }
+
   /**
    * Track guilds
    * /!\ Advanced users only
@@ -134,17 +144,7 @@ export default class AnalyticsBase {
     client_id: string,
     guild_count: 0,
     user_count: 0,
-    guild_members: {
-      little: number;
-      medium: number;
-      big: number;
-      huge: number;
-    } = {
-      little: 0,
-      medium: 0,
-      big: 0,
-      huge: 0,
-    },
+    guild_members: number[] = [],
   ): Promise<void> {
     if (this.debug) console.debug('[DISCORDANALYTICS] Sending stats...');
 
@@ -163,7 +163,7 @@ export default class AnalyticsBase {
       interactions: [],
       locales: [],
       guildsLocales: [],
-      guildMembers: guild_members,
+      guildMembers: this.calculateGuildMembers(guild_members),
       guildsStats: [],
       addedGuilds: 0,
       removedGuilds: 0,

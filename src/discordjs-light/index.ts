@@ -1,5 +1,5 @@
 
-import { ApiEndpoints, ApplicationCommandType, DiscordAnalyticsOptions, ErrorCodes, Locale } from "../utils/types";
+import { ApiEndpoints, ApplicationCommandType, DiscordAnalyticsOptions, ErrorCodes } from "../utils/types";
 import npmPackageData from "../../package.json";
 import AnalyticsBase from "../base";
 
@@ -122,7 +122,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
       this.stats_data.locales,
       (x) => x.locale === interaction.locale,
       (x) => x.number++,
-      () => ({ locale: interaction.locale as Locale, number: 1 }),
+      () => ({ locale: interaction.locale, number: 1 }),
     );
 
     if (interaction.isCommand()) {

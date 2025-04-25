@@ -20,7 +20,8 @@
     "@discordanalytics/core": "workspace:*"
   },
   "devDependencies": {
-    "discord.js-light": "^4.10.0"
+    "discord.js-light": "^4.10.0",
+    "typescript": "*"
   },
   "peerDependencies": {
     "discord.js-light": "4.x"

@@ -20,7 +20,8 @@
     "@discordanalytics/core": "workspace:*"
   },
   "devDependencies": {
-    "eris": "^0.18.0"
+    "eris": "^0.18.0",
+    "typescript": "*"
   },
   "peerDependencies": {
     "eris": ">=0.17.x"

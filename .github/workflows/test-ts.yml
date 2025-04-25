@@ -13,17 +13,6 @@ jobs:
 
     name: Test TypeScript build
     steps:
-      # - name: Check node version
-      #   run: node --version
-      # - uses: actions/checkout@v3.5.2
-      # - name: Install NodeJS
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: ${{ matrix.node-version }}
-      # - name: Install dependencies
-      #   run: npm install
-      # - name: Compile typescript
-      #   uses: icrawl/action-tsc@v1
       - uses: actions/checkout@v4
       - name: Install pnpm
         uses: pnpm/action-setup@v4

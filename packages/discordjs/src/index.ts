@@ -1,20 +1,19 @@
-import { ApiEndpoints, ApplicationCommandType, DiscordAnalyticsOptions, ErrorCodes } from '../utils/types';
-import npmPackageData from '../../package.json';
-import AnalyticsBase from '../base';
+import { AnalyticsBase, ApiEndpoints, ApplicationCommandType, DiscordAnalyticsOptions, ErrorCodes, InteractionType } from '@discordanalytics/core';
+import npmPackageData from '../package.json';
 
 /**
  * @class DiscordAnalytics
- * @description The Discord.js-light class for the DiscordAnalytics library.
- * @param {DiscordAnalyticsOptions} options - Configuration options.
- * @property {any} options.client - The Discord.js-light client to track events for.
- * @property {string} options.apiToken - The API token for DiscordAnalytics.
- * @property {boolean} options.sharded - Whether the Discord.js-light client is sharded.
- * @property {boolean} options.debug - Enable or not the debug mode /!\ MUST BE USED ONLY FOR DEVELOPMENT PURPOSES /!\
+ * @description The Discord.js class for the DiscordAnalytics library.
+ * @param {DiscordAnalyticsOptions} options Configuration options.
+ * @property {any} options.client The Discord.js client to track events for.
+ * @property {string} options.apiToken The API token for DiscordAnalytics.
+ * @property {boolean} options.sharded Whether the Discord.js client is sharded.
+ * @property {boolean} options.debug Enable or not the debug mode /!\ MUST BE USED ONLY FOR DEVELOPMENT PURPOSES /!\
  * @example
- * const { default: DiscordAnalytics } = require('discord-analytics/discord.js-light');
- * const { Client, IntentsBitField } = require('discord.js-light');
+ * const { default: DiscordAnalytics } = require('discord-analytics/discordjs');
+ * const { Client, IntentsBitField } = require('discord.js');
  * const client = new Client({
- *   intents: ['GUILDS']
+ *   intents: [IntentsBitField.Flags.Guilds]
  * })
  * client.on('ready', () => {
  *   const analytics = new DiscordAnalytics({
@@ -25,7 +24,7 @@ import AnalyticsBase from '../base';
  *   analytics.trackEvents();
  * });
  * client.login('YOUR_BOT_TOKEN');
- * @link https://discordanalytics.xyz/docs/main/get-started/installation/discord.js - Check docs for more informations about advanced usages
+ * @link https://discordanalytics.xyz/docs/main/get-started/installation/discord.js Check docs for more informations about advanced usages
  */
 export default class DiscordAnalytics extends AnalyticsBase {
   private readonly _client: any;
@@ -33,9 +32,9 @@ export default class DiscordAnalytics extends AnalyticsBase {
   private _isReady: boolean = false;
 
   constructor(options: DiscordAnalyticsOptions) {
-      super(options.apiToken, options.debug);
-      this._client = options.client;
-      this._sharded = options.sharded || false;
+    super(options.apiToken, options.debug);
+    this._client = options.client;
+    this._sharded = options.sharded || false;
   }
 
   /**
@@ -49,7 +48,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
     const body = JSON.stringify({
       username: this._client.user.username,
       avatar: this._client.user.avatar,
-      framework: 'discord.js-light',
+      framework: 'discord.js',
       version: npmPackageData.version,
       team: this._client.application.owner
         ? this._client.application.owner.hasOwnProperty('members')
@@ -57,6 +56,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
           : [this._client.application.owner.id]
         : [],
     });
+
     await this.api_call_with_retries('PATCH', url, body);
 
     this.debug('[DISCORDANALYTICS] Instance successfully initialized');
@@ -91,8 +91,8 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * Track interactions
    * /!\ Advanced users only
    * /!\ You need to initialize the class first
-   * @param interaction - BaseInteraction class and its extensions only
-   * @param interactionNameResolver - A function that will resolve the name of the interaction
+   * @param interaction BaseInteraction class and its extensions only
+   * @param interactionNameResolver A function that will resolve the name of the interaction
    */
   public async trackInteractions(interaction: any, interactionNameResolver?: (interaction: any) => string): Promise<void> {
     this.debug(`[DISCORDANALYTICS] trackInteractions(${interaction.type}) triggered`);
@@ -102,31 +102,26 @@ export default class DiscordAnalytics extends AnalyticsBase {
       this.stats_data.guildsLocales,
       (x) => x.locale === interaction.guild?.preferredLocale,
       (x) => x.number++,
-      () => ({ locale: interaction.guild?.preferredLocale, number: 1 }),
+      () => ({ locale: interaction.guild?.preferredLocale, number: 1 })
     );
 
     this.updateOrInsert(
       this.stats_data.locales,
       (x) => x.locale === interaction.locale,
       (x) => x.number++,
-      () => ({ locale: interaction.locale, number: 1 }),
+      () => ({ locale: interaction.locale, number: 1 })
     );
 
-    if (interaction.isCommand()) {
+    if (interaction.type === InteractionType.ApplicationCommand) {
       const commandType = interaction.command
-        ? interaction.command.type === 'USER'
-          ? ApplicationCommandType.UserCommand
-          : interaction.command.type === 'MESSAGE'
-            ? ApplicationCommandType.MessageCommand
-            : ApplicationCommandType.ChatInputCommand
+        ? interaction.command.type
         : ApplicationCommandType.ChatInputCommand;
       const commandName = interactionNameResolver
-          ? interactionNameResolver(interaction)
-          : interaction.commandName;
+        ? interactionNameResolver(interaction)
+        : interaction.commandName;
       this.updateOrInsert(
         this.stats_data.interactions,
-        (x) =>
-          x.name === commandName
+        (x) => x.name === commandName
           && x.type === interaction.type
           && x.command_type === commandType,
         (x) => x.number++,
@@ -137,7 +132,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
           command_type: commandType,
         }),
       );
-    } else if (interaction.isMessageComponent() || interaction.isModalSubmit()) {
+    } else if (interaction.type === InteractionType.MessageComponent || interaction.type === InteractionType.ModalSubmit) {
       const interactionName = interactionNameResolver
         ? interactionNameResolver(interaction)
         : interaction.customId;
@@ -181,7 +176,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
       && interaction.member.permissions
       && interaction.member.permissions.has(8192n)
       || interaction.member.permissions.has(2n)
-      || interaction.member.permissions.has(4n)
+      || interaction.member.permissions.has(4n) 
       || interaction.member.permissions.has(4194304n)
       || interaction.member.permissions.has(8388608n)
       || interaction.member.permissions.has(16777216n)
@@ -198,11 +193,12 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * Let DiscordAnalytics declare the events necessary for its operation.
    * /!\ Not recommended for big bots
    * /!\ Not compatible with other functions
-   * @param interactionNameResolver - A function that will resolve the name of the interaction
+   * @param interactionNameResolver A function that will resolve the name of the interaction
    */
   public trackEvents(interactionNameResolver?: (interaction: any) => string): void {
     this.debug('[DISCORDANALYTICS] trackEvents() triggered');
     if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
+
     this._client.on('interactionCreate', async (interaction: any) => await this.trackInteractions(interaction, interactionNameResolver));
     this._client.on('guildCreate', (guild: any) => this.trackGuilds(guild, 'create'));
     this._client.on('guildDelete', (guild: any) => this.trackGuilds(guild, 'delete'));

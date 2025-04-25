@@ -1,0 +1,28 @@
+{
+  "name": "@discordanalytics/discordjs-light",
+  "version": "3.5.0",
+  "description": "Discord.js light package for working with Discord Analytics",
+  "main": "dist/index.js",
+  "author": "Discord Analytics",
+  "homepage": "https://discordanalytics.xyz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiscordAnalytics/node-package.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DiscordAnalytics/node-package/issues"
+  },
+  "scripts": {
+    "prebuild": "pnpm --filter @discordanalytics/core build",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@discordanalytics/core": "workspace:*"
+  },
+  "devDependencies": {
+    "discord.js-light": "^4.10.0"
+  },
+  "peerDependencies": {
+    "discord.js-light": "4.x"
+  }
+}

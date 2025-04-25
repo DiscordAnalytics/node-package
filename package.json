@@ -1,55 +1,22 @@
 {
   "name": "discord-analytics",
-  "version": "3.5.0",
-  "description": "A discord bot analytics to send your bot data",
-  "main": "dist/index.js",
+  "version": "0.0.0",
+  "author": "Discord Analytics",
+  "homepage": "https://discordanalytics.xyz",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "init": "tsc --init",
-    "test:djs": "nodemon src/test/discordjs/index.ts --dev",
-    "test:eris": "nodemon src/test/eris/index.ts --dev",
-    "test:oceanic": "nodemon src/test/oceanic/index.ts --dev",
-    "build": "tsc"
+    "build": "pnpm -r run build",
+    "install": "pnpm -r install"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DiscordAnalytics/node-package.git"
   },
-  "keywords": [
-    "Javascript",
-    "Discord",
-    "Discord.js",
-    "Discord.js-Light",
-    "Eris",
-    "API",
-    "Analytics",
-    "Oceanic"
-  ],
-  "author": "Discord Analytics",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/DiscordAnalytics/node-package/issues"
-  },
-  "homepage": "https://discordanalytics.xyz",
-  "devDependencies": {
-    "@types/node": "^20.17.11",
-    "@types/node-fetch": "^2.6.12",
-    "discord.js": "^14.17.2",
-    "discord.js-light": "^4.10.0",
-    "dotenv": "^16.4.7",
-    "eris": "^0.17.2",
-    "nodemon": "^3.1.9",
-    "oceanic.js": "^1.11.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
-  },
-  "dependencies": {
-    "node-fetch": "^2.7.0"
-  },
-  "peerDependencies": {
-    "discord.js": "14.x",
-    "discord.js-light": "4.10.0",
-    "eris": ">=0.17.2",
-    "oceanic.js": ">= 1.11.0 < 1.12.0"
   }
 }

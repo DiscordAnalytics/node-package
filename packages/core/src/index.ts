@@ -1,21 +1,18 @@
-import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData, TrackGuildType } from './utils/types';
+import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData, TrackGuildType } from './types';
 import fetch from 'node-fetch';
 
 /**
  * DiscordAnalytics Base Class
  * @class AnalyticsBase
  * @description Base class for DiscordAnalytics
- * @param {string} api_key - The API key for DiscordAnalytics
- * @param {boolean} debug - Optional flag to enable debug mode /!\ MUST BE USED ONLY FOR DEBUGGING PURPOSES
- * @returns {AnalyticsBase} - An instance of the AnalyticsBase class
+ * @param {string} api_key The API key for DiscordAnalytics
+ * @param {boolean} debug Optional flag to enable debug mode /!\ MUST BE USED ONLY FOR DEBUGGING PURPOSES
+ * @returns {AnalyticsBase} An instance of the AnalyticsBase class
  * @example
  * const analytics = new AnalyticsBase('YOUR_API_KEY');
  * analytics.sendStats('YOUR_CLIENT_ID', 0, 0);
- * const customEvent = analytics.events('my_custom_event');
- * customEvent.increment(1);
- * analytics.trackGuilds(guild, 'create');
  */
-export default class AnalyticsBase {
+export class AnalyticsBase {
   private readonly _api_key: string;
   private readonly _headers: { 'Content-Type': string; Authorization: string; };
   private readonly debug_mode: boolean = false;
@@ -67,8 +64,8 @@ export default class AnalyticsBase {
    * Custom events
    * /!\ Advanced users only
    * /!\ You need to initialize the class first
-   * @param event_key - The event key to track
-   * @returns {CustomEvent} - The CustomEvent instance
+   * @param event_key The event key to track
+   * @returns {CustomEvent} The CustomEvent instance
    * @example
    * const event = analytics.events('my_custom_event');
    * event.increment(1);
@@ -108,8 +105,8 @@ export default class AnalyticsBase {
    * Track guilds
    * /!\ Advanced users only
    * /!\ You need to initialize the class first
-   * @param guild - The Guild instance only
-   * @param {TrackGuildType} type - 'create' if the event is guildCreate and 'delete' if is guildDelete
+   * @param guild The Guild instance only
+   * @param {TrackGuildType} type 'create' if the event is guildCreate and 'delete' if is guildDelete
    */
   public trackGuilds(guild: any, type: TrackGuildType): void {
     this.debug(`[DISCORDANALYTICS] trackGuilds(${type}) triggered`);
@@ -117,13 +114,22 @@ export default class AnalyticsBase {
     else this.stats_data.removedGuilds++;
   }
 
+  /**
+   * API call with retries
+   * @param method The HTTP method to use (GET, POST, PUT, DELETE)
+   * @param url The URL to call
+   * @param body The body to send (optional)
+   * @param max_retries The maximum number of retries (default: 5)
+   * @param backoff_factor The backoff factor to use (default: 0.5)
+   * @returns {Promise<void | fetch.Response>} The response from the API
+   */
   public async api_call_with_retries(
     method: string,
     url: string,
-    body: string,
+    body?: string,
     max_retries: number = 5,
     backoff_factor: number = 0.5,
-  ) {
+  ): Promise<void | fetch.Response> {
     let retries = 0;
     let response: fetch.Response;
 
@@ -150,10 +156,18 @@ export default class AnalyticsBase {
     }
   }
 
+  /**
+   * Send stats to the API
+   * @param client_id The client ID of the bot
+   * @param guild_count The number of guilds the bot is in (default: 0)
+   * @param user_count The number of users the bot is in (default: 0)
+   * @param guild_members The number of members in each guild (optional)
+   * @returns {Promise<void>} A promise that resolves when the stats are sent
+   */
   public async sendStats(
     client_id: string,
-    guild_count: 0,
-    user_count: 0,
+    guild_count: number = 0,
+    user_count: number = 0,
     guild_members: number[] = [],
   ): Promise<void> {
     this.debug('[DISCORDANALYTICS] Sending stats...');
@@ -188,6 +202,20 @@ export default class AnalyticsBase {
   }
 }
 
+/**
+ * CustomEvent class
+ * @class CustomEvent
+ * @description Class for custom events
+ * @param {AnalyticsBase} analytics The AnalyticsBase instance
+ * @param {string} event_key The event key to track
+ * @returns {CustomEvent} An instance of the CustomEvent class
+ * @example
+ * const event = analytics.events('my_custom_event');
+ * event.increment(1);
+ * event.decrement(1);
+ * event.set(10);
+ * event.get();
+ */
 export class CustomEvent {
   private readonly _analytics: AnalyticsBase;
   private readonly _event_key: string;
@@ -212,6 +240,10 @@ export class CustomEvent {
     this._analytics.debug(`[DISCORDANALYTICS] Event ${this._event_key} ensured`);
   }
 
+  /**
+   * Increment the event by a value
+   * @param value The value to increment the event by (default: 1)
+   */
   public increment(value: number = 1): void {
     this._analytics.debug(`[DISCORDANALYTICS] Incrementing event ${this._event_key} by ${value}`);
 
@@ -222,6 +254,10 @@ export class CustomEvent {
     this._analytics.stats_data.custom_events[this._event_key] += value;
   }
 
+  /**
+   * Decrement the event by a value
+   * @param value The value to decrement the event by (default: 1)
+   */
   public decrement(value: number = 1): void {
     this._analytics.debug(`[DISCORDANALYTICS] Decrementing event ${this._event_key} by ${value}`);
 
@@ -232,6 +268,10 @@ export class CustomEvent {
     this._analytics.stats_data.custom_events[this._event_key] -= value;
   }
 
+  /**
+   * Set the event to a value
+   * @param value The value to set the event to
+   */
   public set(value: number): void {
     this._analytics.debug(`[DISCORDANALYTICS] Setting event ${this._event_key} to ${value}`);
 
@@ -242,9 +282,15 @@ export class CustomEvent {
     this._analytics.stats_data.custom_events[this._event_key] = value;
   }
 
+  /**
+   * Get the event value
+   * @returns {number} The event value
+   */
   public get(): number {
     this._analytics.debug(`[DISCORDANALYTICS] Getting event ${this._event_key}`);
 
     return this._analytics.stats_data.custom_events[this._event_key];
   }
 }
+
+export * from './types';

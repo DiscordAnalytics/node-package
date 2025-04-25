@@ -1,0 +1,28 @@
+{
+  "name": "@discordanalytics/discordjs",
+  "version": "3.5.0",
+  "description": "Discord.js package for working with Discord Analytics",
+  "main": "dist/index.js",
+  "author": "Discord Analytics",
+  "homepage": "https://discordanalytics.xyz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiscordAnalytics/node-package.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DiscordAnalytics/node-package/issues"
+  },
+  "scripts": {
+    "prebuild": "pnpm --filter @discordanalytics/core build",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@discordanalytics/core": "workspace:*"
+  },
+  "devDependencies": {
+    "discord.js": "14.18.0"
+  },
+  "peerDependencies": {
+    "discord.js": "14.x"
+  }
+}

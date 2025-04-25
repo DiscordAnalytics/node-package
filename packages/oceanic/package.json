@@ -1,0 +1,28 @@
+{
+  "name": "@discordanalytics/oceanic",
+  "version": "3.5.0",
+  "description": "Oceanic package for working with Discord Analytics",
+  "main": "dist/index.js",
+  "author": "Discord Analytics",
+  "homepage": "https://discordanalytics.xyz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiscordAnalytics/node-package.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DiscordAnalytics/node-package/issues"
+  },
+  "scripts": {
+    "prebuild": "pnpm --filter @discordanalytics/core build",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@discordanalytics/core": "workspace:*"
+  },
+  "devDependencies": {
+    "oceanic.js": "^1.12.0"
+  },
+  "peerDependencies": {
+    "oceanic.js": ">=1.12.x"
+  }
+}

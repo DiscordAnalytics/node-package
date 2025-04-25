@@ -1,0 +1,28 @@
+{
+  "name": "@discordanalytics/eris",
+  "version": "3.5.0",
+  "description": "Eris package for working with Discord Analytics",
+  "main": "dist/index.js",
+  "author": "Discord Analytics",
+  "homepage": "https://discordanalytics.xyz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiscordAnalytics/node-package.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DiscordAnalytics/node-package/issues"
+  },
+  "scripts": {
+    "prebuild": "pnpm --filter @discordanalytics/core build",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@discordanalytics/core": "workspace:*"
+  },
+  "devDependencies": {
+    "eris": "^0.18.0"
+  },
+  "peerDependencies": {
+    "eris": ">=0.17.x"
+  }
+}

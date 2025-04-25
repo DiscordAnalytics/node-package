@@ -231,9 +231,8 @@ export class CustomEvent {
     this._analytics.debug(`[DISCORDANALYTICS] Ensuring event ${this._event_key} exists`);
 
     const url = ApiEndpoints.EVENT_URL.replace(':id', this._analytics.client_id).replace(':event', this._event_key);
-    const body = JSON.stringify({ event: this._event_key, count: 0 });
 
-    await this._analytics.api_call_with_retries('POST', url, body);
+    await this._analytics.api_call_with_retries('GET', url);
 
     if (this._analytics.stats_data.custom_events[this._event_key] === undefined) this._analytics.stats_data.custom_events[this._event_key] = 0;
 

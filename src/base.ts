@@ -219,7 +219,6 @@ export class CustomEvent {
 
     if (value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
-    this.ensure();
     this._analytics.stats_data.custom_events[this._event_key] += value;
   }
 
@@ -230,7 +229,6 @@ export class CustomEvent {
 
     if (value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
-    this.ensure();
     this._analytics.stats_data.custom_events[this._event_key] -= value;
   }
 
@@ -241,14 +239,12 @@ export class CustomEvent {
 
     if (value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
-    this.ensure();
     this._analytics.stats_data.custom_events[this._event_key] = value;
   }
 
   public get(): number {
     this._analytics.debug(`[DISCORDANALYTICS] Getting event ${this._event_key}`);
 
-    this.ensure();
     return this._analytics.stats_data.custom_events[this._event_key];
   }
 }

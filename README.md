@@ -3,7 +3,9 @@
 ## Installing the package
 
 ```bash
-npm install discord-analytics
+npm install @discordanalytics/discordjs # For Discord.js
+npm install @discordanalytics/eris # For Eris
+npm install @discordanalytics/oceanic # For Oceanic.js
 ```
 
 ## Usage
@@ -16,7 +18,7 @@ npm install discord-analytics
 // Import Discord.js's client and intents
 const { Client, IntentsBitField } = require("discord.js")
 // import discord-analytics
-const { default: DiscordAnalytics } = require("discord-analytics/discordjs")
+const { default: DiscordAnalytics } = require("@discordanalytics/discordjs")
 
 // Create Discord client
 const client = new Client({
@@ -49,7 +51,7 @@ client.login('token');
 
 ```js
 const {Client} = require("eris");
-const {default: DiscordAnalytics} = require("discord-analytics/eris");
+const {default: DiscordAnalytics} = require("@discordanalytics/eris");
 
 // Create Eris client.
 // Don't forget to replace token by your Discord bot token !
@@ -79,7 +81,7 @@ bot.connect();
 // Import Discord.js's client and intents
 const { Client } = require("oceanic.js")
 // import discord-analytics
-const { default: DiscordAnalytics } = require("discord-analytics/oceanic")
+const { default: DiscordAnalytics } = require("@discordanalytics/oceanic")
 
 // Create Discord client
 const client = new Client({
@@ -106,7 +108,7 @@ client.on('ready', () => {
 
 // Login to Discord
 // Don't forget to replace token by your Discord bot token !
-client.login('token');
+client.connect();
 ```
 
 > For advanced usages and updated docs, please check https://discordanalytics.xyz/docs/main/get-started/installation

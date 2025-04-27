@@ -33,7 +33,7 @@ client.on('ready', async () => {
 
   console.log('Client is ready!');
 
-  await analytics.init(); // Initialize DiscordAnalytics
+  await analytics.init();
 });
 
 client.on('interactionCreate', async (interaction) => {

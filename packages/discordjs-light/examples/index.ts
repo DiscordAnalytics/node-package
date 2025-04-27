@@ -1,9 +1,10 @@
-import DiscordAnalytics from '../src/index'; // Replace it with @discordanalytics/discordjs in your project
-import { ActionRowBuilder, Client, IntentsBitField, InteractionType, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
+import { InteractionType } from '@discordanalytics/core';
+import DiscordAnalytics from '../src/index'; // Replace it with @discordanalytics/discordjs-light in your project
+import { Client, Message, MessageActionRow, Modal, TextInputComponent } from 'discord.js-light';
 import 'dotenv/config';
 
 const client = new Client({
-  intents: [IntentsBitField.Flags.Guilds],
+  intents: ['GUILDS'],
 });
 
 client.on('error', (error) => {
@@ -50,7 +51,7 @@ client.on('interactionCreate', async (interaction) => {
     return '';
   });
 
-  if (interaction.isChatInputCommand()) {
+  if (interaction.isCommand()) {
     if (interaction.commandName === 'test') {
       const option = interaction.options.getString('test');
 
@@ -83,16 +84,16 @@ client.on('interactionCreate', async (interaction) => {
       });
 
       else if (option === 'modal') {
-        const modal = new ModalBuilder()
+        const modal = new Modal()
           .setCustomId(`my_modal`)
           .setTitle('My modal');
 
-        const favoriteColorInput = new TextInputBuilder()
+        const favoriteColorInput = new TextInputComponent()
           .setCustomId('favorite_color_input')
           .setLabel("What's your favorite color?")
-          .setStyle(TextInputStyle.Short);
+          .setStyle('SHORT');
 
-        const actionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(favoriteColorInput);
+        const actionRow = new MessageActionRow<TextInputComponent>().addComponents(favoriteColorInput);
         modal.addComponents(actionRow);
 
         await interaction.showModal(modal);
@@ -119,7 +120,7 @@ client.on('interactionCreate', async (interaction) => {
     ephemeral: true,
   });
 
-  if (interaction.isStringSelectMenu()) await interaction.message.edit({
+  if (interaction.isSelectMenu()) await (interaction.message as Message).edit({
     content: `You selected: ${interaction.values[0]}`,
     components: [],
   });

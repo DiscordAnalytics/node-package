@@ -1,10 +1,3 @@
-export interface EventsToTrack {
-  trackInteractions: boolean;
-  trackGuilds: boolean;
-  trackUserCount: boolean;
-  trackUserLanguage: boolean;
-  trackGuildsLocale: boolean;
-}
 export const api_url = 'https://discordanalytics.xyz/api';
 export const ApiEndpoints = {
   EDIT_SETTINGS_URL: `${api_url}/bots/:id`,
@@ -61,11 +54,11 @@ export interface GuildsStatsData {
   interactions: number;
 }
 
-export interface DiscordAnalyticsOptions {
+export interface AnalyticsOptions {
   client: any;
-  apiToken: string;
+  api_key: string;
   sharded?: boolean;
   debug?: boolean;
 }
 
-export type TrackGuildType = "create" | "delete"
+export type TrackGuildType = "create" | "delete";

@@ -1,6 +1,9 @@
 node_modules
 src
-dist/test
+test
+examples
+coverage
+tsconfig.json
+*.ts
 .idea
 .github
-test

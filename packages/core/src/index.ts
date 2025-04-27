@@ -105,10 +105,9 @@ export class AnalyticsBase {
    * Track guilds
    * /!\ Advanced users only
    * /!\ You need to initialize the class first
-   * @param guild The Guild instance only
    * @param {TrackGuildType} type 'create' if the event is guildCreate and 'delete' if is guildDelete
    */
-  public trackGuilds(guild: any, type: TrackGuildType): void {
+  public trackGuilds(type: TrackGuildType): void {
     this.debug(`[DISCORDANALYTICS] trackGuilds(${type}) triggered`);
     if (type === 'create') this.stats_data.addedGuilds++;
     else this.stats_data.removedGuilds++;

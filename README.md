@@ -27,7 +27,7 @@ const client = new Client({
 // Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
 const analytics = new DiscordAnalytics({
     client: client,
-    apiToken: 'YOUR_API_TOKEN',
+    api_key: 'YOUR_API_TOKEN',
     sharded: false // Set it to true if your bot use shards
 });
 
@@ -60,7 +60,7 @@ bot.on("ready", () => {
     // Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
     const analytics = new DiscordAnalytics({
         client: client,
-        apiToken: 'YOUR_API_TOKEN'
+        api_key: 'YOUR_API_TOKEN'
     });
 
     // start tracking selected events
@@ -93,7 +93,7 @@ const client = new Client({
 // Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
 const analytics = new DiscordAnalytics({
   client: client,
-  apiToken: 'YOUR_API_TOKEN'
+  api_key: 'YOUR_API_TOKEN'
 });
 
 // When Discord client is ready

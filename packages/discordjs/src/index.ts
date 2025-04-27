@@ -1,12 +1,12 @@
-import { AnalyticsBase, ApiEndpoints, ApplicationCommandType, DiscordAnalyticsOptions, ErrorCodes, InteractionType } from '@discordanalytics/core';
+import { AnalyticsBase, ApiEndpoints, ApplicationCommandType, AnalyticsOptions, ErrorCodes, InteractionType } from '@discordanalytics/core';
 import npmPackageData from '../package.json';
 
 /**
  * @class DiscordAnalytics
  * @description The Discord.js class for the DiscordAnalytics library.
- * @param {DiscordAnalyticsOptions} options Configuration options.
+ * @param {AnalyticsOptions} options Configuration options.
  * @property {any} options.client The Discord.js client to track events for.
- * @property {string} options.apiToken The API token for DiscordAnalytics.
+ * @property {string} options.api_key The API token for DiscordAnalytics.
  * @property {boolean} options.sharded Whether the Discord.js client is sharded.
  * @property {boolean} options.debug Enable or not the debug mode /!\ MUST BE USED ONLY FOR DEVELOPMENT PURPOSES /!\
  * @example
@@ -18,7 +18,7 @@ import npmPackageData from '../package.json';
  * client.on('ready', () => {
  *   const analytics = new DiscordAnalytics({
  *     client: client,
- *     apiToken: 'YOUR_API_TOKEN'
+ *     api_key: 'YOUR_API_TOKEN'
  *   });
  *   analytics.init();
  *   analytics.trackEvents();
@@ -31,8 +31,8 @@ export default class DiscordAnalytics extends AnalyticsBase {
   private readonly _sharded: boolean = false;
   private _isReady: boolean = false;
 
-  constructor(options: DiscordAnalyticsOptions) {
-    super(options.apiToken, options.debug);
+  constructor(options: AnalyticsOptions) {
+    super(options.api_key, options.debug);
     this._client = options.client;
     this._sharded = options.sharded || false;
   }
@@ -200,7 +200,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
     if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
     this._client.on('interactionCreate', async (interaction: any) => await this.trackInteractions(interaction, interactionNameResolver));
-    this._client.on('guildCreate', (guild: any) => this.trackGuilds(guild, 'create'));
-    this._client.on('guildDelete', (guild: any) => this.trackGuilds(guild, 'delete'));
+    this._client.on('guildCreate', (guild: any) => this.trackGuilds('create'));
+    this._client.on('guildDelete', (guild: any) => this.trackGuilds('delete'));
   }
 }

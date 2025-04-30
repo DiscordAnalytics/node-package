@@ -45,7 +45,7 @@ test('should update or insert an item in the array', () => {
   expect(array).toEqual([{ id: 1, value: 15 }, { id: 2, value: 20 }]);
 });
 
-test('should return a dictionary of guild sizes', () => {
+test('should return an object of guild sizes', () => {
   const instance = new AnalyticsBase('test_api_key', true);
   const guilds_member_count = [50, 200, 1000, 3000, 150];
   const result = instance.calculateGuildMembers(guilds_member_count);

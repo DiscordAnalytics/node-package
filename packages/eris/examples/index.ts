@@ -95,7 +95,7 @@ client.on('interactionCreate', async (interaction) => {
           components: [{
             type: 4,
             custom_id: 'favorite_color_input',
-            label: 'What's your favorite color?',
+            label: 'What\'s your favorite color?',
             style: 1,
           }],
         }],

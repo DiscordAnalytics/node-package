@@ -90,7 +90,7 @@ client.on('interactionCreate', async (interaction) => {
 
         const favoriteColorInput = new TextInputComponent()
           .setCustomId('favorite_color_input')
-          .setLabel('What's your favorite color?')
+          .setLabel('What\'s your favorite color?')
           .setStyle('SHORT');
 
         const actionRow = new MessageActionRow<TextInputComponent>().addComponents(favoriteColorInput);

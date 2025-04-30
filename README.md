@@ -3,12 +3,14 @@
 ## Installing the package
 
 ```bash
-npm install discord-analytics
+npm install @discordanalytics/discordjs # For Discord.js
+npm install @discordanalytics/eris # For Eris
+npm install @discordanalytics/oceanic # For Oceanic.js
 ```
 
 ## Usage
 
-> **Note:** To use Discord Analytics, you need to have an API token. Check the docs for more informations : https://docs.discordanalytics.xyz/get-started/bot-registration
+> **Note:** To use Discord Analytics, you need to have an API token. Check the docs for more informations : https://discordanalytics.xyz/docs/main/get-started/bot-registration
 
 **With Discord.js:**
 
@@ -16,7 +18,7 @@ npm install discord-analytics
 // Import Discord.js's client and intents
 const { Client, IntentsBitField } = require("discord.js")
 // import discord-analytics
-const { default: DiscordAnalytics } = require("discord-analytics/discordjs")
+const { default: DiscordAnalytics } = require("@discordanalytics/discordjs")
 
 // Create Discord client
 const client = new Client({
@@ -27,16 +29,17 @@ const client = new Client({
 // Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
 const analytics = new DiscordAnalytics({
     client: client,
-    apiToken: 'YOUR_API_TOKEN',
+    api_key: 'YOUR_API_TOKEN',
     sharded: false // Set it to true if your bot use shards
 });
 
 // start tracking selected events
-analytics.trackEvents();
 
 // When Discord client is ready
 client.on('ready', () => {
     console.log("Bot is ready!");
+    analytics.init(); // Initialize the analytics
+    analytics.trackEvents(); // Start tracking events
 });
 
 // Login to Discord
@@ -48,7 +51,7 @@ client.login('token');
 
 ```js
 const {Client} = require("eris");
-const {default: DiscordAnalytics} = require("discord-analytics/eris");
+const {default: DiscordAnalytics} = require("@discordanalytics/eris");
 
 // Create Eris client.
 // Don't forget to replace token by your Discord bot token !
@@ -59,10 +62,11 @@ bot.on("ready", () => {
     // Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
     const analytics = new DiscordAnalytics({
         client: client,
-        apiToken: 'YOUR_API_TOKEN'
+        api_key: 'YOUR_API_TOKEN'
     });
 
     // start tracking selected events
+    analytics.init(); // Initialize the analytics
     analytics.trackEvents();
 
     console.log("Ready!");
@@ -77,7 +81,7 @@ bot.connect();
 // Import Discord.js's client and intents
 const { Client } = require("oceanic.js")
 // import discord-analytics
-const { default: DiscordAnalytics } = require("discord-analytics/oceanic")
+const { default: DiscordAnalytics } = require("@discordanalytics/oceanic")
 
 // Create Discord client
 const client = new Client({
@@ -91,20 +95,20 @@ const client = new Client({
 // Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
 const analytics = new DiscordAnalytics({
   client: client,
-  apiToken: 'YOUR_API_TOKEN'
+  api_key: 'YOUR_API_TOKEN'
 });
-
-// start tracking selected events
-analytics.trackEvents();
 
 // When Discord client is ready
 client.on('ready', () => {
   console.log("Bot is ready!");
+
+  analytics.init(); // Initialize the analytics
+  analytics.trackEvents(); // Start tracking events
 });
 
 // Login to Discord
 // Don't forget to replace token by your Discord bot token !
-client.login('token');
+client.connect();
 ```
 
-> For advanced usages and updated docs, please check https://docs.discordanalytics.xyz/get-started/installation
+> For advanced usages and updated docs, please check https://discordanalytics.xyz/docs/main/get-started/installation

@@ -1,4 +1,4 @@
-name: Test TS
+name: CI
 
 on:
   pull_request:
@@ -10,6 +10,7 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x, 19.x, 20.x, 21.x, 22.x]
+      fail-fast: true
 
     name: Test TypeScript build
     steps:
@@ -24,4 +25,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+      - name: Build the package
+        run: pnpm build
+      - name: Run tests
+        run: pnpm run coverage

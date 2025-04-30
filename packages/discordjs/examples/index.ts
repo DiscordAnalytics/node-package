@@ -89,7 +89,7 @@ client.on('interactionCreate', async (interaction) => {
 
         const favoriteColorInput = new TextInputBuilder()
           .setCustomId('favorite_color_input')
-          .setLabel("What's your favorite color?")
+          .setLabel('What's your favorite color?')
           .setStyle(TextInputStyle.Short);
 
         const actionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(favoriteColorInput);

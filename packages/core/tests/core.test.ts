@@ -27,6 +27,15 @@ test('should return a CustomEvent instance', () => {
   expect(event).toBeInstanceOf(CustomEvent);
 });
 
+test('should update the event value', () => {
+  const instance = new AnalyticsBase('test_api_key', true);
+  const event = instance.events('my_custom_event');
+  event.set(42);
+  event.increment(8);
+  event.decrement(1);
+  expect(event.get()).toBe(49);
+});
+
 test('should throw an error if the event key is not a string', () => {
   const instance = new AnalyticsBase('test_api_key', true);
   expect(() => instance.events(123 as any)).toThrow(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);

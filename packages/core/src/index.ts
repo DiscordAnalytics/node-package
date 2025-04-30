@@ -247,7 +247,7 @@ export class CustomEvent {
 
     if (typeof value !== 'number') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
-    if (value < 0 || this.get()) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
+    if (value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
     this._analytics.stats_data.custom_events[this._event_key] += value;
   }

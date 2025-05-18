@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "author": "Discord Analytics",
   "homepage": "https://discordanalytics.xyz",
+  "readme": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DiscordAnalytics/node-package.git"

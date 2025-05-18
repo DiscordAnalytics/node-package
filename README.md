@@ -1,114 +1,22 @@
 # Discord Analytics
 
-## Installing the package
+## Overview
+Discord Analytics is a powerful tool that allows you to track and analyze your Discord bot's performance and user engagement. This repository contains packages for different Discord libraries, including Discord.js, Eris, Oceanic.js, and Discord.js-light.
+These packages provide a simple and efficient way to integrate Discord Analytics into your bot, enabling you to gather valuable insights and improve your bot's functionality.
+
+## Installing the packages
+> **Note:** Use the package manager of your choice (npm, yarn, pnpm) to install the packages.
 
 ```bash
+npm install @discordanalytics/core # Core package
 npm install @discordanalytics/discordjs # For Discord.js
+npm install @discordanalytics/discordjs-light # For Discord.js-light
 npm install @discordanalytics/eris # For Eris
 npm install @discordanalytics/oceanic # For Oceanic.js
 ```
 
 ## Usage
 
-> **Note:** To use Discord Analytics, you need to have an API token. Check the docs for more informations : https://discordanalytics.xyz/docs/main/get-started/bot-registration
+[Discord.js](./packages/discordjs/README.md) | [Discord.js-light](./packages/discordjs-light/README.md) | [Eris](./packages/eris/README.md) | [Oceanic.js](./packages/oceanic/README.md)
 
-**With Discord.js:**
-
-```js
-// Import Discord.js's client and intents
-const { Client, IntentsBitField } = require("discord.js")
-// import discord-analytics
-const { default: DiscordAnalytics } = require("@discordanalytics/discordjs")
-
-// Create Discord client
-const client = new Client({
-    intents: [IntentsBitField.Flags.Guilds] // This intent is required
-});
-
-// Create Discord Analytics instance
-// Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
-const analytics = new DiscordAnalytics({
-    client: client,
-    api_key: 'YOUR_API_TOKEN',
-    sharded: false // Set it to true if your bot use shards
-});
-
-// start tracking selected events
-
-// When Discord client is ready
-client.on('ready', () => {
-    console.log("Bot is ready!");
-    analytics.init(); // Initialize the analytics
-    analytics.trackEvents(); // Start tracking events
-});
-
-// Login to Discord
-// Don't forget to replace token by your Discord bot token !
-client.login('token');
-```
-
-**With Eris:**
-
-```js
-const {Client} = require("eris");
-const {default: DiscordAnalytics} = require("@discordanalytics/eris");
-
-// Create Eris client.
-// Don't forget to replace token by your Discord bot token !
-const bot = new Client("token");
-
-bot.on("ready", () => {
-    // Create Discord Analytics instance
-    // Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
-    const analytics = new DiscordAnalytics({
-        client: client,
-        api_key: 'YOUR_API_TOKEN'
-    });
-
-    // start tracking selected events
-    analytics.init(); // Initialize the analytics
-    analytics.trackEvents();
-
-    console.log("Ready!");
-});
-
-// Login to Discord
-bot.connect();
-```
-
-**With Oceanic.js:**
-```js
-// Import Discord.js's client and intents
-const { Client } = require("oceanic.js")
-// import discord-analytics
-const { default: DiscordAnalytics } = require("@discordanalytics/oceanic")
-
-// Create Discord client
-const client = new Client({
-  auth: "Bot <YOUR_BOT_TOKEN>",
-  gateway: {
-    intents: ["GUILDS"] // This intent is required
-  }
-})
-
-// Create Discord Analytics instance
-// Don't forget to replace YOUR_API_TOKEN by your Discord Analytics token !
-const analytics = new DiscordAnalytics({
-  client: client,
-  api_key: 'YOUR_API_TOKEN'
-});
-
-// When Discord client is ready
-client.on('ready', () => {
-  console.log("Bot is ready!");
-
-  analytics.init(); // Initialize the analytics
-  analytics.trackEvents(); // Start tracking events
-});
-
-// Login to Discord
-// Don't forget to replace token by your Discord bot token !
-client.connect();
-```
-
-> For advanced usages and updated docs, please check https://discordanalytics.xyz/docs/main/get-started/installation
+> For advanced usages and updated docs, please check https://discordanalytics.xyz/docs/main/get-started/advanced-usage

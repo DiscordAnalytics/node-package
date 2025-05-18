@@ -1,0 +1,27 @@
+{
+  "name": "@discordanalytics/core",
+  "version": "3.5.0",
+  "description": "Core package to work with Discord Analytics",
+  "main": "dist/index.js",
+  "author": "Discord Analytics",
+  "homepage": "https://discordanalytics.xyz",
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiscordAnalytics/node-package.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DiscordAnalytics/node-package/issues"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "*",
+    "@types/node-fetch": "2.6.12",
+    "typescript": "*"
+  }
+}

@@ -11,12 +11,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
-      - uses: actions/setup-node@v3
+          version: 10
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
@@ -29,12 +30,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
-      - uses: actions/setup-node@v3
+          version: 10
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
@@ -43,11 +45,7 @@ jobs:
         run: pnpm install --frozen-lock
       - name: Build the package
         run: pnpm build
-      - name: Move files
-        run: rm -r ./src && mv ./dist/src/* ./ && rm -r ./dist
-      - name: Edit package.json imports
-        run: sed -i 's#../../package.json#../package.json#' discordjs/index.js && sed -i 's#../../package.json#../package.json#' discordjs-light/index.js && sed -i 's#../../package.json#../package.json#' eris/index.js && sed -i 's#../../package.json#../package.json#' oceanic/index.js
       - name: Publish to NPM
-        run: pnpm publish --no-git-checks
+        run: pnpm publish --recursive --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

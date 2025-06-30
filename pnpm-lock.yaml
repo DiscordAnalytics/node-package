@@ -25,8 +25,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       dotenv:
-        specifier: ^16.4.7
-        version: 16.4.7
+        specifier: ^17.0.0
+        version: 17.0.0
       eris:
         specifier: ^0.17.2
         version: 0.17.2
@@ -234,8 +234,8 @@ packages:
     resolution: {integrity: sha512-SvU5kVUvwunQhN2/+0t55QW/1EHfB1lp0TtLZUSXVHDmyHTrdOj5LRKdR0zLcybaA15F+NtdWuWmGOX9lE+CAw==}
     engines: {node: '>=18'}
 
-  dotenv@16.4.7:
-    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+  dotenv@17.0.0:
+    resolution: {integrity: sha512-A0BJ5lrpJVSfnMMXjmeO0xUnoxqsBHWCoqqTnGwGYVdnctqXXUEhJOO7LxmgxJon9tEZFGpe0xPRX0h2v3AANQ==}
     engines: {node: '>=12'}
 
   eris@0.17.2:
@@ -689,7 +689,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  dotenv@16.4.7: {}
+  dotenv@17.0.0: {}
 
   eris@0.17.2:
     dependencies:

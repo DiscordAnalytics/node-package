@@ -36,7 +36,7 @@
     "@types/node-fetch": "^2.6.12",
     "discord.js": "^14.17.2",
     "discord.js-light": "^4.10.0",
-    "dotenv": "^16.4.7",
+    "dotenv": "^17.2.0",
     "eris": "^0.17.2",
     "nodemon": "^3.1.9",
     "oceanic.js": "^1.11.2",

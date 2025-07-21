@@ -199,7 +199,7 @@ export default class DiscordAnalytics {
    */
   public async trackInteractions(interaction: any, interactionNameResolver?: (interaction: any) => string) {
     if (this._debug) console.log("[DISCORDANALYTICS] trackInteractions() triggered")
-    if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED)
+    if (!this._isReady) console.error(ErrorCodes.INSTANCE_NOT_INITIALIZED)
 
     let guilds: { locale: Locale, number: number }[] = []
     this._client.guilds.cache.map((current: any) => guilds.find((x) => x.locale === current.preferredLocale) ?

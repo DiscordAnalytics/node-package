@@ -57,7 +57,7 @@ export class AnalyticsBase {
   }
 
   public error(...args: any[]): void {
-    if (this.debug_mode) throw new Error(...args);
+    return console.error(...args);
   }
 
   /**
@@ -149,7 +149,7 @@ export class AnalyticsBase {
         retries++;
         const retry_after = Math.pow(2, retries) * backoff_factor;
         this.error(`[DISCORDANALYTICS] Error: ${error}. Retrying in ${retry_after} seconds...`);
-        if (retries >= max_retries) throw error;
+        if (retries >= max_retries) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.MAX_RETRIES_EXCEEDED}`);
         await new Promise((resolve) => setTimeout(resolve, retry_after * 1000));
       }
     }

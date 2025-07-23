@@ -84,7 +84,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
    */
   public async trackInteractions(interaction: any, interactionNameResolver?: (interaction: any) => string): Promise<void> {
     this.debug('[DISCORDANALYTICS] trackInteractions() triggered');
-    if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED)
+    if (!this._isReady) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
     this.updateOrInsert(
       this.stats_data.guildsLocales,
@@ -160,7 +160,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
    */
   public trackEvents(interactionNameResolver?: (interaction: any) => string): void {
     this.debug('[DISCORDANALYTICS] trackEvents() triggered');
-    if (!this._isReady) throw new Error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
+    if (!this._isReady) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
     this._client.on('interactionCreate', async (interaction: any) => await this.trackInteractions(interaction, interactionNameResolver));
     this._client.on('guildCreate', (guild: any) => this.trackGuilds('create'));

@@ -16,6 +16,7 @@ export const ErrorCodes = {
   INVALID_EVENTS_COUNT: 'invalid events count',
   INVALID_VALUE_TYPE: 'invalid value type',
   INVALID_EVENT_KEY: 'invalid event key',
+  MAX_RETRIES_EXCEEDED: 'Max retries exceeded, please check your network connection or the API status.',
 }
 
 export type Locale = 'id' | 'en-US' | 'en-GB' | 'bg' | 'zh-CN' | 'zh-TW' | 'hr' | 'cs' | 'da' | 'nl' | 'fi' | 'fr' | 'de' | 'el' | 'hi' | 'hu' | 'it' | 'ja' | 'ko' | 'lt' | 'no' | 'pl' | 'pt-BR' | 'ro' | 'ru' | 'es-ES' | 'sv-SE' | 'th' | 'tr' | 'uk' | 'vi';

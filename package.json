@@ -32,7 +32,7 @@
   },
   "homepage": "https://discordanalytics.xyz",
   "devDependencies": {
-    "@types/node": "^20.17.11",
+    "@types/node": "^24.3.1",
     "@types/node-fetch": "^2.6.12",
     "discord.js": "^14.17.2",
     "discord.js-light": "^4.10.0",

@@ -44,6 +44,8 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * /!\ Must be used when the client is ready (recommended to use in ready event to prevent problems)
    */
   public async init(): Promise<void> {
+    if (process.env.NODE_ENV !== 'production') return console.log("[DISCORDANALYTICS] NODE_ENV != 'production', initialization skipped")
+
     const url = ApiEndpoints.EDIT_SETTINGS_URL.replace(':id', this._client.user.id);
     const body = JSON.stringify({
       username: this._client.user.username,
@@ -176,7 +178,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
       && interaction.member.permissions
       && interaction.member.permissions.has(8192n)
       || interaction.member.permissions.has(2n)
-      || interaction.member.permissions.has(4n) 
+      || interaction.member.permissions.has(4n)
       || interaction.member.permissions.has(4194304n)
       || interaction.member.permissions.has(8388608n)
       || interaction.member.permissions.has(16777216n)

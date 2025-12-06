@@ -44,6 +44,8 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * /!\ Must be used when the client is ready (recommended to use in ready event to prevent problems)
    */
   public async init(): Promise<void> {
+    if (process.env.NODE_ENV !== 'production') return console.log("[DISCORDANALYTICS] NODE_ENV != 'production', initialization skipped")
+
     const app = await this._client.rest.applications.getCurrent();
     const url = ApiEndpoints.EDIT_SETTINGS_URL.replace(':id', this._client.user.id);
     const body = JSON.stringify({
@@ -156,7 +158,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
     if (!interaction.guild) ++this.stats_data.users_type.private_message
     else if (
       interaction.member
-      && interaction.member.permissions 
+      && interaction.member.permissions
       && interaction.member.permissions.has(8n)
       || interaction.member.permissions.has(32n)
     ) ++this.stats_data.users_type.admin

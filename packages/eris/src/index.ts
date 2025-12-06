@@ -42,6 +42,8 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * /!\ Must be used when the client is ready (recommended to use in ready event to prevent problems)
    */
   public async init(): Promise<void> {
+    if (process.env.NODE_ENV !== 'production') return console.log("[DISCORDANALYTICS] NODE_ENV != 'production', initialization skipped")
+
     const url = ApiEndpoints.EDIT_SETTINGS_URL.replace(':id', this._client.user.id);
     const body = JSON.stringify({
       username: this._client.user.username,

@@ -65,8 +65,8 @@ export default class DiscordAnalytics extends AnalyticsBase {
     this.client_id = this._client.user.id;
     this._isReady = true;
 
-    const dev_mode = process.argv[2] === '--dev';
-    this.debug(`[DISCORDANALYTICS] DevMode is ${dev_mode ? 'enabled' : 'disabled'}. Stats will be sent every ${dev_mode ? '30s' : '5min'}.`);
+    const fast_mode = process.argv[2] === '--fast';
+    this.debug(`[DISCORDANALYTICS] Fast mode is ${fast_mode ? 'enabled' : 'disabled'}. Stats will be sent every ${fast_mode ? '30s' : '5min'}.`);
 
     setInterval(async () => {
       this.debug('[DISCORDANALYTICS] Sending stats...');
@@ -86,7 +86,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
         ))?.flat() ?? []);
 
       await this.sendStats(this._client.user.id, guildCount, userCount, guildMembers);
-    }, dev_mode ? 30000 : 300000);
+    }, fast_mode ? 30000 : 300000);
   }
 
   /**

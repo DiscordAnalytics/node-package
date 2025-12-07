@@ -56,8 +56,9 @@ export class AnalyticsBase {
     if (this.debug_mode) console.debug(...args);
   }
 
-  public error(...args: any[]): void {
-    return console.error(...args);
+  public error(content: any, exit: boolean = false): void {
+    console.error(content)
+    if (exit) process.exit(1);
   }
 
   /**
@@ -143,7 +144,7 @@ export class AnalyticsBase {
         if (response.ok) return response;
         else if (response.status === 401) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_API_TOKEN}`);
         else if (response.status === 423) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.SUSPENDED_BOT}`);
-        else if (response.status === 404 && url.includes('events')) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENT_KEY}`);
+        else if (response.status === 404 && url.includes('events')) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENT_KEY}`, true);
         else if (response.status !== 200) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_RESPONSE}`);
       } catch (error) {
         retries++;
@@ -196,7 +197,7 @@ export class AnalyticsBase {
         other: 0,
         private_message: 0,
       },
-      custom_events: {},
+      custom_events: this.stats_data.custom_events,
     }
   }
 }
@@ -218,24 +219,28 @@ export class AnalyticsBase {
 export class CustomEvent {
   private readonly _analytics: AnalyticsBase;
   private readonly _event_key: string;
+  private _last_action: string;
 
   constructor(analytics: AnalyticsBase, event_key: string) {
     this._analytics = analytics;
     this._event_key = event_key;
-    
+    this._last_action = "";
+
     this.ensure();
   }
 
   private async ensure() {
-    this._analytics.debug(`[DISCORDANALYTICS] Ensuring event ${this._event_key} exists`);
+    if (typeof this._analytics.stats_data.custom_events[this._event_key] !== 'number') {
+      this._analytics.debug(`[DISCORDANALYTICS] Fetching value for event ${this._event_key}`);
+      const url = ApiEndpoints.EVENT_URL.replace(':id', this._analytics.client_id).replace(':event', this._event_key);
+      const res = await this._analytics.api_call_with_retries('GET', url);
 
-    const url = ApiEndpoints.EVENT_URL.replace(':id', this._analytics.client_id).replace(':event', this._event_key);
-
-    await this._analytics.api_call_with_retries('GET', url);
-
-    if (this._analytics.stats_data.custom_events[this._event_key] === undefined) this._analytics.stats_data.custom_events[this._event_key] = 0;
-
-    this._analytics.debug(`[DISCORDANALYTICS] Event ${this._event_key} ensured`);
+      if (res instanceof fetch.Response && this._last_action !== 'set') {
+        const data = await res.json()
+        this._analytics.stats_data.custom_events[this._event_key] = (this._analytics.stats_data.custom_events[this._event_key] || 0) + (data.today_value || 0)
+      }
+      this._analytics.debug(`[DISCORDANALYTICS] Value fetched for event ${this._event_key}`);
+    }
   }
 
   /**
@@ -249,7 +254,8 @@ export class CustomEvent {
 
     if (value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
-    this._analytics.stats_data.custom_events[this._event_key] += value;
+    this._analytics.stats_data.custom_events[this._event_key] = (this._analytics.stats_data.custom_events[this._event_key] || 0) + value;
+    this._last_action = 'increment';
   }
 
   /**
@@ -264,6 +270,7 @@ export class CustomEvent {
     if (value < 0 || this.get() - value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
     this._analytics.stats_data.custom_events[this._event_key] -= value;
+    this._last_action = 'decrement';
   }
 
   /**
@@ -278,6 +285,7 @@ export class CustomEvent {
     if (value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
     this._analytics.stats_data.custom_events[this._event_key] = value;
+    this._last_action = 'set';
   }
 
   /**

@@ -1,9 +1,16 @@
 import DiscordAnalytics from '../src/index'; // Replace it with @discordanalytics/discordjs in your project
-import { ActionRowBuilder, Client, IntentsBitField, InteractionType, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
+import {
+  ActionRowBuilder, Client, IntentsBitField, InteractionType, ModalBuilder,
+  ReactionEmoji, TextInputBuilder, TextInputStyle
+} from 'discord.js';
 import 'dotenv/config';
 
 const client = new Client({
-  intents: [IntentsBitField.Flags.Guilds],
+  intents: [
+    IntentsBitField.Flags.Guilds,
+    IntentsBitField.Flags.GuildMessageReactions,
+    IntentsBitField.Flags.GuildMessages
+  ],
 });
 
 client.on('error', (error) => {
@@ -135,5 +142,11 @@ client.on('interactionCreate', async (interaction) => {
 
 client.on('guildCreate', (_) => analytics.trackGuilds('create'));
 client.on('guildDelete', (_) => analytics.trackGuilds('delete'));
+
+client.on('messageReactionAdd', (reaction) => {
+  if (reaction.emoji.name === '❤️') {
+    analytics.events('heart_reaction').increment()
+  }
+})
 
 client.login(process.env.DISCORD_TOKEN);

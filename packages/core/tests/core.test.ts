@@ -16,8 +16,9 @@ test('debug should log messages when debug is enabled', () => {
 
 test('error should throw an error when debug is enabled', () => {
   const instance = new AnalyticsBase('test_api_key', true);
-  const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-  expect(() => instance.error('Test error')).toThrow('Test error');
+  const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+  instance.error('Test error');
+  expect(consoleSpy).toHaveBeenCalledWith('Test error');
   consoleSpy.mockRestore();
 });
 

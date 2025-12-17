@@ -1,10 +1,10 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    reporters: process.env.GITHUB_ACTIONS ? ['dot', 'github-actions'] : ['dot'],
+    reporters: process.env.GITHUB_ACTIONS ? ["dot", "github-actions"] : ["dot"],
     coverage: {
-      include: ['packages/*/src/**/*.ts'],
+      include: ["packages/*/src/**/*.ts"],
     },
   },
 });

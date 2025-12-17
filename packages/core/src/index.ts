@@ -1,5 +1,12 @@
-import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData, TrackGuildType } from './types';
-import fetch from 'node-fetch';
+import {
+  ApiEndpoints,
+  ErrorCodes,
+  GuildsStatsData,
+  InteractionData,
+  LocaleData,
+  TrackGuildType,
+} from "./types";
+import fetch from "node-fetch";
 
 /**
  * DiscordAnalytics Base Class
@@ -14,7 +21,7 @@ import fetch from 'node-fetch';
  */
 export class AnalyticsBase {
   private readonly _api_key: string;
-  private readonly _headers: { 'Content-Type': string; Authorization: string; };
+  private readonly _headers: { "Content-Type": string; Authorization: string };
   private readonly debug_mode: boolean = false;
   public stats_data = {
     date: new Date().toISOString().slice(0, 10),
@@ -41,13 +48,13 @@ export class AnalyticsBase {
     },
     custom_events: {} as Record<string, number>,
   };
-  public client_id: string = '';
+  public client_id: string = "";
 
   constructor(api_key: string, debug: boolean = false) {
     this._api_key = api_key;
     this.debug_mode = debug;
     this._headers = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bot ${this._api_key}`,
     };
   }
@@ -57,7 +64,7 @@ export class AnalyticsBase {
   }
 
   public error(content: any, exit: boolean = false): void {
-    console.error(content)
+    console.error(content);
     if (exit) process.exit(1);
   }
 
@@ -76,7 +83,8 @@ export class AnalyticsBase {
   public events(event_key: string): CustomEvent {
     this.debug(`[DISCORDANALYTICS] Getting event ${event_key}`);
 
-    if (typeof event_key !== 'string') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
+    if (typeof event_key !== "string")
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
     return new CustomEvent(this, event_key);
   }
@@ -92,14 +100,22 @@ export class AnalyticsBase {
     else array.push(insert());
   }
 
-  public calculateGuildMembers(guildMembers: number[]): { little: number; medium: number; big: number; huge: number } {
-    return guildMembers.reduce((acc, count) => {
-      if (count <= 100) acc.little++;
-      else if (count <= 500) acc.medium++;
-      else if (count <= 1500) acc.big++;
-      else acc.huge++;
-      return acc;
-    }, { little: 0, medium: 0, big: 0, huge: 0 });
+  public calculateGuildMembers(guildMembers: number[]): {
+    little: number;
+    medium: number;
+    big: number;
+    huge: number;
+  } {
+    return guildMembers.reduce(
+      (acc, count) => {
+        if (count <= 100) acc.little++;
+        else if (count <= 500) acc.medium++;
+        else if (count <= 1500) acc.big++;
+        else acc.huge++;
+        return acc;
+      },
+      { little: 0, medium: 0, big: 0, huge: 0 },
+    );
   }
 
   /**
@@ -110,7 +126,7 @@ export class AnalyticsBase {
    */
   public trackGuilds(type: TrackGuildType): void {
     this.debug(`[DISCORDANALYTICS] trackGuilds(${type}) triggered`);
-    if (type === 'create') this.stats_data.addedGuilds++;
+    if (type === "create") this.stats_data.addedGuilds++;
     else this.stats_data.removedGuilds++;
   }
 
@@ -142,15 +158,31 @@ export class AnalyticsBase {
         });
 
         if (response.ok) return response;
-        else if (response.status === 401) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_API_TOKEN}`);
-        else if (response.status === 423) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.SUSPENDED_BOT}`);
-        else if (response.status === 404 && url.includes('events')) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENT_KEY}`, true);
-        else if (response.status !== 200) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_RESPONSE}`);
+        else if (response.status === 401)
+          return this.error(
+            `[DISCORDANALYTICS] ${ErrorCodes.INVALID_API_TOKEN}`,
+          );
+        else if (response.status === 423)
+          return this.error(`[DISCORDANALYTICS] ${ErrorCodes.SUSPENDED_BOT}`);
+        else if (response.status === 404 && url.includes("events"))
+          return this.error(
+            `[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENT_KEY}`,
+            true,
+          );
+        else if (response.status !== 200)
+          return this.error(
+            `[DISCORDANALYTICS] ${ErrorCodes.INVALID_RESPONSE}`,
+          );
       } catch (error) {
         retries++;
         const retry_after = Math.pow(2, retries) * backoff_factor;
-        this.error(`[DISCORDANALYTICS] Error: ${error}. Retrying in ${retry_after} seconds...`);
-        if (retries >= max_retries) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.MAX_RETRIES_EXCEEDED}`);
+        this.error(
+          `[DISCORDANALYTICS] Error: ${error}. Retrying in ${retry_after} seconds...`,
+        );
+        if (retries >= max_retries)
+          return this.error(
+            `[DISCORDANALYTICS] ${ErrorCodes.MAX_RETRIES_EXCEEDED}`,
+          );
         await new Promise((resolve) => setTimeout(resolve, retry_after * 1000));
       }
     }
@@ -170,14 +202,14 @@ export class AnalyticsBase {
     user_count: number = 0,
     guild_members: number[] = [],
   ): Promise<void> {
-    this.debug('[DISCORDANALYTICS] Sending stats...');
+    this.debug("[DISCORDANALYTICS] Sending stats...");
 
-    const url = ApiEndpoints.EDIT_STATS_URL.replace(':id', client_id);
+    const url = ApiEndpoints.EDIT_STATS_URL.replace(":id", client_id);
     const body = JSON.stringify(this.stats_data);
 
-    await this.api_call_with_retries('POST', url, body);
+    await this.api_call_with_retries("POST", url, body);
 
-    this.debug('[DISCORDANALYTICS] Stats sent to the API', body);
+    this.debug("[DISCORDANALYTICS] Stats sent to the API", body);
 
     this.stats_data = {
       date: new Date().toISOString().slice(0, 10),
@@ -198,7 +230,7 @@ export class AnalyticsBase {
         private_message: 0,
       },
       custom_events: this.stats_data.custom_events,
-    }
+    };
   }
 }
 
@@ -230,16 +262,28 @@ export class CustomEvent {
   }
 
   private async ensure() {
-    if (typeof this._analytics.stats_data.custom_events[this._event_key] !== 'number') {
-      this._analytics.debug(`[DISCORDANALYTICS] Fetching value for event ${this._event_key}`);
-      const url = ApiEndpoints.EVENT_URL.replace(':id', this._analytics.client_id).replace(':event', this._event_key);
-      const res = await this._analytics.api_call_with_retries('GET', url);
+    if (
+      typeof this._analytics.stats_data.custom_events[this._event_key] !==
+      "number"
+    ) {
+      this._analytics.debug(
+        `[DISCORDANALYTICS] Fetching value for event ${this._event_key}`,
+      );
+      const url = ApiEndpoints.EVENT_URL.replace(
+        ":id",
+        this._analytics.client_id,
+      ).replace(":event", this._event_key);
+      const res = await this._analytics.api_call_with_retries("GET", url);
 
-      if (res instanceof fetch.Response && this._last_action !== 'set') {
-        const data = await res.json()
-        this._analytics.stats_data.custom_events[this._event_key] = (this._analytics.stats_data.custom_events[this._event_key] || 0) + (data.today_value || 0)
+      if (res instanceof fetch.Response && this._last_action !== "set") {
+        const data = await res.json();
+        this._analytics.stats_data.custom_events[this._event_key] =
+          (this._analytics.stats_data.custom_events[this._event_key] || 0) +
+          (data.today_value || 0);
       }
-      this._analytics.debug(`[DISCORDANALYTICS] Value fetched for event ${this._event_key}`);
+      this._analytics.debug(
+        `[DISCORDANALYTICS] Value fetched for event ${this._event_key}`,
+      );
     }
   }
 
@@ -248,14 +292,19 @@ export class CustomEvent {
    * @param value The value to increment the event by (default: 1)
    */
   public increment(value: number = 1): void {
-    this._analytics.debug(`[DISCORDANALYTICS] Incrementing event ${this._event_key} by ${value}`);
+    this._analytics.debug(
+      `[DISCORDANALYTICS] Incrementing event ${this._event_key} by ${value}`,
+    );
 
-    if (typeof value !== 'number') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
+    if (typeof value !== "number")
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
-    if (value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
+    if (value < 0)
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
-    this._analytics.stats_data.custom_events[this._event_key] = (this._analytics.stats_data.custom_events[this._event_key] || 0) + value;
-    this._last_action = 'increment';
+    this._analytics.stats_data.custom_events[this._event_key] =
+      (this._analytics.stats_data.custom_events[this._event_key] || 0) + value;
+    this._last_action = "increment";
   }
 
   /**
@@ -263,14 +312,18 @@ export class CustomEvent {
    * @param value The value to decrement the event by (default: 1)
    */
   public decrement(value: number = 1): void {
-    this._analytics.debug(`[DISCORDANALYTICS] Decrementing event ${this._event_key} by ${value}`);
+    this._analytics.debug(
+      `[DISCORDANALYTICS] Decrementing event ${this._event_key} by ${value}`,
+    );
 
-    if (typeof value !== 'number') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
+    if (typeof value !== "number")
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
-    if (value < 0 || this.get() - value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
+    if (value < 0 || this.get() - value < 0)
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
     this._analytics.stats_data.custom_events[this._event_key] -= value;
-    this._last_action = 'decrement';
+    this._last_action = "decrement";
   }
 
   /**
@@ -278,14 +331,18 @@ export class CustomEvent {
    * @param value The value to set the event to
    */
   public set(value: number): void {
-    this._analytics.debug(`[DISCORDANALYTICS] Setting event ${this._event_key} to ${value}`);
+    this._analytics.debug(
+      `[DISCORDANALYTICS] Setting event ${this._event_key} to ${value}`,
+    );
 
-    if (typeof value !== 'number') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
+    if (typeof value !== "number")
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
-    if (value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
+    if (value < 0)
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
     this._analytics.stats_data.custom_events[this._event_key] = value;
-    this._last_action = 'set';
+    this._last_action = "set";
   }
 
   /**
@@ -293,10 +350,12 @@ export class CustomEvent {
    * @returns {number} The event value
    */
   public get(): number {
-    this._analytics.debug(`[DISCORDANALYTICS] Getting event ${this._event_key}`);
+    this._analytics.debug(
+      `[DISCORDANALYTICS] Getting event ${this._event_key}`,
+    );
 
     return this._analytics.stats_data.custom_events[this._event_key];
   }
 }
 
-export * from './types';
+export * from "./types";

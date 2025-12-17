@@ -1,5 +1,11 @@
-import { AnalyticsBase, ApiEndpoints, AnalyticsOptions, ErrorCodes, InteractionType } from '@discordanalytics/core';
-import npmPackageData from '../package.json';
+import {
+  AnalyticsBase,
+  ApiEndpoints,
+  AnalyticsOptions,
+  ErrorCodes,
+  InteractionType,
+} from "@discordanalytics/core";
+import npmPackageData from "../package.json";
 
 /**
  * @class DiscordAnalytics
@@ -32,7 +38,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
   private readonly _client: any;
   private _isReady: boolean = false;
 
-  constructor(options: Omit<AnalyticsOptions, 'sharded'>) {
+  constructor(options: Omit<AnalyticsOptions, "sharded">) {
     super(options.api_key, options.debug);
     this._client = options.client;
   }
@@ -44,14 +50,20 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * /!\ Must be used when the client is ready (recommended to use in ready event to prevent problems)
    */
   public async init(): Promise<void> {
-    if (process.env.NODE_ENV !== 'production') return console.log("[DISCORDANALYTICS] NODE_ENV != 'production', initialization skipped")
+    if (process.env.NODE_ENV !== "production")
+      return console.log(
+        "[DISCORDANALYTICS] NODE_ENV != 'production', initialization skipped",
+      );
 
     const app = await this._client.rest.applications.getCurrent();
-    const url = ApiEndpoints.EDIT_SETTINGS_URL.replace(':id', this._client.user.id);
+    const url = ApiEndpoints.EDIT_SETTINGS_URL.replace(
+      ":id",
+      this._client.user.id,
+    );
     const body = JSON.stringify({
       username: this._client.user.username,
       avatar: this._client.user.avatar,
-      framework: 'oceanic',
+      framework: "oceanic",
       version: npmPackageData.version,
       team: app.team
         ? app.team.members.map((member: any) => member.user.id)
@@ -60,24 +72,39 @@ export default class DiscordAnalytics extends AnalyticsBase {
           : [],
     });
 
-    await this.api_call_with_retries('PATCH', url, body);
+    await this.api_call_with_retries("PATCH", url, body);
 
-    this.debug('[DISCORDANALYTICS] Instance successfully initialized');
+    this.debug("[DISCORDANALYTICS] Instance successfully initialized");
     this.client_id = this._client.user.id;
     this._isReady = true;
 
-    const fast_mode = process.argv[2] === '--fast';
-    this.debug(`[DISCORDANALYTICS] Fast mode is ${fast_mode ? 'enabled' : 'disabled'}. Stats will be sent every ${fast_mode ? '30s' : '5min'}.`);
+    const fast_mode = process.argv[2] === "--fast";
+    this.debug(
+      `[DISCORDANALYTICS] Fast mode is ${fast_mode ? "enabled" : "disabled"}. Stats will be sent every ${fast_mode ? "30s" : "5min"}.`,
+    );
 
-    setInterval(async () => {
-      this.debug('[DISCORDANALYTICS] Sending stats...');
+    setInterval(
+      async () => {
+        this.debug("[DISCORDANALYTICS] Sending stats...");
 
-      const guildCount = this._client.guilds.toArray().length;
-      const userCount = this._client.guilds.reduce((a: number, g: any) => a + (g.memberCount || 0), 0);
-      const guildMembers: number[] = this._client.guilds.map((guild: any) => guild.memberCount);
+        const guildCount = this._client.guilds.toArray().length;
+        const userCount = this._client.guilds.reduce(
+          (a: number, g: any) => a + (g.memberCount || 0),
+          0,
+        );
+        const guildMembers: number[] = this._client.guilds.map(
+          (guild: any) => guild.memberCount,
+        );
 
-      await this.sendStats(this._client.user.id, guildCount, userCount, guildMembers);
-    }, fast_mode ? 30000 : 300000);
+        await this.sendStats(
+          this._client.user.id,
+          guildCount,
+          userCount,
+          guildMembers,
+        );
+      },
+      fast_mode ? 30000 : 300000,
+    );
   }
 
   /**
@@ -87,8 +114,11 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * @param interaction BaseInteraction class and its extensions only
    * @param interactionNameResolver A function that will resolve the name of the interaction
    */
-  public async trackInteractions(interaction: any, interactionNameResolver?: (interaction: any) => string): Promise<void> {
-    this.debug('[DISCORDANALYTICS] trackInteractions() triggered');
+  public async trackInteractions(
+    interaction: any,
+    interactionNameResolver?: (interaction: any) => string,
+  ): Promise<void> {
+    this.debug("[DISCORDANALYTICS] trackInteractions() triggered");
     if (!this._isReady) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
     this.updateOrInsert(
@@ -112,9 +142,10 @@ export default class DiscordAnalytics extends AnalyticsBase {
         : interaction.data.name;
       this.updateOrInsert(
         this.stats_data.interactions,
-        (x) => x.name === commandName
-          && x.type === interaction.type
-          && x.command_type === commandType,
+        (x) =>
+          x.name === commandName &&
+          x.type === interaction.type &&
+          x.command_type === commandType,
         (x) => x.number++,
         () => ({
           name: commandName,
@@ -123,7 +154,10 @@ export default class DiscordAnalytics extends AnalyticsBase {
           command_type: commandType,
         }),
       );
-    } else if (interaction.type === InteractionType.MessageComponent || interaction.type === InteractionType.ModalSubmit) {
+    } else if (
+      interaction.type === InteractionType.MessageComponent ||
+      interaction.type === InteractionType.ModalSubmit
+    ) {
       const interactionName = interactionNameResolver
         ? interactionNameResolver(interaction)
         : interaction.data.customID;
@@ -141,12 +175,15 @@ export default class DiscordAnalytics extends AnalyticsBase {
 
     this.updateOrInsert(
       this.stats_data.guildsStats,
-      (x) => x.guildId === (interaction.guild ? interaction.guildID : 'dm'),
+      (x) => x.guildId === (interaction.guild ? interaction.guildID : "dm"),
       (x) => x.interactions++,
       () => ({
-        guildId: interaction.guild ? interaction.guildID : 'dm',
-        name: interaction.guild ? interaction.guild.name : 'DM',
-        icon: interaction.guild && interaction.guild.icon ? interaction.guild.icon : undefined,
+        guildId: interaction.guild ? interaction.guildID : "dm",
+        name: interaction.guild ? interaction.guild.name : "DM",
+        icon:
+          interaction.guild && interaction.guild.icon
+            ? interaction.guild.icon
+            : undefined,
         interactions: 1,
         members: interaction.guild ? interaction.guild.memberCount : 0,
       }),
@@ -155,28 +192,31 @@ export default class DiscordAnalytics extends AnalyticsBase {
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-    if (!interaction.guild) ++this.stats_data.users_type.private_message
+    if (!interaction.guild) ++this.stats_data.users_type.private_message;
     else if (
-      interaction.member
-      && interaction.member.permissions
-      && interaction.member.permissions.has(8n)
-      || interaction.member.permissions.has(32n)
-    ) ++this.stats_data.users_type.admin
+      (interaction.member &&
+        interaction.member.permissions &&
+        interaction.member.permissions.has(8n)) ||
+      interaction.member.permissions.has(32n)
+    )
+      ++this.stats_data.users_type.admin;
     else if (
-      interaction.member
-      && interaction.member.permissions
-      && interaction.member.permissions.has(8192n)
-      || interaction.member.permissions.has(2n)
-      || interaction.member.permissions.has(4194304n)
-      || interaction.member.permissions.has(8388608n)
-      || interaction.member.permissions.has(16777216n)
-      || interaction.member.permissions.has(1099511627776n)
-    ) ++this.stats_data.users_type.moderator
+      (interaction.member &&
+        interaction.member.permissions &&
+        interaction.member.permissions.has(8192n)) ||
+      interaction.member.permissions.has(2n) ||
+      interaction.member.permissions.has(4194304n) ||
+      interaction.member.permissions.has(8388608n) ||
+      interaction.member.permissions.has(16777216n) ||
+      interaction.member.permissions.has(1099511627776n)
+    )
+      ++this.stats_data.users_type.moderator;
     else if (
-      interaction.member
-      && interaction.member.joinedAt
-      && interaction.member.joinedAt > oneWeekAgo
-    ) ++this.stats_data.users_type.new_member
+      interaction.member &&
+      interaction.member.joinedAt &&
+      interaction.member.joinedAt > oneWeekAgo
+    )
+      ++this.stats_data.users_type.new_member;
   }
 
   /**
@@ -185,12 +225,22 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * /!\ Not compatible with other functions
    * @param interactionNameResolver A function that will resolve the name of the interaction
    */
-  public trackEvents(interactionNameResolver?: (interaction: any) => string): void {
-    this.debug('[DISCORDANALYTICS] trackEvents() triggered');
+  public trackEvents(
+    interactionNameResolver?: (interaction: any) => string,
+  ): void {
+    this.debug("[DISCORDANALYTICS] trackEvents() triggered");
     if (!this._isReady) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
-    this._client.on('interactionCreate', async (interaction: any) => await this.trackInteractions(interaction, interactionNameResolver));
-    this._client.on('guildCreate', async (guild: any) => this.trackGuilds('create'));
-    this._client.on('guildDelete', async (guild: any) => this.trackGuilds('delete'));
+    this._client.on(
+      "interactionCreate",
+      async (interaction: any) =>
+        await this.trackInteractions(interaction, interactionNameResolver),
+    );
+    this._client.on("guildCreate", async (guild: any) =>
+      this.trackGuilds("create"),
+    );
+    this._client.on("guildDelete", async (guild: any) =>
+      this.trackGuilds("delete"),
+    );
   }
 }

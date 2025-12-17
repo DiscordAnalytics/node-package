@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-          cache: 'pnpm'
+          cache: "pnpm"
       - run: pnpm install --frozen-lock
       - name: Build the package
         run: pnpm build
@@ -40,7 +40,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: Install Dependencies
         run: pnpm install --frozen-lock
       - name: Build the package

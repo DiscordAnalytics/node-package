@@ -1,6 +1,6 @@
 {
   "name": "@discordanalytics/core",
-  "version": "3.5.3",
+  "version": "3.5.4",
   "description": "Core package to work with Discord Analytics",
   "main": "dist/index.js",
   "author": "Discord Analytics",

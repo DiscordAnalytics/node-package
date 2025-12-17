@@ -1,9 +1,10 @@
 {
   "name": "discord-analytics",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "author": "Discord Analytics",
   "homepage": "https://discordanalytics.xyz",
   "license": "MIT",
+  "private": true,
   "workspaces": [
     "packages/*"
   ],

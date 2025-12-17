@@ -24,7 +24,7 @@ const analytics = new DiscordAnalytics({
   debug: true,
 });
 
-client.on('ready', async () => {
+client.on('clientReady', async () => {
   client.application?.commands.set([{
     name: 'test',
     description: 'Send a test message',

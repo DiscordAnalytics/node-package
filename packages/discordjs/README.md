@@ -38,9 +38,9 @@ const analytics = new DiscordAnalytics({
 // start tracking selected events
 
 // When Discord client is ready
-client.on('ready', () => {
+client.on('clientReady', async () => {
   console.log("Bot is ready!");
-  analytics.init(); // Initialize the analytics
+  await analytics.init(); // Initialize the analytics
   analytics.trackEvents(); // Start tracking events
 });
 

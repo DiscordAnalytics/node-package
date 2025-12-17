@@ -1,7 +1,7 @@
 import DiscordAnalytics from '../src/index'; // Replace it with @discordanalytics/discordjs in your project
 import {
   ActionRowBuilder, Client, IntentsBitField, InteractionType, ModalBuilder,
-  ReactionEmoji, TextInputBuilder, TextInputStyle
+  TextInputBuilder, TextInputStyle
 } from 'discord.js';
 import 'dotenv/config';
 

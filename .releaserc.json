@@ -10,8 +10,7 @@
       }
     ],
     "@semantic-release/git",
-    "@semantic-release/github",
-    "@anolilab/multi-semantic-release"
+    "@semantic-release/github"
   ],
   "dryRun": true
 }

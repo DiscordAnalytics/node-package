@@ -12,5 +12,8 @@
     "@semantic-release/git",
     "@semantic-release/github"
   ],
+  "extends": [
+    "@anolilab/multi-semantic-release"
+  ],
   "dryRun": true
 }

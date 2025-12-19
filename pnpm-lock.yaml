@@ -15,8 +15,8 @@ importers:
         specifier: 3.1.2
         version: 3.1.2(vitest@3.1.2(@types/node@22.15.2))
       dotenv:
-        specifier: ^16.5.0
-        version: 16.5.0
+        specifier: ^17.0.0
+        version: 17.2.3
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -612,8 +612,8 @@ packages:
     resolution: {integrity: sha512-2l0gsPOLPs5t6GFZfQZKnL1OJNYFcuC/ETWsW4VtKVD/tg4ICa9x+jb9bkPffkMdRpRpuUaO/fKkHCBeiCKh8g==}
     engines: {node: '>=18'}
 
-  dotenv@16.5.0:
-    resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
+  dotenv@17.2.3:
+    resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
     engines: {node: '>=12'}
 
   eastasianwidth@0.2.0:
@@ -1518,7 +1518,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  dotenv@16.5.0: {}
+  dotenv@17.2.3: {}
 
   eastasianwidth@0.2.0: {}
 

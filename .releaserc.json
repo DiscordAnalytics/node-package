@@ -1,5 +1,5 @@
 {
-  "branches": ["master", "ci/semantic-release"],
+  "branches": ["master"],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
@@ -15,5 +15,5 @@
   "extends": [
     "@anolilab/multi-semantic-release"
   ],
-  "dryRun": true
+  "dryRun": false
 }

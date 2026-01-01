@@ -230,7 +230,7 @@ export class CustomEvent {
   }
 
   private async ensure() {
-    if (typeof this._analytics.stats_data.custom_events[this._event_key] !== 'number') {
+    if (typeof this._analytics.stats_data.custom_events[this._event_key] !== 'number' && process.env.NODE_ENV === 'production') {
       this._analytics.debug(`[DISCORDANALYTICS] Fetching value for event ${this._event_key}`);
       const url = ApiEndpoints.EVENT_URL.replace(':id', this._analytics.client_id).replace(':event', this._event_key);
       const res = await this._analytics.api_call_with_retries('GET', url);

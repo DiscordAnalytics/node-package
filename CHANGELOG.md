@@ -1,3 +1,10 @@
+## [2.6.1](https://github.com/DiscordAnalytics/node-package/compare/v2.6.0...v2.6.1) (2026-01-01)
+
+
+### Bug Fixes
+
+* the package tries to fetch event data even if NODE_ENV is not production [#219](https://github.com/DiscordAnalytics/node-package/issues/219) ([468ecde](https://github.com/DiscordAnalytics/node-package/commit/468ecdea2d5036ccba15688d1db57579edc434c5))
+
 # [2.6.0](https://github.com/DiscordAnalytics/node-package/compare/v2.5.0...v2.6.0) (2025-12-19)
 
 

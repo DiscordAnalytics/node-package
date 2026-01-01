@@ -1,5 +1,5 @@
 import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData, TrackGuildType } from './types';
-import fetch from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
 
 /**
  * DiscordAnalytics Base Class
@@ -129,9 +129,9 @@ export class AnalyticsBase {
     body?: string,
     max_retries: number = 5,
     backoff_factor: number = 0.5,
-  ): Promise<void | fetch.Response> {
+  ): Promise<void | Response> {
     let retries = 0;
-    let response: fetch.Response;
+    let response: Response;
 
     while (retries < max_retries) {
       try {
@@ -235,8 +235,8 @@ export class CustomEvent {
       const url = ApiEndpoints.EVENT_URL.replace(':id', this._analytics.client_id).replace(':event', this._event_key);
       const res = await this._analytics.api_call_with_retries('GET', url);
 
-      if (res instanceof fetch.Response && this._last_action !== 'set') {
-        const data = await res.json()
+      if (res instanceof Response && this._last_action !== 'set') {
+        const data: any = await res.json()
         this._analytics.stats_data.custom_events[this._event_key] = (this._analytics.stats_data.custom_events[this._event_key] || 0) + (data.today_value || 0)
       }
       this._analytics.debug(`[DISCORDANALYTICS] Value fetched for event ${this._event_key}`);

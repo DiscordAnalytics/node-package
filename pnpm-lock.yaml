@@ -33,9 +33,6 @@ importers:
       '@types/node':
         specifier: '*'
         version: 22.19.3
-      '@types/node-fetch':
-        specifier: 2.6.12
-        version: 2.6.12
       typescript:
         specifier: '*'
         version: 5.9.3

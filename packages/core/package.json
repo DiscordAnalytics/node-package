@@ -21,7 +21,6 @@
   },
   "devDependencies": {
     "@types/node": "*",
-    "@types/node-fetch": "2.6.12",
     "typescript": "*"
   }
 }

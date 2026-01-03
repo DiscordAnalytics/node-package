@@ -1,5 +1,5 @@
 import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData, TrackGuildType } from './types';
-import fetch, { Response } from 'node-fetch';
+import fetch from 'node-fetch';
 
 /**
  * DiscordAnalytics Base Class
@@ -129,9 +129,9 @@ export class AnalyticsBase {
     body?: string,
     max_retries: number = 5,
     backoff_factor: number = 0.5,
-  ): Promise<void | Response> {
+  ): Promise<void | fetch.Response> {
     let retries = 0;
-    let response: Response;
+    let response: fetch.Response;
 
     while (retries < max_retries) {
       try {

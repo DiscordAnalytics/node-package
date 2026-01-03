@@ -18,7 +18,9 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@discordanalytics/core": "workspace:*"
+    "@discordanalytics/core": "workspace:*",
+    "@types/node-fetch": "^2.6.13",
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
     "discord.js-light": "^4.10.0",

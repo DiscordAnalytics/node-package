@@ -1,3 +1,10 @@
+## [2.6.2](https://github.com/DiscordAnalytics/node-package/compare/v2.6.1...v2.6.2) (2026-01-03)
+
+
+### Bug Fixes
+
+* rollback node-fetch to v2 ([a48888e](https://github.com/DiscordAnalytics/node-package/commit/a48888e163c557737af38f26c6aacd55f504c0da))
+
 ## [2.6.1](https://github.com/DiscordAnalytics/node-package/compare/v2.6.0...v2.6.1) (2026-01-01)
 
 

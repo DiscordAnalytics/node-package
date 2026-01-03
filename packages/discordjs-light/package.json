@@ -1,6 +1,6 @@
 {
   "name": "@discordanalytics/discordjs-light",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "Discord.js light package for working with Discord Analytics",
   "main": "dist/index.js",
   "author": "Discord Analytics",

@@ -1,5 +1,4 @@
 import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData, TrackGuildType } from './types';
-import fetch from 'node-fetch';
 
 /**
  * DiscordAnalytics Base Class
@@ -121,7 +120,7 @@ export class AnalyticsBase {
    * @param body The body to send (optional)
    * @param max_retries The maximum number of retries (default: 5)
    * @param backoff_factor The backoff factor to use (default: 0.5)
-   * @returns {Promise<void | fetch.Response>} The response from the API
+   * @returns {Promise<void | Response>} The response from the API
    */
   public async api_call_with_retries(
     method: string,
@@ -129,9 +128,9 @@ export class AnalyticsBase {
     body?: string,
     max_retries: number = 5,
     backoff_factor: number = 0.5,
-  ): Promise<void | fetch.Response> {
+  ): Promise<void | Response> {
     let retries = 0;
-    let response: fetch.Response;
+    let response: Response;
 
     while (retries < max_retries) {
       try {

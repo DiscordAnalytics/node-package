@@ -20,7 +20,7 @@
   "dependencies": {
     "@discordanalytics/core": "workspace:*",
     "@types/node-fetch": "^2.6.13",
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^3.0.0"
   },
   "devDependencies": {
     "oceanic.js": "^1.12.0",

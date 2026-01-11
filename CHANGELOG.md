@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/DiscordAnalytics/node-package/compare/v2.6.2...v2.7.0) (2026-01-11)
+
+
+### Features
+
+* **deps:** removed node-fetch ([ef704c9](https://github.com/DiscordAnalytics/node-package/commit/ef704c9aa5d18c76e8ecfcc6d128c0b14bbfb512))
+
 ## [2.6.2](https://github.com/DiscordAnalytics/node-package/compare/v2.6.1...v2.6.2) (2026-01-03)
 
 

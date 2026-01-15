@@ -73,7 +73,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
       const userCount = this._client.guilds.reduce((a: number, g: any) => a + g.memberCount, 0);
       const guildMembers: number[] = this._client.guilds.map((guild: any) => guild.memberCount);
 
-      await this.sendStats(this._client.user.id, guildCount, userCount, guildMembers);
+      await this.sendStats(this._client.user.id, guildCount, userCount, 0, guildMembers);
     }, fast_mode ? 30000 : 300000);
   }
 

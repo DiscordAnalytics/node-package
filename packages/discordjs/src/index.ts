@@ -79,13 +79,17 @@ export default class DiscordAnalytics extends AnalyticsBase {
         ? ((await this._client.shard?.broadcastEval((c: any) => c.guilds.cache.reduce((a: number, g: any) => a + (g.memberCount || 0), 0)))?.reduce((a: number, b: number) => a + b, 0) || 0)
         : this._client.guilds.cache.reduce((a: number, g: any) => a + (g.memberCount || 0), 0);
 
+      const userInstallCount = this._sharded
+        ? ((await this._client.shard?.broadcastEval((c: any) => c.approximateUserInstallCount))?.reduce((a: number, b: number) => a + b, 0) || 0)
+        : this._client.approximateUserInstallCount;
+
       const guildMembers: number[] = !this._sharded
         ? this._client.guilds.cache.map((guild: any) => guild.memberCount)
         : ((await this._client.shard?.broadcastEval(
           (c: any) => c.guilds.cache.map((guild: any) => guild.memberCount)
         ))?.flat() ?? []);
 
-      await this.sendStats(this._client.user.id, guildCount, userCount, guildMembers);
+      await this.sendStats(this._client.user.id, guildCount, userCount, userInstallCount, guildMembers);
     }, fast_mode ? 30000 : 300000);
   }
 

@@ -1,5 +1,14 @@
 import DiscordAnalytics from '../src/index';
-import { ApplicationCommandOptionTypes, ApplicationCommandTypes, ButtonStyles, Client, ComponentTypes, InteractionTypes, TextInputStyles } from 'oceanic.js';
+import {
+  Application,
+  ApplicationCommandOptionTypes,
+  ApplicationCommandTypes,
+  ButtonStyles,
+  Client,
+  ComponentTypes,
+  InteractionTypes,
+  TextInputStyles
+} from 'oceanic.js';
 import 'dotenv/config';
 
 const client = new Client({
@@ -126,7 +135,7 @@ client.on('interactionCreate', async (interaction) => {
       components: [],
     });
   } else if (interaction.isModalSubmitInteraction()) {
-    const input = interaction.data.components.getComponents()[0].value;
+    const input = interaction.data.components.getComponents()[0].customID;
     interaction.reply({
       content: `You submitted the modal! ${input}`,
     });

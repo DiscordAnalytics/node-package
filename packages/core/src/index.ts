@@ -39,6 +39,7 @@ export class AnalyticsBase {
       private_message: 0,
     },
     custom_events: {} as Record<string, number>,
+    user_install_count: 0,
   };
   public client_id: string = '';
 
@@ -160,6 +161,7 @@ export class AnalyticsBase {
    * @param client_id The client ID of the bot
    * @param guild_count The number of guilds the bot is in (default: 0)
    * @param user_count The number of users the bot is in (default: 0)
+   * @param user_install_count The number of user installs (default: 0)
    * @param guild_members The number of members in each guild (optional)
    * @returns {Promise<void>} A promise that resolves when the stats are sent
    */
@@ -167,6 +169,7 @@ export class AnalyticsBase {
     client_id: string,
     guild_count: number = 0,
     user_count: number = 0,
+    user_install_count: number = 0,
     guild_members: number[] = [],
   ): Promise<void> {
     this.debug('[DISCORDANALYTICS] Sending stats...');
@@ -197,6 +200,7 @@ export class AnalyticsBase {
         private_message: 0,
       },
       custom_events: this.stats_data.custom_events,
+      user_install_count: user_install_count,
     }
   }
 }

@@ -7,7 +7,7 @@
         "releaseRules": [
           { "type": "refactor", "release": "patch" },
           { "type": "chore", "release": "patch" },
-          { "type": "ci", "release": "patch" },
+          { "type": "ci", "release": "patch" }
         ]
       }
     ],

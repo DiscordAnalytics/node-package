@@ -200,7 +200,7 @@ export class AnalyticsBase {
         private_message: 0,
       },
       custom_events: this.stats_data.custom_events,
-      user_install_count: user_install_count,
+      user_install_count,
     }
   }
 }

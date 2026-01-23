@@ -1,4 +1,11 @@
-import { AnalyticsBase, ApiEndpoints, AnalyticsOptions, ErrorCodes, InteractionType } from '@discordanalytics/core';
+import {
+  AnalyticsBase,
+  ApiEndpoints,
+  AnalyticsOptions,
+  ErrorCodes,
+  InteractionType,
+  Locale, LocaleData
+} from '@discordanalytics/core';
 import npmPackageData from '../package.json';
 
 /**
@@ -73,6 +80,13 @@ export default class DiscordAnalytics extends AnalyticsBase {
       const userCount = this._client.guilds.reduce((a: number, g: any) => a + g.memberCount, 0);
       const guildMembers: number[] = this._client.guilds.map((guild: any) => guild.memberCount);
 
+      let guildLocales: LocaleData[] = []
+      this._client.guilds.map((current: any) => guildLocales.find((x) => x.locale === current.preferredLocale) ?
+        ++guildLocales.find((x) => x.locale === current.preferredLocale)!.number :
+        guildLocales.push({ locale: current.preferredLocale, number: 1 }));
+
+      this.stats_data.guildsLocales = guildLocales;
+
       await this.sendStats(this._client.user.id, guildCount, userCount, 0, guildMembers);
     }, fast_mode ? 30000 : 300000);
   }
@@ -87,13 +101,6 @@ export default class DiscordAnalytics extends AnalyticsBase {
   public async trackInteractions(interaction: any, interactionNameResolver?: (interaction: any) => string): Promise<void> {
     this.debug('[DISCORDANALYTICS] trackInteractions() triggered');
     if (!this._isReady) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
-
-    this.updateOrInsert(
-      this.stats_data.guildsLocales,
-      (x) => x.locale === interaction.guild?.preferredLocale,
-      (x) => x.number++,
-      () => ({ locale: interaction.guild?.preferredLocale, number: 1 })
-    );
 
     if (interaction.type === InteractionType.ApplicationCommand) {
       const name = interactionNameResolver ? interactionNameResolver(interaction) : interaction.data.name;

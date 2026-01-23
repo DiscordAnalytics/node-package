@@ -1,6 +1,6 @@
 {
   "name": "@discordanalytics/eris",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "description": "Eris package for working with Discord Analytics",
   "main": "dist/index.js",
   "author": "Discord Analytics",

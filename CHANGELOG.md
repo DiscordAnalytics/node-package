@@ -1,10 +1,3 @@
-## [2.8.1](https://github.com/DiscordAnalytics/node-package/compare/v2.8.0...v2.8.1) (2026-01-23)
-
-
-### Bug Fixes
-
-* **ci:** removed pnpm publish ([c3752b2](https://github.com/DiscordAnalytics/node-package/commit/c3752b2949afb5f1b4f543b3eb08f610964c5d26))
-
 # [2.7.0](https://github.com/DiscordAnalytics/node-package/compare/v2.6.2...v2.7.0) (2026-01-11)
 
 

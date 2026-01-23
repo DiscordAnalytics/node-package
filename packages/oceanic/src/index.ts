@@ -1,4 +1,11 @@
-import { AnalyticsBase, ApiEndpoints, AnalyticsOptions, ErrorCodes, InteractionType } from '@discordanalytics/core';
+import {
+  AnalyticsBase,
+  ApiEndpoints,
+  AnalyticsOptions,
+  ErrorCodes,
+  InteractionType,
+  LocaleData
+} from '@discordanalytics/core';
 import npmPackageData from '../package.json';
 
 /**
@@ -77,7 +84,14 @@ export default class DiscordAnalytics extends AnalyticsBase {
       const userInstallCount = this._client.application.approximateUserInstallCount
       const guildMembers: number[] = this._client.guilds.map((guild: any) => guild.memberCount);
 
-      await this.sendStats(this._client.user.id, guildCount, userCount, 0, guildMembers);
+      let guildLocales: LocaleData[] = []
+      this._client.guilds.map((current: any) => guildLocales.find((x) => x.locale === current.preferredLocale) ?
+        ++guildLocales.find((x) => x.locale === current.preferredLocale)!.number :
+        guildLocales.push({ locale: current.preferredLocale, number: 1 }));
+
+      this.stats_data.guildsLocales = guildLocales;
+
+      await this.sendStats(this._client.user.id, guildCount, userCount, userInstallCount, guildMembers);
     }, fast_mode ? 30000 : 300000);
   }
 

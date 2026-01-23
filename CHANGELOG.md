@@ -1,3 +1,25 @@
+# [2.8.0](https://github.com/DiscordAnalytics/node-package/compare/v2.7.0...v2.8.0) (2026-01-23)
+
+
+### Bug Fixes
+
+* **ci:** added pnpm to release workflow ([cfacc8d](https://github.com/DiscordAnalytics/node-package/commit/cfacc8d3001fe9ee54a7444444597150ecd81d66))
+* **ci:** fix semantic release config file ([8668303](https://github.com/DiscordAnalytics/node-package/commit/866830380275579a88e977c0569d39b99d770b02))
+* **ci:** fixed release workflow permission errors ([7c81a10](https://github.com/DiscordAnalytics/node-package/commit/7c81a10ff41831b5ccd45bffde3cb8921969963e))
+* **ci:** fixed release workflow permission errors ([3fbfe5d](https://github.com/DiscordAnalytics/node-package/commit/3fbfe5d7f372fde0cd46e1aeb9f3302aa1bd5bfd))
+* **ci:** fixed release workflow permission errors ([f2ab188](https://github.com/DiscordAnalytics/node-package/commit/f2ab1889179c70e641655820b805869b043b87b3))
+* **ci:** fixed release workflow permission errors ([51363ec](https://github.com/DiscordAnalytics/node-package/commit/51363ec930e02236b95a3b4a220128aede3385c0))
+* **ci:** removed pnpm publish ([c3752b2](https://github.com/DiscordAnalytics/node-package/commit/c3752b2949afb5f1b4f543b3eb08f610964c5d26))
+* **examples:** fixed type error in oceanic example ([1a83be5](https://github.com/DiscordAnalytics/node-package/commit/1a83be53977e355ee1da6e857e4c2d9c0028e56f))
+* fixed guild locales ([#228](https://github.com/DiscordAnalytics/node-package/issues/228)) ([3bcdf98](https://github.com/DiscordAnalytics/node-package/commit/3bcdf9893f497cf05a703e42091cc12d6e072c81))
+* fixed guild locales [#227](https://github.com/DiscordAnalytics/node-package/issues/227) ([f31e9f0](https://github.com/DiscordAnalytics/node-package/commit/f31e9f00cff55c8c152183a38b0684ba764fb36a))
+
+
+### Features
+
+* **ci:** added pnpm support to semantic release ([9b89f55](https://github.com/DiscordAnalytics/node-package/commit/9b89f55017cb328e3e769dfe955e1f92687afc27))
+* **stats:** added user installs support ([3178b05](https://github.com/DiscordAnalytics/node-package/commit/3178b0540c08133ac6203740b0d00970e8f8ae83))
+
 # [2.7.0](https://github.com/DiscordAnalytics/node-package/compare/v2.6.2...v2.7.0) (2026-01-11)
 
 

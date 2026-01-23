@@ -13,7 +13,6 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -27,7 +26,5 @@ jobs:
           extra_plugins: |
             @semantic-release/changelog
             @semantic-release/git
-            @anolilab/semantic-release-pnpm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: "${{ secrets.NPM_AUTH_TOKEN }}"

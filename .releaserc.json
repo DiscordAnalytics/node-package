@@ -21,8 +21,5 @@
     "@semantic-release/git",
     "@semantic-release/github"
   ],
-  "extends": [
-    "@anolilab/semantic-release-pnpm"
-  ],
   "dryRun": false
 }

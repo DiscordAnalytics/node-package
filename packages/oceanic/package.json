@@ -20,15 +20,13 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@discordanalytics/core": "workspace:*",
-    "@types/node-fetch": "^2.6.13",
-    "node-fetch": "^2.7.0"
+    "@discordanalytics/core": "workspace:*"
   },
   "devDependencies": {
-    "oceanic.js": "^1.12.0",
+    "oceanic.js": "^1.13.0",
     "typescript": "*"
   },
   "peerDependencies": {
-    "oceanic.js": ">=1.12.x"
+    "oceanic.js": ">=1.13.x"
   }
 }

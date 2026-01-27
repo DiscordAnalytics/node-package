@@ -1,3 +1,10 @@
+## [2.8.1](https://github.com/DiscordAnalytics/node-package/compare/v2.8.0...v2.8.1) (2026-01-27)
+
+
+### Bug Fixes
+
+* fixed missing types declarations in packages ([7719d2b](https://github.com/DiscordAnalytics/node-package/commit/7719d2ba4c6d7b3ef78bc7ddc0cd9dea323f7c92))
+
 # [2.8.0](https://github.com/DiscordAnalytics/node-package/compare/v2.7.0...v2.8.0) (2026-01-23)
 
 

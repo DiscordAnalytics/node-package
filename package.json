@@ -21,11 +21,11 @@
     "url": "https://github.com/DiscordAnalytics/node-package/issues"
   },
   "devDependencies": {
-    "@types/node": "^24.0.0",
-    "@vitest/coverage-v8": "3.2.4",
-    "dotenv": "^17.0.0",
-    "typescript": "^5.8.3",
-    "vitest": "^3.1.2"
+    "@types/node": "^25.0.10",
+    "@vitest/coverage-v8": "^4.0.18",
+    "dotenv": "^17.2.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   },
   "multi-release": {
     "deps": {

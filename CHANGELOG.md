@@ -1,3 +1,10 @@
+## [2.8.2](https://github.com/DiscordAnalytics/node-package/compare/v2.8.1...v2.8.2) (2026-02-17)
+
+
+### Bug Fixes
+
+* error using user installs in guild ([404a279](https://github.com/DiscordAnalytics/node-package/commit/404a27955d2133a821d2cfe1dfedb9f1454548ff))
+
 ## [2.8.1](https://github.com/DiscordAnalytics/node-package/compare/v2.8.0...v2.8.1) (2026-01-27)
 
 

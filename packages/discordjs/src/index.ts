@@ -178,7 +178,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-    if (!interaction.inGuild()) ++this.stats_data.users_type.private_message;
+    if (!interaction.inGuild() || !interaction.guild) ++this.stats_data.users_type.private_message;
     else if (
       interaction.member
       && interaction.member.permissions

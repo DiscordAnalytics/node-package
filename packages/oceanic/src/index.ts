@@ -108,9 +108,9 @@ export default class DiscordAnalytics extends AnalyticsBase {
 
     this.updateOrInsert(
       this.stats_data.guildsLocales,
-      (x) => x.locale === interaction.guild?.preferredLocale,
+      (x) => x.locale === interaction.guildLocale,
       (x) => x.number++,
-      () => ({ locale: interaction.guild?.preferredLocale, number: 1 }),
+      () => ({ locale: interaction.guildLocale, number: 1 }),
     );
 
     this.updateOrInsert(
@@ -159,33 +159,33 @@ export default class DiscordAnalytics extends AnalyticsBase {
       (x) => x.guildId === (interaction.guild ? interaction.guildID : 'dm'),
       (x) => x.interactions++,
       () => ({
-        guildId: interaction.guild ? interaction.guildID : 'dm',
-        name: interaction.guild ? interaction.guild.name : 'DM',
-        icon: interaction.guild && interaction.guild.icon ? interaction.guild.icon : undefined,
+        guildId: interaction.guildID ? interaction.guildID : 'dm',
+        name: this.is_guild_install(interaction) ? interaction.guild.name : 'DM',
+        icon: this.is_guild_install(interaction) && interaction.guild.icon ? interaction.guild.icon : undefined,
         interactions: 1,
-        members: interaction.guild ? interaction.guild.memberCount : 0,
+        members: this.is_guild_install(interaction) ? interaction.guild.memberCount : 0,
       }),
     );
 
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-    if (!interaction.guild) ++this.stats_data.users_type.private_message
+    if (!interaction.guildID) ++this.stats_data.users_type.private_message
     else if (
       interaction.member
-      && interaction.member.permissions
-      && interaction.member.permissions.has(8n)
-      || interaction.member.permissions.has(32n)
+      && interaction.memberPermissions
+      && interaction.memberPermissions.has(8n)
+      || interaction.memberPermissions.has(32n)
     ) ++this.stats_data.users_type.admin
     else if (
       interaction.member
-      && interaction.member.permissions
-      && interaction.member.permissions.has(8192n)
-      || interaction.member.permissions.has(2n)
-      || interaction.member.permissions.has(4194304n)
-      || interaction.member.permissions.has(8388608n)
-      || interaction.member.permissions.has(16777216n)
-      || interaction.member.permissions.has(1099511627776n)
+      && interaction.memberPermissions
+      && interaction.memberPermissions.has(8192n)
+      || interaction.memberPermissions.has(2n)
+      || interaction.memberPermissions.has(4194304n)
+      || interaction.memberPermissions.has(8388608n)
+      || interaction.memberPermissions.has(16777216n)
+      || interaction.memberPermissions.has(1099511627776n)
     ) ++this.stats_data.users_type.moderator
     else if (
       interaction.member
@@ -207,5 +207,9 @@ export default class DiscordAnalytics extends AnalyticsBase {
     this._client.on('interactionCreate', async (interaction: any) => await this.trackInteractions(interaction, interactionNameResolver));
     this._client.on('guildCreate', async (guild: any) => this.trackGuilds('create'));
     this._client.on('guildDelete', async (guild: any) => this.trackGuilds('delete'));
+  }
+
+  private is_guild_install (interaction: any): boolean {
+    return interaction.authorizingIntegrationOwners["0"] === interaction.guildID
   }
 }

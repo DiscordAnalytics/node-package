@@ -29,6 +29,8 @@ client.on('clientReady', async () => {
     name: 'test',
     description: 'Send a test message',
     dmPermission: true,
+    integrationTypes: [0, 1], // 0 = Guild Install, 1 = User Install
+    contexts: [0, 1, 2], // 0 = Guild, 1 = Bot DM, 2 = Private Channel
     options: [{
       name: 'test',
       description: 'Test option',

@@ -33,6 +33,8 @@ client.on('ready', async () => {
     type: ApplicationCommandTypes.CHAT_INPUT,
     name: 'test',
     description: 'Do some tests',
+    integrationTypes: [0, 1], // 0 = Guild Install, 1 = User Install
+    contexts: [0, 1, 2], // 0 = Guild, 1 = Bot DM, 2 = Private Channel
     options: [{
       type: ApplicationCommandOptionTypes.STRING,
       name: 'type',
@@ -76,7 +78,7 @@ client.on('interactionCreate', async (interaction) => {
 
   if (interaction.isCommandInteraction() && interaction.data.name === 'test') {
     const option = interaction.data.options.getString('type', false);
-    
+
     if (option === 'button') interaction.reply({
       content: 'Here is the button!',
       components: [{

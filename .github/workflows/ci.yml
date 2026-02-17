@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x, 19.x, 20.x, 21.x, 22.x]
+        node-version: [20.x, 21.x, 22.x, 23.x, 24.x, v25.x]
       fail-fast: true
 
     name: Test TypeScript build

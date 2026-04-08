@@ -80,7 +80,7 @@ importers:
     devDependencies:
       oceanic.js:
         specifier: ^1.13.0
-        version: 1.13.0(opusscript@0.0.8)
+        version: 1.14.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(opusscript@0.0.8)
       typescript:
         specifier: '*'
         version: 5.9.3
@@ -142,13 +142,22 @@ packages:
     resolution: {integrity: sha512-3LKP7F2+atl9vJFhaBjn4nOaSWahZ/yWjOvA4e5pnXkt2qyXRCHLxoBQy81GFtLGCq7K9lPm9R517M1U+/90Qg==}
     engines: {node: '>=18'}
 
-  '@discordjs/voice@0.18.0':
-    resolution: {integrity: sha512-BvX6+VJE5/vhD9azV9vrZEt9hL1G+GlOdsQaVl5iv9n87fkXjf3cSwllhR3GdaUC8m6dqT8umXIWtn3yCu4afg==}
-    engines: {node: '>=18'}
+  '@discordjs/voice@0.19.2':
+    resolution: {integrity: sha512-3yJ255e4ag3wfZu/DSxeOZK1UtnqNxnspmLaQetGT0pDkThNZoHs+Zg6dgZZ19JEVomXygvfHn9lNpICZuYtEA==}
+    engines: {node: '>=22.12.0'}
 
   '@discordjs/ws@1.2.3':
     resolution: {integrity: sha512-wPlQDxEmlDg5IxhJPuxXr3Vy9AjYq5xCvFWGJyD7w7Np8ZGu+Mc+97LCoEc/+AYCo2IDpKioiH0/c/mj5ZR9Uw==}
     engines: {node: '>=16.11.0'}
+
+  '@emnapi/core@1.9.2':
+    resolution: {integrity: sha512-UC+ZhH3XtczQYfOlu3lNEkdW/p4dsJ1r/bP7H8+rhao3TTTMO1ATq/4DdIi23XuGoFY+Cz0JmCbdVl0hz9jZcA==}
+
+  '@emnapi/runtime@1.9.2':
+    resolution: {integrity: sha512-3U4+MIWHImeyu1wnmVygh5WlgfYDtyf0k8AbLhMFxOipihf6nrWC4syIm/SwEeec0mNSafiiNnMJwbza/Is6Lw==}
+
+  '@emnapi/wasi-threads@1.2.1':
+    resolution: {integrity: sha512-uTII7OYF+/Mes/MrcIOYp5yOtSMLBWSIoLPpcgwipoiKbli6k322tcoFsxoIIxPDqW01SQGAgko4EzZi2BNv2w==}
 
   '@esbuild/aix-ppc64@0.25.3':
     resolution: {integrity: sha512-W8bFfPA8DowP8l//sxjJLSLkD8iEjMc7cBVyP+u4cEv9sM7mdUCkgsj+t0n/BWPFtv7WWCN5Yzj0N6FJNUUqBQ==}
@@ -313,6 +322,12 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
+  '@napi-rs/wasm-runtime@1.1.3':
+    resolution: {integrity: sha512-xK9sGVbJWYb08+mTJt3/YV24WxvxpXcXtP6B172paPZ+Ts69Re9dAr7lKwJoeIx8OoeuimEiRZ7umkiUVClmmQ==}
+    peerDependencies:
+      '@emnapi/core': ^1.7.1
+      '@emnapi/runtime': ^1.7.1
+
   '@rollup/rollup-android-arm-eabi@4.40.0':
     resolution: {integrity: sha512-+Fbls/diZ0RDerhE8kyC6hjADCXA1K4yVNlH0EYfd2XjyH0UGgzaQ8MlT0pCXAThfxv3QUAczHaL+qSv1E4/Cg==}
     cpu: [arm]
@@ -347,56 +362,67 @@ packages:
     resolution: {integrity: sha512-y/qUMOpJxBMy8xCXD++jeu8t7kzjlOCkoxxajL58G62PJGBZVl/Gwpm7JK9+YvlB701rcQTzjUZ1JgUoPTnoQA==}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.40.0':
     resolution: {integrity: sha512-GoCsPibtVdJFPv/BOIvBKO/XmwZLwaNWdyD8TKlXuqp0veo2sHE+A/vpMQ5iSArRUz/uaoj4h5S6Pn0+PdhRjg==}
     cpu: [arm]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.40.0':
     resolution: {integrity: sha512-L5ZLphTjjAD9leJzSLI7rr8fNqJMlGDKlazW2tX4IUF9P7R5TMQPElpH82Q7eNIDQnQlAyiNVfRPfP2vM5Avvg==}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.40.0':
     resolution: {integrity: sha512-ATZvCRGCDtv1Y4gpDIXsS+wfFeFuLwVxyUBSLawjgXK2tRE6fnsQEkE4csQQYWlBlsFztRzCnBvWVfcae/1qxQ==}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-loongarch64-gnu@4.40.0':
     resolution: {integrity: sha512-wG9e2XtIhd++QugU5MD9i7OnpaVb08ji3P1y/hNbxrQ3sYEelKJOq1UJ5dXczeo6Hj2rfDEL5GdtkMSVLa/AOg==}
     cpu: [loong64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.40.0':
     resolution: {integrity: sha512-vgXfWmj0f3jAUvC7TZSU/m/cOE558ILWDzS7jBhiCAFpY2WEBn5jqgbqvmzlMjtp8KlLcBlXVD2mkTSEQE6Ixw==}
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.40.0':
     resolution: {integrity: sha512-uJkYTugqtPZBS3Z136arevt/FsKTF/J9dEMTX/cwR7lsAW4bShzI2R0pJVw+hcBTWF4dxVckYh72Hk3/hWNKvA==}
     cpu: [riscv64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-musl@4.40.0':
     resolution: {integrity: sha512-rKmSj6EXQRnhSkE22+WvrqOqRtk733x3p5sWpZilhmjnkHkpeCgWsFFo0dGnUGeA+OZjRl3+VYq+HyCOEuwcxQ==}
     cpu: [riscv64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-s390x-gnu@4.40.0':
     resolution: {integrity: sha512-SpnYlAfKPOoVsQqmTFJ0usx0z84bzGOS9anAC0AZ3rdSo3snecihbhFTlJZ8XMwzqAcodjFU4+/SM311dqE5Sw==}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.40.0':
     resolution: {integrity: sha512-RcDGMtqF9EFN8i2RYN2W+64CdHruJ5rPqrlYw+cgM3uOVPSsnAQps7cpjXe9be/yDp8UC7VLoCoKC8J3Kn2FkQ==}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.40.0':
     resolution: {integrity: sha512-HZvjpiUmSNx5zFgwtQAV1GaGazT2RWvqeDi0hV+AtC8unqqDSsaFjPxfsO6qPtKRRg25SisACWnJ37Yio8ttaw==}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-win32-arm64-msvc@4.40.0':
     resolution: {integrity: sha512-UtZQQI5k/b8d7d3i9AZmA/t+Q4tk3hOC0tMOMSq2GlMYOfxbesxG4mJSeDp0EHs30N9bsfwUvs3zF4v/RzOeTQ==}
@@ -429,8 +455,102 @@ packages:
     resolution: {integrity: sha512-jjmJywLAFoWeBi1W7994zZyiNWPIiqRRNAmSERxyg93xRGzNYvGjlZ0gR6x0F4gPRi2+0O6S71kOZYyr3cxaIQ==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
+  '@snazzah/davey-android-arm-eabi@0.1.11':
+    resolution: {integrity: sha512-T1RYbNYKN6tLOcGIDKJd8OI6FBSEemwL7DOYdTMmhqfhhMr3YVN8WOhfoxGg63OcnpTN2e2c5tdY2bAx25RmQQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [android]
+
+  '@snazzah/davey-android-arm64@0.1.11':
+    resolution: {integrity: sha512-ksJn/x2VU8h6w9eku1HT96ugSRZ7lKVkKNKbFleaFN+U99DJaPM+gMu2YvnFU4V54HR06ZBnRihnVG6VLXQpDw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [android]
+
+  '@snazzah/davey-darwin-arm64@0.1.11':
+    resolution: {integrity: sha512-E1d7PbaaVMO3Lj9EiAPqOVbuV0xg5+PsHzHH097DDXiD1+zUDXvJaTnUWsnm5z50pJniHpi4GtaYmk+ieB/guA==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@snazzah/davey-darwin-x64@0.1.11':
+    resolution: {integrity: sha512-Tl4TI/LTmgJZepgbgVMYDi8RqlAkPtPg1OEBPl7a9Tn3AwR36Vs6lyIT1cs/lGy/ds/+B+mKI4rPObN1cyILTw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@snazzah/davey-freebsd-x64@0.1.11':
+    resolution: {integrity: sha512-T8Iw9FXkuI1T+YBAFzh9v/TXf9IOTOSqnd/BFpTRTrlW72PR2lhIidzSmg027VxO7r5pX47iFwiOkb9I/NU/EA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@snazzah/davey-linux-arm-gnueabihf@0.1.11':
+    resolution: {integrity: sha512-1Txj+8pqA8uq/OGtaUaBFWAPnNMQzFgIywj0iA7EI4xZl+mab48/pv+YZ1pNb/suC6ynsW44oB9efiXSdcUAgA==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+
+  '@snazzah/davey-linux-arm64-gnu@0.1.11':
+    resolution: {integrity: sha512-ERzF5nM/IYW1BcN3wLXpEwBCGLFf0kGJUVhaV6yfiInz0tkU8UmvrrgpaMaACfMjIhfWdq5CcX+aTkXo/saNcg==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
+  '@snazzah/davey-linux-arm64-musl@0.1.11':
+    resolution: {integrity: sha512-e6pX6Hiabtz99q+H/YHNkm9JVlpqN8HGh0qPib8G2+UY4/SSH8WvqWipk3v581dMy2oyCHt7MOoY1aU1P1N/xA==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  '@snazzah/davey-linux-x64-gnu@0.1.11':
+    resolution: {integrity: sha512-TW5bSoqChOJMbvsDb4wAATYrxmAXuNnse7wFNVSAJUaZKSeRfZbu3UAiPWSNn7GwLwSfU6hg322KZUn8IWCuvg==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@snazzah/davey-linux-x64-musl@0.1.11':
+    resolution: {integrity: sha512-5j6Pmc+Wzv5lSxVP6quA7teYRJXibkZqQyYGfTDnTsUOO5dPpcojpqlXlkhyvsA1OAQTj4uxbOCciN3cVWwzug==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  '@snazzah/davey-wasm32-wasi@0.1.11':
+    resolution: {integrity: sha512-rKOwZ/0J8lp+4VEyOdMDBRP9KR+PksZpa9V1Qn0veMzy4FqTVKthkxwGqewheFe0SFg9fdvt798l/PBFrfDeZw==}
+    engines: {node: '>=14.0.0'}
+    cpu: [wasm32]
+
+  '@snazzah/davey-win32-arm64-msvc@0.1.11':
+    resolution: {integrity: sha512-5fptJU4tX901m3mj0SHiBljMrPT4ZEsynbBhR7bK1yn9TY1jjyhN8EFi7QF5IWtUEni+0mia2BCMHZ5ZkmFZqQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@snazzah/davey-win32-ia32-msvc@0.1.11':
+    resolution: {integrity: sha512-ualexn8SeLsiMHhWfzVrzRcjHgcBapg++FPaVgJJxoh2S/jCRiklXOu3luqIZdJdNKvhe2V9SwO/cImPeIIBKw==}
+    engines: {node: '>= 10'}
+    cpu: [ia32]
+    os: [win32]
+
+  '@snazzah/davey-win32-x64-msvc@0.1.11':
+    resolution: {integrity: sha512-muNhc8UKXtknzsH/w4AIkbPR2I8BuvApn0pDXar0IEvY8PCjqU/M8MPbOOEYwQVvQRMwVTgExtxzrkBPSXB4nA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+
+  '@snazzah/davey@0.1.11':
+    resolution: {integrity: sha512-oBN+msHzPnm1M5DDx3wVD7iBwpNXFUtkh2MrAbUJu0OhKjliLChi28hq++mu1+qdMpAVQO5JKAvQQxYVbyneiw==}
+    engines: {node: '>= 10'}
+
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  '@tybys/wasm-util@0.10.1':
+    resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -530,11 +650,11 @@ packages:
   discord-api-types@0.36.3:
     resolution: {integrity: sha512-bz/NDyG0KBo/tY14vSkrwQ/n3HKPf87a0WFW/1M9+tXYK+vp5Z5EksawfCWo2zkAc6o7CClc0eff1Pjrqznlwg==}
 
-  discord-api-types@0.37.120:
-    resolution: {integrity: sha512-7xpNK0EiWjjDFp2nAhHXezE4OUWm7s1zhc/UXXN6hnFFU8dfoPHgV0Hx0RPiCa3ILRpdeh152icc68DGCyXYIw==}
-
   discord-api-types@0.38.37:
     resolution: {integrity: sha512-Cv47jzY1jkGkh5sv0bfHYqGgKOWO1peOrGMkDFM4UmaGMOTgOW8QSexhvixa9sVOiz8MnVOBryWYyw/CEVhj7w==}
+
+  discord-api-types@0.38.44:
+    resolution: {integrity: sha512-q91MgBzP/gRaCLIbQTaOrOhbD8uVIaPKxpgX2sfFB2nZ9nSiTYM9P3NFQ7cbO6NCxctI6ODttc67MI+YhIfILg==}
 
   discord.js-light@4.10.0:
     resolution: {integrity: sha512-IFpwVeeyUtopu77pWUfzZwOmhQqWLFbNhNqvRZZBAtRQ7t4m6LKjJjfAsHr4QgQiHcGUjNAvEUnpPnMOmZyuQg==}
@@ -722,8 +842,8 @@ packages:
   obug@2.1.1:
     resolution: {integrity: sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ==}
 
-  oceanic.js@1.13.0:
-    resolution: {integrity: sha512-WXE8KhAZI9Fv/OsD+mEYMnRq363XfDHlPLiYe52SF+ND7+HyUxYuhBxDhPx2DqXUuC7fiB4ocxiMZGvlvHLVCQ==}
+  oceanic.js@1.14.0:
+    resolution: {integrity: sha512-h8KfbN0GEWoi4kiHXj10uJzQe+L//VMZX6cRDBU4GuGP8wNDWsami20wbpErP8fFzN78kpVshF3g70vd/niP3g==}
     engines: {node: '>=18.13.0'}
 
   opusscript@0.0.8:
@@ -938,6 +1058,18 @@ packages:
       utf-8-validate:
         optional: true
 
+  ws@8.20.0:
+    resolution: {integrity: sha512-sAt8BhgNbzCtgGbt2OxmpuryO63ZoDk/sqaB/znQm94T4fCEsy/yV+7CdC1kJhOU9lboAEU7R3kquuycDoibVA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
 snapshots:
 
   '@babel/helper-string-parser@7.27.1': {}
@@ -999,15 +1131,18 @@ snapshots:
     dependencies:
       discord-api-types: 0.38.37
 
-  '@discordjs/voice@0.18.0(opusscript@0.0.8)':
+  '@discordjs/voice@0.19.2(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(opusscript@0.0.8)':
     dependencies:
+      '@snazzah/davey': 0.1.11(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
       '@types/ws': 8.18.1
-      discord-api-types: 0.37.120
+      discord-api-types: 0.38.44
       prism-media: 1.3.5(opusscript@0.0.8)
       tslib: 2.8.1
-      ws: 8.18.3
+      ws: 8.20.0
     transitivePeerDependencies:
       - '@discordjs/opus'
+      - '@emnapi/core'
+      - '@emnapi/runtime'
       - bufferutil
       - ffmpeg-static
       - node-opus
@@ -1029,6 +1164,22 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+
+  '@emnapi/core@1.9.2':
+    dependencies:
+      '@emnapi/wasi-threads': 1.2.1
+      tslib: 2.8.1
+    optional: true
+
+  '@emnapi/runtime@1.9.2':
+    dependencies:
+      tslib: 2.8.1
+    optional: true
+
+  '@emnapi/wasi-threads@1.2.1':
+    dependencies:
+      tslib: 2.8.1
+    optional: true
 
   '@esbuild/aix-ppc64@0.25.3':
     optional: true
@@ -1116,6 +1267,13 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
+  '@napi-rs/wasm-runtime@1.1.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)':
+    dependencies:
+      '@emnapi/core': 1.9.2
+      '@emnapi/runtime': 1.9.2
+      '@tybys/wasm-util': 0.10.1
+    optional: true
+
   '@rollup/rollup-android-arm-eabi@4.40.0':
     optional: true
 
@@ -1190,7 +1348,80 @@ snapshots:
 
   '@sapphire/snowflake@3.5.3': {}
 
+  '@snazzah/davey-android-arm-eabi@0.1.11':
+    optional: true
+
+  '@snazzah/davey-android-arm64@0.1.11':
+    optional: true
+
+  '@snazzah/davey-darwin-arm64@0.1.11':
+    optional: true
+
+  '@snazzah/davey-darwin-x64@0.1.11':
+    optional: true
+
+  '@snazzah/davey-freebsd-x64@0.1.11':
+    optional: true
+
+  '@snazzah/davey-linux-arm-gnueabihf@0.1.11':
+    optional: true
+
+  '@snazzah/davey-linux-arm64-gnu@0.1.11':
+    optional: true
+
+  '@snazzah/davey-linux-arm64-musl@0.1.11':
+    optional: true
+
+  '@snazzah/davey-linux-x64-gnu@0.1.11':
+    optional: true
+
+  '@snazzah/davey-linux-x64-musl@0.1.11':
+    optional: true
+
+  '@snazzah/davey-wasm32-wasi@0.1.11(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)':
+    dependencies:
+      '@napi-rs/wasm-runtime': 1.1.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
+    optional: true
+
+  '@snazzah/davey-win32-arm64-msvc@0.1.11':
+    optional: true
+
+  '@snazzah/davey-win32-ia32-msvc@0.1.11':
+    optional: true
+
+  '@snazzah/davey-win32-x64-msvc@0.1.11':
+    optional: true
+
+  '@snazzah/davey@0.1.11(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)':
+    optionalDependencies:
+      '@snazzah/davey-android-arm-eabi': 0.1.11
+      '@snazzah/davey-android-arm64': 0.1.11
+      '@snazzah/davey-darwin-arm64': 0.1.11
+      '@snazzah/davey-darwin-x64': 0.1.11
+      '@snazzah/davey-freebsd-x64': 0.1.11
+      '@snazzah/davey-linux-arm-gnueabihf': 0.1.11
+      '@snazzah/davey-linux-arm64-gnu': 0.1.11
+      '@snazzah/davey-linux-arm64-musl': 0.1.11
+      '@snazzah/davey-linux-x64-gnu': 0.1.11
+      '@snazzah/davey-linux-x64-musl': 0.1.11
+      '@snazzah/davey-wasm32-wasi': 0.1.11(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
+      '@snazzah/davey-win32-arm64-msvc': 0.1.11
+      '@snazzah/davey-win32-ia32-msvc': 0.1.11
+      '@snazzah/davey-win32-x64-msvc': 0.1.11
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
+    optional: true
+
   '@standard-schema/spec@1.1.0': {}
+
+  '@tybys/wasm-util@0.10.1':
+    dependencies:
+      tslib: 2.8.1
+    optional: true
 
   '@types/chai@5.2.3':
     dependencies:
@@ -1304,10 +1535,10 @@ snapshots:
 
   discord-api-types@0.36.3: {}
 
-  discord-api-types@0.37.120:
-    optional: true
-
   discord-api-types@0.38.37: {}
+
+  discord-api-types@0.38.44:
+    optional: true
 
   discord.js-light@4.10.0:
     dependencies:
@@ -1535,14 +1766,16 @@ snapshots:
 
   obug@2.1.1: {}
 
-  oceanic.js@1.13.0(opusscript@0.0.8):
+  oceanic.js@1.14.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(opusscript@0.0.8):
     dependencies:
       tslib: 2.8.1
-      ws: 8.18.3
+      ws: 8.20.0
     optionalDependencies:
-      '@discordjs/voice': 0.18.0(opusscript@0.0.8)
+      '@discordjs/voice': 0.19.2(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(opusscript@0.0.8)
     transitivePeerDependencies:
       - '@discordjs/opus'
+      - '@emnapi/core'
+      - '@emnapi/runtime'
       - bufferutil
       - ffmpeg-static
       - node-opus
@@ -1701,3 +1934,5 @@ snapshots:
   ws@8.18.0: {}
 
   ws@8.18.3: {}
+
+  ws@8.20.0: {}

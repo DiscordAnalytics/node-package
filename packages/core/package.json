@@ -2,7 +2,9 @@
   "name": "@discordanalytics/core",
   "version": "2.8.2",
   "description": "Core package to work with Discord Analytics",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Discord Analytics",

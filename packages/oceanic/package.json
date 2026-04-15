@@ -23,10 +23,10 @@
     "@discordanalytics/core": "workspace:*"
   },
   "devDependencies": {
-    "oceanic.js": "^1.13.0",
+    "oceanic.js": "^1.14.0",
     "typescript": "*"
   },
   "peerDependencies": {
-    "oceanic.js": ">=1.13.x"
+    "oceanic.js": ">=1.14.x"
   }
 }

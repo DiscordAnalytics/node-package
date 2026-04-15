@@ -1,8 +1,10 @@
-export const api_url = 'https://discordanalytics.xyz/api';
+// export const api_url = 'https://discordanalytics.xyz/api';
+export const api_url = 'http://localhost:3001';
 export const ApiEndpoints = {
-  EDIT_SETTINGS_URL: `${api_url}/bots/:id`,
-  EDIT_STATS_URL: `${api_url}/bots/:id/stats`,
-  EVENT_URL: `${api_url}/bots/:id/events/:event`,
+  BASE_URL: api_url,
+  EDIT_SETTINGS_URL: `/bots/{id}`,
+  EDIT_STATS_URL: `/bots/{id}/stats`,
+  EVENT_URL: `/bots/{id}/events/{event}`,
 }
 
 export const ErrorCodes = {
@@ -23,23 +25,23 @@ export type Locale = 'id' | 'en-US' | 'en-GB' | 'bg' | 'zh-CN' | 'zh-TW' | 'hr' 
 
 export enum InteractionType {
   Ping = 1,
-  ApplicationCommand,
-  MessageComponent,
-  ApplicationCommandAutocomplete,
-  ModalSubmit,
+  ApplicationCommand = 2,
+  MessageComponent = 3,
+  ApplicationCommandAutocomplete = 4,
+  ModalSubmit = 5,
 }
 
 export enum ApplicationCommandType {
   ChatInputCommand = 1,
-  UserCommand,
-  MessageCommand,
+  UserCommand = 2,
+  MessageCommand = 3,
 }
 
 export interface InteractionData {
   name: string;
   number: number;
   type: InteractionType;
-  command_type?: ApplicationCommandType;
+  commandType?: ApplicationCommandType;
 }
 
 export interface LocaleData {
@@ -47,7 +49,7 @@ export interface LocaleData {
   number: number;
 }
 
-export interface GuildsStatsData {
+export interface GuildData {
   guildId: string;
   name: string;
   icon: string | null;
@@ -55,9 +57,41 @@ export interface GuildsStatsData {
   interactions: number;
 }
 
+export interface GuildMembersData {
+  little: number;
+  medium: number;
+  big: number;
+  huge: number;
+}
+
+export interface UsersTypeData {
+  admin: number;
+  moderator: number;
+  newMember: number;
+  other: number;
+  privateMessage: number;
+}
+
+export interface StatsData {
+  date: string;
+  addedGuilds: number;
+  customEvents: Record<string, number>;
+  guilds: GuildData[];
+  guildCount: number;
+  guildLocales: LocaleData[];
+  guildMembers: GuildMembersData;
+  interactions: InteractionData[];
+  interactionLocales: LocaleData[];
+  removedGuilds: number;
+  userCount: number;
+  userInstallCount: number;
+  usersType: UsersTypeData;
+}
+
 export interface AnalyticsOptions {
   client: any;
   api_key: string;
+  api_url?: string;
   sharded?: boolean;
   debug?: boolean;
 }

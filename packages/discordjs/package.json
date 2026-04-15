@@ -23,7 +23,7 @@
     "@discordanalytics/core": "workspace:*"
   },
   "devDependencies": {
-    "discord.js": "14.25.1",
+    "discord.js": "14.26.2",
     "typescript": "*"
   },
   "peerDependencies": {

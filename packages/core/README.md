@@ -15,7 +15,7 @@ pnpm add @discordanalytics/core
 ```
 
 ### Usage
-Discord Analytics core package is used by other packages like `@discordanalytics/discordjs`, `@discordanalytics/discordjs-light`, `@discordanalytics/eris`, and `@discordanalytics/oceanic`. You don't need to use this package directly unless you want to use the core features without any wrapper.
+Discord Analytics core package is used by other packages like `@discordanalytics/discordjs` and `@discordanalytics/oceanic`. You don't need to use this package directly unless you want to use the core features without any wrapper or make your own support for your framework of choice.
 
 ## API
 ### `AnalyticsBase`

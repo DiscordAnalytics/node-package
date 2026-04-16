@@ -42,7 +42,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
   private readonly _sharded: boolean = false;
   private _isReady: boolean = false;
 
-  constructor(options: AnalyticsOptions) {
+  constructor(options: AnalyticsOptions<Client>) {
     super(options.api_key, options.api_url, options.debug);
     this._client = options.client;
     this._sharded = options.sharded || false;
@@ -149,7 +149,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
     if (!this._isReady) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
     this.updateOrInsert(
-      this.stats_data.interactionLocales,
+      this.stats_data.interactionsLocales,
       (x) => x.locale === interaction.locale,
       (x) => x.number++,
       (): LocaleData => ({ locale: interaction.locale as Locale, number: 1 }),

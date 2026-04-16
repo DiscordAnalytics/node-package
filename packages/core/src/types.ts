@@ -72,10 +72,10 @@ export enum ApplicationCommandType {
 }
 
 export interface InteractionData {
+  commandType?: ApplicationCommandType;
   name: string;
   number: number;
   type: InteractionType;
-  commandType?: ApplicationCommandType;
 }
 
 export interface LocaleData {
@@ -85,10 +85,10 @@ export interface LocaleData {
 
 export interface GuildData {
   guildId: string;
-  name: string;
   icon: string | null;
-  members: number;
   interactions: number;
+  members: number;
+  name: string;
 }
 
 export interface GuildMembersData {
@@ -115,7 +115,7 @@ export interface StatsData {
   guildLocales: LocaleData[];
   guildMembers: GuildMembersData;
   interactions: InteractionData[];
-  interactionLocales: LocaleData[];
+  interactionsLocales: LocaleData[];
   removedGuilds: number;
   userCount: number;
   userInstallCount: number;

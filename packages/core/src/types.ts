@@ -1,7 +1,5 @@
-// export const api_url = 'https://discordanalytics.xyz/api';
-export const api_url = 'http://localhost:3001';
 export const ApiEndpoints = {
-  BASE_URL: api_url,
+  BASE_URL: 'https://discordanalytics.xyz/api',
   EDIT_SETTINGS_URL: `/bots/{id}`,
   EDIT_STATS_URL: `/bots/{id}/stats`,
   EVENT_URL: `/bots/{id}/events/{event}`,
@@ -12,7 +10,9 @@ export const ErrorCodes = {
   CLIENT_NOT_READY: 'Client is not ready, please start the client first.',
   INVALID_RESPONSE: 'Invalid response from the API, please try again later.',
   INVALID_API_TOKEN:
-    'Invalid API token, please get one at ' + api_url.split('/api')[0] + ' and try again.',
+    'Invalid API token, please get one at ' +
+    ApiEndpoints.BASE_URL.split('/api')[0] +
+    ' and try again.',
   DATA_NOT_SENT: 'Data cannot be sent to the API, I will try again in a minute.',
   SUSPENDED_BOT: 'Your bot has been suspended, please check your mailbox for more information.',
   INSTANCE_NOT_INITIALIZED:

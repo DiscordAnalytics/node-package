@@ -19,7 +19,8 @@
       }
     ],
     "@semantic-release/git",
-    "@semantic-release/github"
+    "@semantic-release/github",
+    "@anolilab/semantic-release-pnpm"
   ],
   "dryRun": false
 }

@@ -1,6 +1,5 @@
 import { expect, test, vi } from 'vitest';
-import { AnalyticsBase, CustomEvent, ErrorCodes } from '../src';
-import { ApiEndpoints } from '../dist';
+import { AnalyticsBase, ApiEndpoints, CustomEvent, ErrorCodes } from '../src';
 
 test('should create an Analytics instance', () => {
   const instance = new AnalyticsBase('test_api_key', ApiEndpoints.BASE_URL, true);

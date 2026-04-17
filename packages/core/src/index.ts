@@ -178,14 +178,14 @@ export class AnalyticsBase {
     version: string,
     avatar: string | null,
   ): Promise<void> {
-    const url = ApiEndpoints.EDIT_SETTINGS_URL.replace('{id}', this.client_id);
+    const endpoint = ApiEndpoints.EDIT_SETTINGS_URL.replace('{id}', this.client_id);
     const body = JSON.stringify({
       avatar,
       framework,
       username,
       version,
     });
-    await this.api_call_with_retries('PATCH', url, body);
+    await this.api_call_with_retries('PATCH', endpoint, body);
   }
 
   /**
@@ -206,10 +206,10 @@ export class AnalyticsBase {
   ): Promise<void> {
     this.debug('[DISCORDANALYTICS] Sending stats...');
 
-    const url = ApiEndpoints.EDIT_STATS_URL.replace('{id}', client_id);
+    const endpoint = ApiEndpoints.EDIT_STATS_URL.replace('{id}', client_id);
     const body = JSON.stringify(this.stats_data);
 
-    await this.api_call_with_retries('POST', url, body);
+    await this.api_call_with_retries('POST', endpoint, body);
 
     this.debug('[DISCORDANALYTICS] Stats sent to the API', body);
 
@@ -270,11 +270,11 @@ export class CustomEvent {
       process.env.NODE_ENV === 'production'
     ) {
       this._analytics.debug(`[DISCORDANALYTICS] Fetching value for event ${this._event_key}`);
-      const url = ApiEndpoints.EVENT_URL.replace('{id}', this._analytics.client_id).replace(
+      const endpoint = ApiEndpoints.EVENT_URL.replace('{id}', this._analytics.client_id).replace(
         '{event}',
         this._event_key,
       );
-      const res = await this._analytics.api_call_with_retries('GET', url);
+      const res = await this._analytics.api_call_with_retries('GET', endpoint);
 
       if (res instanceof Response && this._last_action !== 'set') {
         const data: { today_value?: number } = await res.json();

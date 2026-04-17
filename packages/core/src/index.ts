@@ -277,9 +277,10 @@ export class CustomEvent {
       const res = await this._analytics.api_call_with_retries('GET', endpoint);
 
       if (res instanceof Response && this._last_action !== 'set') {
-        const data: { today_value?: number } = await res.json();
+        const data: { currentValue?: number } = await res.json();
         this._analytics.stats_data.customEvents[this._event_key] =
-          (this._analytics.stats_data.customEvents[this._event_key] || 0) + (data.today_value || 0);
+          (this._analytics.stats_data.customEvents[this._event_key] || 0) +
+          (data.currentValue || 0);
       }
       this._analytics.debug(`[DISCORDANALYTICS] Value fetched for event ${this._event_key}`);
     }

@@ -65,6 +65,9 @@ importers:
       '@types/node':
         specifier: '*'
         version: 22.19.3
+      tsdown:
+        specifier: '*'
+        version: 0.21.9(synckit@0.11.12)(typescript@5.9.3)
       typescript:
         specifier: '*'
         version: 5.9.3
@@ -78,6 +81,9 @@ importers:
       discord.js:
         specifier: 14.26.2
         version: 14.26.2
+      tsdown:
+        specifier: '*'
+        version: 0.21.9(synckit@0.11.12)(typescript@5.9.3)
       typescript:
         specifier: '*'
         version: 5.9.3
@@ -91,6 +97,9 @@ importers:
       oceanic.js:
         specifier: ^1.14.0
         version: 1.14.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(opusscript@0.0.8)
+      tsdown:
+        specifier: '*'
+        version: 0.21.9(synckit@0.11.12)(typescript@5.9.3)
       typescript:
         specifier: '*'
         version: 5.9.3
@@ -5012,6 +5021,24 @@ snapshots:
 
   reusify@1.1.0: {}
 
+  rolldown-plugin-dts@0.23.2(rolldown@1.0.0-rc.16)(typescript@5.9.3):
+    dependencies:
+      '@babel/generator': 8.0.0-rc.3
+      '@babel/helper-validator-identifier': 8.0.0-rc.3
+      '@babel/parser': 8.0.0-rc.3
+      '@babel/types': 8.0.0-rc.3
+      ast-kit: 3.0.0-beta.1
+      birpc: 4.0.0
+      dts-resolver: 2.1.3
+      get-tsconfig: 4.14.0
+      obug: 2.1.1
+      picomatch: 4.0.4
+      rolldown: 1.0.0-rc.16
+    optionalDependencies:
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - oxc-resolver
+
   rolldown-plugin-dts@0.23.2(rolldown@1.0.0-rc.16)(typescript@6.0.2):
     dependencies:
       '@babel/generator': 8.0.0-rc.3
@@ -5300,6 +5327,33 @@ snapshots:
   ts-deepmerge@7.0.3: {}
 
   ts-mixer@6.0.4: {}
+
+  tsdown@0.21.9(synckit@0.11.12)(typescript@5.9.3):
+    dependencies:
+      ansis: 4.2.0
+      cac: 7.0.0
+      defu: 6.1.7
+      empathic: 2.0.0
+      hookable: 6.1.1
+      import-without-cache: 0.3.3
+      obug: 2.1.1
+      picomatch: 4.0.4
+      rolldown: 1.0.0-rc.16
+      rolldown-plugin-dts: 0.23.2(rolldown@1.0.0-rc.16)(typescript@5.9.3)
+      semver: 7.7.4
+      tinyexec: 1.1.1
+      tinyglobby: 0.2.16
+      tree-kill: 1.2.2
+      unconfig-core: 7.5.0
+      unrun: 0.2.36(synckit@0.11.12)
+    optionalDependencies:
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - '@ts-macro/tsc'
+      - '@typescript/native-preview'
+      - oxc-resolver
+      - synckit
+      - vue-tsc
 
   tsdown@0.21.9(synckit@0.11.12)(typescript@6.0.2):
     dependencies:

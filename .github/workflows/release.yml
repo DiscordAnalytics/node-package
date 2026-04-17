@@ -23,13 +23,12 @@ jobs:
         with:
           version: 10
 
-      - name: "Semantic Release"
-        if: "success()"
+      - name: 'Semantic Release'
+        if: 'success()'
         env:
-          GITHUB_TOKEN: "${{ secrets.SEMANTIC_RELEASE_GITHUB_TOKEN }}"
-          NPM_TOKEN: "${{ secrets.NPM_AUTH_TOKEN }}"
-          GIT_AUTHOR_NAME: "github-actions-shell"
-          GIT_AUTHOR_EMAIL: "github-actions[bot]@users.noreply.github.com"
-          GIT_COMMITTER_NAME: "github-actions-shell"
-          GIT_COMMITTER_EMAIL: "github-actions[bot]@users.noreply.github.com"
-        run: "pnpm exec multi-semantic-release"
+          GITHUB_TOKEN: '${{ secrets.SEMANTIC_RELEASE_GITHUB_TOKEN }}'
+          GIT_AUTHOR_NAME: 'github-actions-shell'
+          GIT_AUTHOR_EMAIL: 'github-actions[bot]@users.noreply.github.com'
+          GIT_COMMITTER_NAME: 'github-actions-shell'
+          GIT_COMMITTER_EMAIL: 'github-actions[bot]@users.noreply.github.com'
+        run: 'pnpm exec multi-semantic-release'

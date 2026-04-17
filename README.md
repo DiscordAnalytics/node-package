@@ -17,4 +17,4 @@ npm install @discordanalytics/oceanic # For Oceanic.js
 
 [Discord.js](./packages/discordjs/README.md) | [Oceanic.js](./packages/oceanic/README.md)
 
-> For advanced usages and updated docs, please check https://discordanalytics.xyz/docs/main/get-started/advanced-usage
+> For advanced usages and updated docs, please check https://discordanalytics.xyz/docs/get-started/advanced-usage/

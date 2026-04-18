@@ -1,6 +1,6 @@
 {
   "name": "@discordanalytics/discordjs",
-  "version": "2.8.2",
+  "version": "2.9.0",
   "description": "Discord.js package for working with Discord Analytics",
   "files": [
     "dist"
@@ -36,7 +36,7 @@
     "build": "tsdown"
   },
   "dependencies": {
-    "@discordanalytics/core": "workspace:*"
+    "@discordanalytics/core": "2.9.0"
   },
   "devDependencies": {
     "discord.js": "14.26.2",

@@ -1,4 +1,4 @@
-import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData, TrackGuildType } from './types';
+import { ApiEndpoints, ErrorCodes, StatsData, TrackGuildType } from './types';
 
 /**
  * DiscordAnalytics Base Class
@@ -13,38 +13,40 @@ import { ApiEndpoints, ErrorCodes, GuildsStatsData, InteractionData, LocaleData,
  */
 export class AnalyticsBase {
   private readonly _api_key: string;
-  private readonly _headers: { 'Content-Type': string; Authorization: string; };
+  private readonly _headers: { 'Content-Type': string; Authorization: string };
   private readonly debug_mode: boolean = false;
-  public stats_data = {
+  public readonly _api_url: string;
+  public stats_data: StatsData = {
     date: new Date().toISOString().slice(0, 10),
-    guilds: 0,
-    users: 0,
-    interactions: [] as InteractionData[],
-    locales: [] as LocaleData[],
-    guildsLocales: [] as LocaleData[],
+    addedGuilds: 0,
+    customEvents: {},
+    guilds: [],
+    guildCount: 0,
+    guildLocales: [],
     guildMembers: {
       little: 0,
       medium: 0,
       big: 0,
       huge: 0,
     },
-    guildsStats: [] as GuildsStatsData[],
-    addedGuilds: 0,
+    interactions: [],
+    interactionsLocales: [],
     removedGuilds: 0,
-    users_type: {
+    userCount: 0,
+    userInstallCount: 0,
+    usersType: {
       admin: 0,
       moderator: 0,
-      new_member: 0,
+      newMember: 0,
       other: 0,
-      private_message: 0,
+      privateMessage: 0,
     },
-    custom_events: {} as Record<string, number>,
-    user_install_count: 0,
   };
   public client_id: string = '';
 
-  constructor(api_key: string, debug: boolean = false) {
+  constructor(api_key: string, api_url: string = ApiEndpoints.BASE_URL, debug: boolean = false) {
     this._api_key = api_key;
+    this._api_url = api_url;
     this.debug_mode = debug;
     this._headers = {
       'Content-Type': 'application/json',
@@ -52,12 +54,12 @@ export class AnalyticsBase {
     };
   }
 
-  public debug(...args: any[]): void {
+  public debug(...args: unknown[]): void {
     if (this.debug_mode) console.debug(...args);
   }
 
-  public error(content: any, exit: boolean = false): void {
-    console.error(content)
+  public error(content: unknown, exit: boolean = false): void {
+    console.error(content);
     if (exit) process.exit(1);
   }
 
@@ -76,7 +78,8 @@ export class AnalyticsBase {
   public events(event_key: string): CustomEvent {
     this.debug(`[DISCORDANALYTICS] Getting event ${event_key}`);
 
-    if (typeof event_key !== 'string') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
+    if (typeof event_key !== 'string')
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
     return new CustomEvent(this, event_key);
   }
@@ -92,14 +95,22 @@ export class AnalyticsBase {
     else array.push(insert());
   }
 
-  public calculateGuildMembers(guildMembers: number[]): { little: number; medium: number; big: number; huge: number } {
-    return guildMembers.reduce((acc, count) => {
-      if (count <= 100) acc.little++;
-      else if (count <= 500) acc.medium++;
-      else if (count <= 1500) acc.big++;
-      else acc.huge++;
-      return acc;
-    }, { little: 0, medium: 0, big: 0, huge: 0 });
+  public calculateGuildMembers(guildMembers: number[]): {
+    little: number;
+    medium: number;
+    big: number;
+    huge: number;
+  } {
+    return guildMembers.reduce(
+      (acc, count) => {
+        if (count <= 100) acc.little++;
+        else if (count <= 500) acc.medium++;
+        else if (count <= 1500) acc.big++;
+        else acc.huge++;
+        return acc;
+      },
+      { little: 0, medium: 0, big: 0, huge: 0 },
+    );
   }
 
   /**
@@ -125,7 +136,7 @@ export class AnalyticsBase {
    */
   public async api_call_with_retries(
     method: string,
-    url: string,
+    endpoint: string,
     body?: string,
     max_retries: number = 5,
     backoff_factor: number = 0.5,
@@ -135,25 +146,46 @@ export class AnalyticsBase {
 
     while (retries < max_retries) {
       try {
-        response = await fetch(url, {
+        response = await fetch(this._api_url + endpoint, {
           method,
           headers: this._headers,
           body,
         });
 
         if (response.ok) return response;
-        else if (response.status === 401) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_API_TOKEN}`);
-        else if (response.status === 423) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.SUSPENDED_BOT}`);
-        else if (response.status === 404 && url.includes('events')) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENT_KEY}`, true);
-        else if (response.status !== 200) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_RESPONSE}`);
+        else if (response.status === 401)
+          return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_API_TOKEN}`);
+        else if (response.status === 423)
+          return this.error(`[DISCORDANALYTICS] ${ErrorCodes.SUSPENDED_BOT}`);
+        else if (response.status === 404 && endpoint.includes('events'))
+          return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENT_KEY}`, true);
+        else if (response.status !== 200)
+          return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_RESPONSE}`);
       } catch (error) {
         retries++;
         const retry_after = Math.pow(2, retries) * backoff_factor;
         this.error(`[DISCORDANALYTICS] Error: ${error}. Retrying in ${retry_after} seconds...`);
-        if (retries >= max_retries) return this.error(`[DISCORDANALYTICS] ${ErrorCodes.MAX_RETRIES_EXCEEDED}`);
+        if (retries >= max_retries)
+          return this.error(`[DISCORDANALYTICS] ${ErrorCodes.MAX_RETRIES_EXCEEDED}`);
         await new Promise((resolve) => setTimeout(resolve, retry_after * 1000));
       }
     }
+  }
+
+  public async updateBotInformations(
+    username: string,
+    framework: string,
+    version: string,
+    avatar: string | null,
+  ): Promise<void> {
+    const endpoint = ApiEndpoints.EDIT_SETTINGS_URL.replace('{id}', this.client_id);
+    const body = JSON.stringify({
+      avatar,
+      framework,
+      username,
+      version,
+    });
+    await this.api_call_with_retries('PATCH', endpoint, body);
   }
 
   /**
@@ -174,34 +206,34 @@ export class AnalyticsBase {
   ): Promise<void> {
     this.debug('[DISCORDANALYTICS] Sending stats...');
 
-    const url = ApiEndpoints.EDIT_STATS_URL.replace(':id', client_id);
+    const endpoint = ApiEndpoints.EDIT_STATS_URL.replace('{id}', client_id);
     const body = JSON.stringify(this.stats_data);
 
-    await this.api_call_with_retries('POST', url, body);
+    await this.api_call_with_retries('POST', endpoint, body);
 
     this.debug('[DISCORDANALYTICS] Stats sent to the API', body);
 
     this.stats_data = {
       date: new Date().toISOString().slice(0, 10),
-      guilds: guild_count,
-      users: user_count,
-      interactions: [],
-      locales: [],
-      guildsLocales: [],
-      guildMembers: this.calculateGuildMembers(guild_members),
-      guildsStats: [],
       addedGuilds: 0,
+      customEvents: this.stats_data.customEvents,
+      guilds: [],
+      guildCount: guild_count,
+      guildLocales: [],
+      guildMembers: this.calculateGuildMembers(guild_members),
+      interactions: [],
+      interactionsLocales: [],
       removedGuilds: 0,
-      users_type: {
+      userCount: user_count,
+      userInstallCount: user_install_count,
+      usersType: {
         admin: 0,
         moderator: 0,
-        new_member: 0,
+        newMember: 0,
         other: 0,
-        private_message: 0,
+        privateMessage: 0,
       },
-      custom_events: this.stats_data.custom_events,
-      user_install_count,
-    }
+    };
   }
 }
 
@@ -227,20 +259,28 @@ export class CustomEvent {
   constructor(analytics: AnalyticsBase, event_key: string) {
     this._analytics = analytics;
     this._event_key = event_key;
-    this._last_action = "";
+    this._last_action = '';
 
     this.ensure();
   }
 
   private async ensure() {
-    if (typeof this._analytics.stats_data.custom_events[this._event_key] !== 'number' && process.env.NODE_ENV === 'production') {
+    if (
+      typeof this._analytics.stats_data.customEvents[this._event_key] !== 'number' &&
+      process.env.NODE_ENV === 'production'
+    ) {
       this._analytics.debug(`[DISCORDANALYTICS] Fetching value for event ${this._event_key}`);
-      const url = ApiEndpoints.EVENT_URL.replace(':id', this._analytics.client_id).replace(':event', this._event_key);
-      const res = await this._analytics.api_call_with_retries('GET', url);
+      const endpoint = ApiEndpoints.EVENT_URL.replace('{id}', this._analytics.client_id).replace(
+        '{event}',
+        this._event_key,
+      );
+      const res = await this._analytics.api_call_with_retries('GET', endpoint);
 
       if (res instanceof Response && this._last_action !== 'set') {
-        const data: any = await res.json()
-        this._analytics.stats_data.custom_events[this._event_key] = (this._analytics.stats_data.custom_events[this._event_key] || 0) + (data.today_value || 0)
+        const data: { currentValue?: number } = await res.json();
+        this._analytics.stats_data.customEvents[this._event_key] =
+          (this._analytics.stats_data.customEvents[this._event_key] || 0) +
+          (data.currentValue || 0);
       }
       this._analytics.debug(`[DISCORDANALYTICS] Value fetched for event ${this._event_key}`);
     }
@@ -253,11 +293,13 @@ export class CustomEvent {
   public increment(value: number = 1): void {
     this._analytics.debug(`[DISCORDANALYTICS] Incrementing event ${this._event_key} by ${value}`);
 
-    if (typeof value !== 'number') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
+    if (typeof value !== 'number')
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
     if (value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
-    this._analytics.stats_data.custom_events[this._event_key] = (this._analytics.stats_data.custom_events[this._event_key] || 0) + value;
+    this._analytics.stats_data.customEvents[this._event_key] =
+      (this._analytics.stats_data.customEvents[this._event_key] || 0) + value;
     this._last_action = 'increment';
   }
 
@@ -268,11 +310,13 @@ export class CustomEvent {
   public decrement(value: number = 1): void {
     this._analytics.debug(`[DISCORDANALYTICS] Decrementing event ${this._event_key} by ${value}`);
 
-    if (typeof value !== 'number') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
+    if (typeof value !== 'number')
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
-    if (value < 0 || this.get() - value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
+    if (value < 0 || this.get() - value < 0)
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
-    this._analytics.stats_data.custom_events[this._event_key] -= value;
+    this._analytics.stats_data.customEvents[this._event_key] -= value;
     this._last_action = 'decrement';
   }
 
@@ -283,11 +327,12 @@ export class CustomEvent {
   public set(value: number): void {
     this._analytics.debug(`[DISCORDANALYTICS] Setting event ${this._event_key} to ${value}`);
 
-    if (typeof value !== 'number') throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
+    if (typeof value !== 'number')
+      throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
     if (value < 0) throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
-    this._analytics.stats_data.custom_events[this._event_key] = value;
+    this._analytics.stats_data.customEvents[this._event_key] = value;
     this._last_action = 'set';
   }
 
@@ -298,7 +343,7 @@ export class CustomEvent {
   public get(): number {
     this._analytics.debug(`[DISCORDANALYTICS] Getting event ${this._event_key}`);
 
-    return this._analytics.stats_data.custom_events[this._event_key];
+    return this._analytics.stats_data.customEvents[this._event_key];
   }
 }
 

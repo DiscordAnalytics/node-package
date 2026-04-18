@@ -2,9 +2,25 @@
   "name": "@discordanalytics/discordjs",
   "version": "2.8.2",
   "description": "Discord.js package for working with Discord Analytics",
-  "files": ["dist"],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
   "author": "Discord Analytics",
   "homepage": "https://discordanalytics.xyz",
   "readme": "README.md",
@@ -17,13 +33,14 @@
   },
   "scripts": {
     "prebuild": "pnpm --filter @discordanalytics/core build",
-    "build": "tsc"
+    "build": "tsdown"
   },
   "dependencies": {
     "@discordanalytics/core": "workspace:*"
   },
   "devDependencies": {
-    "discord.js": "14.25.1",
+    "discord.js": "14.26.2",
+    "tsdown": "*",
     "typescript": "*"
   },
   "peerDependencies": {

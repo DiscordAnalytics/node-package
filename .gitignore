@@ -10,3 +10,4 @@ coverage
 .DS_Store
 .env
 bun.lockb
+.eslintcache

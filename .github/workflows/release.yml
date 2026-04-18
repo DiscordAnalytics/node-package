@@ -18,10 +18,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
           version: 10
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm build
 
       - name: 'Semantic Release'
         if: 'success()'
@@ -32,4 +43,4 @@ jobs:
           GIT_AUTHOR_EMAIL: 'github-actions[bot]@users.noreply.github.com'
           GIT_COMMITTER_NAME: 'github-actions-shell'
           GIT_COMMITTER_EMAIL: 'github-actions[bot]@users.noreply.github.com'
-        run: 'pnpx multi-semantic-release'
+        run: 'pnpm multi-semantic-release'

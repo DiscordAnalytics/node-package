@@ -1,3 +1,20 @@
+# @discordanalytics/core [2.9.0](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/core@2.8.2...@discordanalytics/core@2.9.0) (2026-04-18)
+
+
+### Bug Fixes
+
+* can run without issues with tsx ([97f648a](https://github.com/DiscordAnalytics/node-package/commit/97f648a692f7ed2a18a31e94712a078dcca2e4d4))
+* invalid field name ([a2f8ebb](https://github.com/DiscordAnalytics/node-package/commit/a2f8ebbcab596e3109b7c86c165d643d9d9b0b1a))
+* invalid import ([11ce011](https://github.com/DiscordAnalytics/node-package/commit/11ce01137fa3f48a83224950aff7954df3622f02))
+* invalid types and fields ([0000d9f](https://github.com/DiscordAnalytics/node-package/commit/0000d9f667a3d0592a81fe7a7aac042a0db6e5ce))
+* remove dev api url ([4229638](https://github.com/DiscordAnalytics/node-package/commit/42296388d30f7f524f1d0416f4bcf9f95a57925d))
+
+
+### Features
+
+* add esm support ([52ae2a4](https://github.com/DiscordAnalytics/node-package/commit/52ae2a4b6ee616726a5d600e9913ea296e25115a))
+* add linter and formatter ([8d815a6](https://github.com/DiscordAnalytics/node-package/commit/8d815a6ac7710599ff9bb4eecedab68f1a421637))
+
 # @discordanalytics/core 1.0.0 (2026-04-18)
 
 

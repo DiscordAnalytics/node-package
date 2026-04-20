@@ -16,7 +16,7 @@ pnpm add @discordanalytics/oceanic
 
 ## Usage
 
-> **Note:** To use Discord Analytics, you need to have an API key. Check the docs for more informations : https://discordanalytics.xyz/docs/main/get-started/bot-registration
+> **Note:** To use Discord Analytics, you need to have an API key. Check the docs for more informations : https://discordanalytics.xyz/docs/get-started/bot-registration
 
 ### Example
 

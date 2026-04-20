@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "author": "Discord Analytics",
   "homepage": "https://discordanalytics.xyz",
-  "license": "MIT",
+  "license": "LGPL-2.1-only",
   "private": true,
   "workspaces": [
     "packages/*"

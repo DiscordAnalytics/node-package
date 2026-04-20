@@ -2,6 +2,7 @@
   "name": "@discordanalytics/discordjs",
   "version": "2.9.0",
   "description": "Discord.js package for working with Discord Analytics",
+  "license": "LGPL-2.1-only",
   "files": [
     "dist"
   ],

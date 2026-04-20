@@ -75,8 +75,8 @@ importers:
   packages/discordjs:
     dependencies:
       '@discordanalytics/core':
-        specifier: workspace:*
-        version: link:../core
+        specifier: 2.9.0
+        version: 2.9.0
     devDependencies:
       discord.js:
         specifier: 14.26.2
@@ -91,8 +91,8 @@ importers:
   packages/oceanic:
     dependencies:
       '@discordanalytics/core':
-        specifier: workspace:*
-        version: link:../core
+        specifier: 2.9.0
+        version: 2.9.0
     devDependencies:
       oceanic.js:
         specifier: ^1.14.0
@@ -186,6 +186,9 @@ packages:
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
+
+  '@discordanalytics/core@2.9.0':
+    resolution: {integrity: sha512-Qcac/wMxS2uXSRs3OHfMJRvIbMUyhpx109vjMW6YX7eXZH7AdjmOJTM9uXrd3jhqojz0WKBzBqMQLL/9azdqPg==}
 
   '@discordjs/builders@1.14.1':
     resolution: {integrity: sha512-gSKkhXLqs96TCzk66VZuHHl8z2bQMJFGwrXC0f33ngK+FLNau4hU1PYny3DNJfNdSH+gVMzE85/d5FQ2BpcNwQ==}
@@ -3045,6 +3048,8 @@ snapshots:
 
   '@colors/colors@1.5.0':
     optional: true
+
+  '@discordanalytics/core@2.9.0': {}
 
   '@discordjs/builders@1.14.1':
     dependencies:

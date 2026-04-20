@@ -40,9 +40,9 @@
     "@discordanalytics/core": "2.9.0"
   },
   "devDependencies": {
-    "oceanic.js": "^1.14.0",
-    "tsdown": "*",
-    "typescript": "*"
+    "oceanic.js": "1.14.0",
+    "tsdown": "0.21.9",
+    "typescript": "5.9.3"
   },
   "peerDependencies": {
     "oceanic.js": ">=1.14.x"

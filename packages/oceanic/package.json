@@ -2,6 +2,7 @@
   "name": "@discordanalytics/oceanic",
   "version": "2.9.0",
   "description": "Oceanic package for working with Discord Analytics",
+  "license": "LGPL-2.1-only",
   "files": [
     "dist"
   ],

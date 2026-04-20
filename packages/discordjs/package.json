@@ -40,7 +40,7 @@
     "@discordanalytics/core": "2.9.0"
   },
   "devDependencies": {
-    "discord.js": "14.26.2",
+    "discord.js": "14.26.3",
     "tsdown": "0.21.9",
     "typescript": "5.9.3"
   },

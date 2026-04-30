@@ -12,8 +12,8 @@ importers:
         specifier: 4.4.1
         version: 4.4.1(semantic-release@25.0.3(typescript@6.0.2))(typescript@6.0.2)
       '@anolilab/semantic-release-pnpm':
-        specifier: 8.1.2
-        version: 8.1.2(@types/node@25.6.0)(yaml@2.8.3)
+        specifier: 8.1.4
+        version: 8.1.4(@types/node@25.6.0)(yaml@2.8.3)
       '@semantic-release/changelog':
         specifier: 6.0.3
         version: 6.0.3(semantic-release@25.0.3(typescript@6.0.2))
@@ -109,6 +109,9 @@ packages:
   '@actions/core@3.0.0':
     resolution: {integrity: sha512-zYt6cz+ivnTmiT/ksRVriMBOiuoUpDCJJlZ5KPl2/FRdvwU3f7MPh9qftvbkXJThragzUZieit2nyHUyw53Seg==}
 
+  '@actions/core@3.0.1':
+    resolution: {integrity: sha512-a6d/Nwahm9fliVGRhdhofo40HjHQasUPusmc7vBfyky+7Z+P2A1J68zyFVaNcEclc/Se+eO595oAr5nwEIoIUA==}
+
   '@actions/exec@3.0.0':
     resolution: {integrity: sha512-6xH/puSoNBXb72VPlZVm7vQ+svQpFyA96qdDBvhB8eNZOE8LtPf9L4oAsfzK/crCL8YZ+19fKYVnM63Sl+Xzlw==}
 
@@ -130,8 +133,8 @@ packages:
     resolution: {integrity: sha512-BfZIx+N9+orJVE/YlzqokSxrSN/QCwFxGxFBLIBuy3mfQk4Cu6+0xPGLLaX906/MWlqAWv2t/CIylF1NS89CBQ==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
-  '@anolilab/semantic-release-pnpm@8.1.2':
-    resolution: {integrity: sha512-Jw2YiGwr7Xv5+tCu3/bkbwXxNAbLJ5H05He8TmWvdAYJpREmpiYqbT8SKLl3JcFfvEF64FZqOzRS08xaGVLKHg==}
+  '@anolilab/semantic-release-pnpm@8.1.4':
+    resolution: {integrity: sha512-0mEIJgbc62cgJ95I7+zYsjbrwAso5FFLgtMbcFI0XiznutlMRgD7mojs0yiIkXL0cgGrN1U48bW4PKOE1b+UzQ==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
   '@antfu/install-pkg@1.1.0':
@@ -2915,6 +2918,11 @@ snapshots:
       '@actions/exec': 3.0.0
       '@actions/http-client': 4.0.0
 
+  '@actions/core@3.0.1':
+    dependencies:
+      '@actions/exec': 3.0.0
+      '@actions/http-client': 4.0.0
+
   '@actions/exec@3.0.0':
     dependencies:
       '@actions/io': 3.0.2
@@ -2954,9 +2962,9 @@ snapshots:
       ini: 6.0.0
       ts-deepmerge: 7.0.3
 
-  '@anolilab/semantic-release-pnpm@8.1.2(@types/node@25.6.0)(yaml@2.8.3)':
+  '@anolilab/semantic-release-pnpm@8.1.4(@types/node@25.6.0)(yaml@2.8.3)':
     dependencies:
-      '@actions/core': 3.0.0
+      '@actions/core': 3.0.1
       '@anolilab/rc': 4.0.2
       '@semantic-release/error': 4.0.0
       '@visulima/fs': 4.1.0(yaml@2.8.3)

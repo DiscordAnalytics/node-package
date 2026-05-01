@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@anolilab/multi-semantic-release": "4.4.1",
-    "@anolilab/semantic-release-pnpm": "8.1.4",
+    "@anolilab/semantic-release-pnpm": "8.1.5",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "@types/node": "25.6.0",

@@ -38,6 +38,6 @@
   "devDependencies": {
     "@types/node": "22.15.2",
     "tsdown": "0.21.10",
-    "typescript": "5.8.3"
+    "typescript": "5.9.3"
   }
 }

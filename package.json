@@ -30,7 +30,7 @@
     "@types/node": "25.8.0",
     "@vitest/coverage-v8": "4.1.6",
     "dotenv": "17.4.2",
-    "eslint": "10.3.0",
+    "eslint": "10.4.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
     "jiti": "2.7.0",

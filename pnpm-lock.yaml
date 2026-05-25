@@ -12,8 +12,8 @@ importers:
         specifier: 4.4.1
         version: 4.4.1(semantic-release@25.0.3(typescript@6.0.2))(typescript@6.0.2)
       '@anolilab/semantic-release-pnpm':
-        specifier: 8.1.9
-        version: 8.1.9(@types/node@25.9.1)(yaml@2.8.3)
+        specifier: 8.1.10
+        version: 8.1.10(@types/node@25.9.1)(yaml@2.8.3)
       '@semantic-release/changelog':
         specifier: 6.0.3
         version: 6.0.3(semantic-release@25.0.3(typescript@6.0.2))
@@ -130,8 +130,8 @@ packages:
     resolution: {integrity: sha512-BfZIx+N9+orJVE/YlzqokSxrSN/QCwFxGxFBLIBuy3mfQk4Cu6+0xPGLLaX906/MWlqAWv2t/CIylF1NS89CBQ==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
-  '@anolilab/semantic-release-pnpm@8.1.9':
-    resolution: {integrity: sha512-MgspvFMi5lcLDiMOUKkCKem9bBMG+KOg9/MKWpgCPAVhY7vYC33Iceh2fxwmbbIKntMI1AmifcfqOoPSwidCXg==}
+  '@anolilab/semantic-release-pnpm@8.1.10':
+    resolution: {integrity: sha512-7ejEjusf17J3+7L8bMABwAuyAqORSGO3ltTL95aqYGyNuPflTostlD+QpGCs9XWEZl3KiXHD5/w3gSa8RMKXIw==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
   '@antfu/install-pkg@1.1.0':
@@ -2948,7 +2948,7 @@ snapshots:
       ini: 6.0.0
       ts-deepmerge: 7.0.3
 
-  '@anolilab/semantic-release-pnpm@8.1.9(@types/node@25.9.1)(yaml@2.8.3)':
+  '@anolilab/semantic-release-pnpm@8.1.10(@types/node@25.9.1)(yaml@2.8.3)':
     dependencies:
       '@actions/core': 3.0.1
       '@anolilab/rc': 4.0.2

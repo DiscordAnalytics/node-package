@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@anolilab/multi-semantic-release':
-        specifier: 4.4.1
-        version: 4.4.1(semantic-release@25.0.3(typescript@6.0.2))(typescript@6.0.2)
+        specifier: 4.4.3
+        version: 4.4.3(semantic-release@25.0.3(typescript@6.0.2))(typescript@6.0.2)
       '@anolilab/semantic-release-pnpm':
         specifier: 8.1.11
         version: 8.1.11(@types/node@25.9.1)(yaml@2.8.3)
@@ -118,8 +118,8 @@ packages:
   '@actions/io@3.0.2':
     resolution: {integrity: sha512-nRBchcMM+QK1pdjO7/idu86rbJI5YHUKCvKs0KxnSYbVe3F51UfGxuZX4Qy/fWlp6l7gWFwIkrOzN+oUK03kfw==}
 
-  '@anolilab/multi-semantic-release@4.4.1':
-    resolution: {integrity: sha512-0fuSPdSV+lkYUBHnaiKx4oPj56Cbz8NFgAwUfhjk4/OsnvGpoeCJz7x2gzBzNgHK9g1Baw5+gNCfNd88M6rNsw==}
+  '@anolilab/multi-semantic-release@4.4.3':
+    resolution: {integrity: sha512-LWZE1zYn3KJDoauV0GJ91okHxQbv11FkRCeHyRYzgEXfVKtJUkFcJKPnvfY/6e3wl7Jgb2CXt34pDYzG03hOVg==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
     hasBin: true
@@ -2398,6 +2398,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.8.0:
+    resolution: {integrity: sha512-AcM7dV/5ul4EekoQ29Agm5vri8JNqRyj39o0qpX6vDF2GZrtutZl5RwgD1XnZjiTAfncsJhMI48QQH3sN87YNA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
     engines: {node: '>=8'}
@@ -2874,6 +2879,11 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
+  yaml@2.9.0:
+    resolution: {integrity: sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==}
+    engines: {node: '>= 14.6'}
+    hasBin: true
+
   yargs-parser@20.2.9:
     resolution: {integrity: sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==}
     engines: {node: '>=10'}
@@ -2920,10 +2930,10 @@ snapshots:
 
   '@actions/io@3.0.2': {}
 
-  '@anolilab/multi-semantic-release@4.4.1(semantic-release@25.0.3(typescript@6.0.2))(typescript@6.0.2)':
+  '@anolilab/multi-semantic-release@4.4.3(semantic-release@25.0.3(typescript@6.0.2))(typescript@6.0.2)':
     dependencies:
       '@semrel-extra/topo': 1.14.1
-      '@visulima/fs': 4.1.0(yaml@2.8.3)
+      '@visulima/fs': 4.1.0(yaml@2.9.0)
       '@visulima/path': 2.0.5
       cosmiconfig: 9.0.1(typescript@6.0.2)
       debug: 4.4.3
@@ -2934,10 +2944,10 @@ snapshots:
       lodash-es: 4.18.1
       resolve-from: 5.0.0
       semantic-release: 25.0.3(typescript@6.0.2)
-      semver: 7.7.4
+      semver: 7.8.0
       signale: 1.4.0
       stream-buffers: 3.0.3
-      yaml: 2.8.3
+      yaml: 2.9.0
       yargs: 18.0.0
     transitivePeerDependencies:
       - supports-color
@@ -3799,6 +3809,13 @@ snapshots:
       type-fest: 5.6.0
     optionalDependencies:
       yaml: 2.8.3
+
+  '@visulima/fs@4.1.0(yaml@2.9.0)':
+    dependencies:
+      '@visulima/path': 2.0.5
+      type-fest: 5.6.0
+    optionalDependencies:
+      yaml: 2.9.0
 
   '@visulima/package@4.1.7(@types/node@25.9.1)':
     dependencies:
@@ -5124,6 +5141,8 @@ snapshots:
 
   semver@7.7.4: {}
 
+  semver@7.8.0: {}
+
   shebang-command@2.0.0:
     dependencies:
       shebang-regex: 3.0.0
@@ -5532,6 +5551,8 @@ snapshots:
   y18n@5.0.8: {}
 
   yaml@2.8.3: {}
+
+  yaml@2.9.0: {}
 
   yargs-parser@20.2.9: {}
 

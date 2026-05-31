@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "discord.js": "14.26.4",
-    "tsdown": "0.22.0",
+    "tsdown": "0.22.1",
     "typescript": "5.9.3"
   },
   "peerDependencies": {

@@ -34,6 +34,7 @@
   },
   "scripts": {
     "prebuild": "pnpm --filter @discordanalytics/core build",
+    "prepack": "pnpm run build",
     "build": "tsdown"
   },
   "dependencies": {

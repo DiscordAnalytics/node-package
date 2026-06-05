@@ -33,6 +33,7 @@
     "url": "https://github.com/DiscordAnalytics/node-package/issues"
   },
   "scripts": {
+    "prepack": "pnpm run build",
     "build": "tsdown"
   },
   "devDependencies": {

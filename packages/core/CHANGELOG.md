@@ -1,3 +1,11 @@
+## @discordanalytics/core [2.9.1](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/core@2.9.0...@discordanalytics/core@2.9.1) (2026-06-05)
+
+
+### Bug Fixes
+
+* **ci:** fixed CI ([ba2cd0d](https://github.com/DiscordAnalytics/node-package/commit/ba2cd0de1ea2c997e4fb27ebb1f94840dac805c9))
+* **ci:** fixed CI ([#293](https://github.com/DiscordAnalytics/node-package/issues/293)) ([deda37b](https://github.com/DiscordAnalytics/node-package/commit/deda37bc0605a23774271424fca73d4b1ded0b81))
+
 # @discordanalytics/core [2.9.0](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/core@2.8.2...@discordanalytics/core@2.9.0) (2026-04-18)
 
 

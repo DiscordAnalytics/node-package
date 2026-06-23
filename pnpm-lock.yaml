@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@anolilab/multi-semantic-release':
-        specifier: 4.4.4
-        version: 4.4.4(semantic-release@25.0.5(typescript@6.0.3))(typescript@6.0.3)
+        specifier: 4.4.5
+        version: 4.4.5(semantic-release@25.0.5(typescript@6.0.3))(typescript@6.0.3)
       '@anolilab/semantic-release-pnpm':
         specifier: 8.1.15
         version: 8.1.15(@types/node@25.9.4)(yaml@2.9.0)
@@ -118,13 +118,13 @@ packages:
   '@actions/io@3.0.2':
     resolution: {integrity: sha512-nRBchcMM+QK1pdjO7/idu86rbJI5YHUKCvKs0KxnSYbVe3F51UfGxuZX4Qy/fWlp6l7gWFwIkrOzN+oUK03kfw==}
 
-  '@anolilab/multi-semantic-release@4.4.4':
-    resolution: {integrity: sha512-+Fij1KGStok+4tADLpZGj1goUyaeZlbqZ41hrH/PB5R0NWBWqKsSbv1+1yffeIPK6nOKgIizBHO7EWmeJFhgDA==}
+  '@anolilab/multi-semantic-release@4.4.5':
+    resolution: {integrity: sha512-nkZwZqrcyaOLnnPCJLa3WjKKkl/T+TAquEbCFW3aM4zTzKpGOryKV7BKerjEdvR0i1eyFjV65nlNA0qOApRkuw==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
     hasBin: true
     peerDependencies:
-      semantic-release: '>=24'
+      semantic-release: '>=24.2.9'
 
   '@anolilab/rc@4.0.3':
     resolution: {integrity: sha512-nWGKitOqgcVceoH2udTPd+TBWOF6KZlBJ7vTbWBte/j9GfEHuCS39BADP4pMlBnYAucWN/vQbgTHnbrZ7ikKVA==}
@@ -1312,6 +1312,15 @@ packages:
 
   cosmiconfig@9.0.1:
     resolution: {integrity: sha512-hr4ihw+DBqcvrsEDioRO31Z17x71pUYoNe/4h6Z0wB72p7MU7/9gH8Q3s12NFhHPfYBBOV3qyfUxmr/Yn3shnQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      typescript: '>=4.9.5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  cosmiconfig@9.0.2:
+    resolution: {integrity: sha512-gtTZxTDau1wL7Y7zifc2dd8jHSK/k6BTx/2Xp/BpdlAdnlYWFVt7qhJqgwi7637yRwRQ3qL4ZidbB4I8tA5VOg==}
     engines: {node: '>=14'}
     peerDependencies:
       typescript: '>=4.9.5'
@@ -2928,12 +2937,12 @@ snapshots:
 
   '@actions/io@3.0.2': {}
 
-  '@anolilab/multi-semantic-release@4.4.4(semantic-release@25.0.5(typescript@6.0.3))(typescript@6.0.3)':
+  '@anolilab/multi-semantic-release@4.4.5(semantic-release@25.0.5(typescript@6.0.3))(typescript@6.0.3)':
     dependencies:
       '@semrel-extra/topo': 1.14.1
       '@visulima/fs': 4.1.0(yaml@2.9.0)
       '@visulima/path': 2.0.5
-      cosmiconfig: 9.0.1(typescript@6.0.3)
+      cosmiconfig: 9.0.2(typescript@6.0.3)
       debug: 4.4.3
       detect-indent: 7.0.2
       detect-newline: 4.0.1
@@ -2942,7 +2951,7 @@ snapshots:
       lodash-es: 4.18.1
       resolve-from: 5.0.0
       semantic-release: 25.0.5(typescript@6.0.3)
-      semver: 7.8.1
+      semver: 7.8.4
       signale: 1.4.0
       stream-buffers: 3.0.3
       yaml: 2.9.0
@@ -3580,7 +3589,7 @@ snapshots:
       read-pkg: 10.1.0
       registry-auth-token: 5.1.1
       semantic-release: 25.0.5(typescript@6.0.3)
-      semver: 7.8.1
+      semver: 7.8.4
       tempy: 3.2.0
 
   '@semantic-release/release-notes-generator@14.1.0(semantic-release@25.0.5(typescript@6.0.3))':
@@ -3790,7 +3799,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 8.61.1
       debug: 4.4.3
       minimatch: 10.2.5
-      semver: 7.8.1
+      semver: 7.8.4
       tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@6.0.3)
       typescript: 6.0.3
@@ -4062,7 +4071,7 @@ snapshots:
       conventional-commits-filter: 5.0.0
       handlebars: 4.7.9
       meow: 13.2.0
-      semver: 7.8.1
+      semver: 7.8.4
 
   conventional-commits-filter@5.0.0: {}
 
@@ -4078,6 +4087,15 @@ snapshots:
   core-util-is@1.0.3: {}
 
   cosmiconfig@9.0.1(typescript@6.0.3):
+    dependencies:
+      env-paths: 2.2.1
+      import-fresh: 3.3.1
+      js-yaml: 4.1.1
+      parse-json: 5.2.0
+    optionalDependencies:
+      typescript: 6.0.3
+
+  cosmiconfig@9.0.2(typescript@6.0.3):
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
@@ -4689,7 +4707,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.8.1
+      semver: 7.8.4
 
   marked-terminal@7.3.0(marked@15.0.12):
     dependencies:
@@ -4755,13 +4773,13 @@ snapshots:
   normalize-package-data@6.0.2:
     dependencies:
       hosted-git-info: 7.0.2
-      semver: 7.8.1
+      semver: 7.8.4
       validate-npm-package-license: 3.0.4
 
   normalize-package-data@8.0.0:
     dependencies:
       hosted-git-info: 9.0.2
-      semver: 7.8.1
+      semver: 7.8.4
       validate-npm-package-license: 3.0.4
 
   normalize-url@9.0.1: {}

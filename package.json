@@ -23,7 +23,7 @@
     "url": "https://github.com/DiscordAnalytics/node-package/issues"
   },
   "devDependencies": {
-    "@anolilab/multi-semantic-release": "4.4.4",
+    "@anolilab/multi-semantic-release": "4.4.5",
     "@anolilab/semantic-release-pnpm": "8.1.15",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",

@@ -12,8 +12,8 @@ importers:
         specifier: 4.4.5
         version: 4.4.5(semantic-release@25.0.5(typescript@6.0.3))(typescript@6.0.3)
       '@anolilab/semantic-release-pnpm':
-        specifier: 8.1.15
-        version: 8.1.15(@types/node@25.9.4)(yaml@2.9.0)
+        specifier: 8.1.16
+        version: 8.1.16(@types/node@25.9.4)(yaml@2.9.0)
       '@semantic-release/changelog':
         specifier: 6.0.3
         version: 6.0.3(semantic-release@25.0.5(typescript@6.0.3))
@@ -126,12 +126,12 @@ packages:
     peerDependencies:
       semantic-release: '>=24.2.9'
 
-  '@anolilab/rc@4.0.3':
-    resolution: {integrity: sha512-nWGKitOqgcVceoH2udTPd+TBWOF6KZlBJ7vTbWBte/j9GfEHuCS39BADP4pMlBnYAucWN/vQbgTHnbrZ7ikKVA==}
+  '@anolilab/rc@4.0.4':
+    resolution: {integrity: sha512-vNUpqZb4dvJbG6OeOOtPhjlwMJ+uhZfPOTr7Iprb5JtAaGdU3CjGfUbFZwb6sNhbZfZDWAOZ2Oir9Ifj+jiiIg==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
-  '@anolilab/semantic-release-pnpm@8.1.15':
-    resolution: {integrity: sha512-CmmP0rkc0jDEKm7ZrIit1T6C4SdGpzw/XrZLrEdJi1iYHIAvlOWN5mH64HHvj75XzisBMudJZ1sAQc0Cl2sFxg==}
+  '@anolilab/semantic-release-pnpm@8.1.16':
+    resolution: {integrity: sha512-UaCipCzCLUcjgbTrdX7gtOUTEALgw6EwUqkYLNkj669TwjVEgEPdndr91g/OYcGkvUxUfYRIe7LvFkZbspMN6w==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
   '@antfu/install-pkg@1.1.0':
@@ -1757,9 +1757,9 @@ packages:
   ini@1.3.8:
     resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
 
-  ini@7.0.0:
-    resolution: {integrity: sha512-ifK0CgjALofS5bkrcTy4RaQ9Vx2Knf/eLeIO+NaswQEpH1UblrtTSCIvN71qQDMq0PeQ/SSPojvEJp9vvvfr+w==}
-    engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
+  ini@6.0.0:
+    resolution: {integrity: sha512-IBTdIkzZNOpqm7q3dRqJvMaldXjDHWkEDfrwGEQTs5eaQMWV+djAhR+wahyNNMAa+qpbDUhBMVt4ZKNwpPm7xQ==}
+    engines: {node: ^20.17.0 || >=22.9.0}
 
   into-stream@7.0.0:
     resolution: {integrity: sha512-2dYz766i9HprMBasCMvHMuazJ7u4WzhJwo5kb3iPSiW/iRYV6uPari3zHoqZlnuaR7V1bEiNMxikhp37rdBXbw==}
@@ -2960,15 +2960,15 @@ snapshots:
       - supports-color
       - typescript
 
-  '@anolilab/rc@4.0.3':
+  '@anolilab/rc@4.0.4':
     dependencies:
-      ini: 7.0.0
+      ini: 6.0.0
       ts-deepmerge: 8.0.0
 
-  '@anolilab/semantic-release-pnpm@8.1.15(@types/node@25.9.4)(yaml@2.9.0)':
+  '@anolilab/semantic-release-pnpm@8.1.16(@types/node@25.9.4)(yaml@2.9.0)':
     dependencies:
       '@actions/core': 3.0.1
-      '@anolilab/rc': 4.0.3
+      '@anolilab/rc': 4.0.4
       '@semantic-release/error': 4.0.0
       '@visulima/fs': 4.1.0(yaml@2.9.0)
       '@visulima/package': 4.1.7(@types/node@25.9.4)
@@ -2976,10 +2976,10 @@ snapshots:
       debug: 4.4.3
       env-ci: 11.2.0
       execa: 9.6.1
-      ini: 7.0.0
+      ini: 6.0.0
       normalize-url: 9.0.1
       registry-auth-token: 5.1.1
-      semver: 7.8.1
+      semver: 7.8.4
     transitivePeerDependencies:
       - '@types/node'
       - supports-color
@@ -4550,7 +4550,7 @@ snapshots:
 
   ini@1.3.8: {}
 
-  ini@7.0.0: {}
+  ini@6.0.0: {}
 
   into-stream@7.0.0:
     dependencies:

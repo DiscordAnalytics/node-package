@@ -27,7 +27,7 @@
     "@anolilab/semantic-release-pnpm": "8.1.16",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@types/node": "25.9.4",
+    "@types/node": "26.0.1",
     "@vitest/coverage-v8": "4.1.9",
     "dotenv": "17.4.2",
     "eslint": "10.6.0",

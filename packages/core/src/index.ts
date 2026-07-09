@@ -157,10 +157,12 @@ export class AnalyticsBase {
           return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_API_TOKEN}`);
         else if (response.status === 423)
           return this.error(`[DISCORDANALYTICS] ${ErrorCodes.SUSPENDED_BOT}`);
-        else if (response.status === 404 && endpoint.includes('events'))
+        else if (response.status === 404 && endpoint.match(/\/events\/.+/))
           return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENT_KEY}`, true);
         else if (response.status !== 200)
-          return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_RESPONSE}`);
+          return this.error(
+            `[DISCORDANALYTICS] ${ErrorCodes.INVALID_RESPONSE}\n${await response.text()}`,
+          );
       } catch (error) {
         retries++;
         const retry_after = Math.pow(2, retries) * backoff_factor;
@@ -255,6 +257,43 @@ export class CustomEvent {
   private readonly _analytics: AnalyticsBase;
   private readonly _event_key: string;
   private _last_action: string;
+
+  /**
+   * Create a custom event
+   * @param {AnalyticsBase} analytics - The Analytics instance
+   * @param {string} eventKey - The key of the custom event
+   * @param {string} graphName - The name of the graph
+   * @param {number | null} defaultValue - The default value for the event
+   * @returns {Promise<void>}
+   */
+  public static async create(
+    analytics: AnalyticsBase,
+    eventKey: string,
+    graphName: string,
+    defaultValue: number | null = null,
+  ): Promise<void> {
+    analytics.debug(`[DISCORDANALYTICS] Creating event ${eventKey}`);
+    const endpoint = ApiEndpoints.EVENTS_URL.replace('{id}', analytics.client_id);
+    const body = JSON.stringify({
+      defaultValue,
+      eventKey,
+      graphName,
+    });
+    await analytics.api_call_with_retries('POST', endpoint, body);
+  }
+
+  /**
+   * List custom events
+   * @param {AnalyticsBase} analytics - The Analytics instance
+   * @returns {Promise<CustomEventData[]>}
+   */
+  public static async getEvents(analytics: AnalyticsBase): Promise<CustomEventData[]> {
+    analytics.debug(`[DISCORDANALYTICS] Fetching events`);
+    const endpoint = ApiEndpoints.EVENTS_URL.replace('{id}', analytics.client_id);
+    const res = await analytics.api_call_with_retries('GET', endpoint);
+    if (res instanceof Response) return await res.json();
+    return [];
+  }
 
   constructor(analytics: AnalyticsBase, event_key: string) {
     this._analytics = analytics;

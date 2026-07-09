@@ -3,6 +3,7 @@ export const ApiEndpoints = {
   EDIT_SETTINGS_URL: `/bots/{id}`,
   EDIT_STATS_URL: `/bots/{id}/stats`,
   EVENT_URL: `/bots/{id}/events/{event}`,
+  EVENTS_URL: `/bots/{id}/events`,
 };
 
 export const ErrorCodes = {
@@ -131,3 +132,9 @@ export interface AnalyticsOptions<TClient = unknown> {
 }
 
 export type TrackGuildType = 'create' | 'delete';
+
+export interface CustomEventData {
+  defaultValue: number | null;
+  eventKey: string;
+  graphName: string;
+}

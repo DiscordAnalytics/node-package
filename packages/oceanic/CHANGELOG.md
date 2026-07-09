@@ -1,3 +1,10 @@
+## @discordanalytics/oceanic [2.9.2](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/oceanic@2.9.1...@discordanalytics/oceanic@2.9.2) (2026-07-09)
+
+
+### Dependencies
+
+* **@discordanalytics/core:** upgraded to 2.10.0
+
 ## @discordanalytics/oceanic [2.9.1](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/oceanic@2.9.0...@discordanalytics/oceanic@2.9.1) (2026-06-05)
 
 

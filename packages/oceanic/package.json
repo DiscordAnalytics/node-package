@@ -1,6 +1,6 @@
 {
   "name": "@discordanalytics/oceanic",
-  "version": "2.9.1",
+  "version": "2.9.2",
   "description": "Oceanic package for working with Discord Analytics",
   "license": "LGPL-2.1-only",
   "files": [
@@ -38,7 +38,7 @@
     "build": "tsdown"
   },
   "dependencies": {
-    "@discordanalytics/core": "2.9.1"
+    "@discordanalytics/core": "2.10.0"
   },
   "devDependencies": {
     "oceanic.js": "1.14.0",

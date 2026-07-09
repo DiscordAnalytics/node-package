@@ -1,3 +1,15 @@
+## @discordanalytics/discordjs [2.9.2](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/discordjs@2.9.1...@discordanalytics/discordjs@2.9.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* correct guild locale mapping for sharded clients ([8782d48](https://github.com/DiscordAnalytics/node-package/commit/8782d48bcdb810ec531abd45e8347497c0bd156d))
+
+
+### Dependencies
+
+* **@discordanalytics/core:** upgraded to 2.10.0
+
 ## @discordanalytics/discordjs [2.9.1](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/discordjs@2.9.0...@discordanalytics/discordjs@2.9.1) (2026-06-05)
 
 

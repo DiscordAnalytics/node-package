@@ -1,3 +1,10 @@
+# @discordanalytics/core [2.10.0](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/core@2.9.1...@discordanalytics/core@2.10.0) (2026-07-09)
+
+
+### Features
+
+* add support for listing and creating custom events ([9b4363b](https://github.com/DiscordAnalytics/node-package/commit/9b4363b74a47c0840904c4b83f9cc4f65fcf4b58))
+
 ## @discordanalytics/core [2.9.1](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/core@2.9.0...@discordanalytics/core@2.9.1) (2026-06-05)
 
 

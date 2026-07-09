@@ -113,12 +113,20 @@ export default class DiscordAnalytics extends AnalyticsBase {
               )
             )?.flat() ?? []);
 
+        const locales: string[] = !this._sharded
+          ? this._client.guilds.cache.map((guild) => guild.preferredLocale)
+          : ((
+              await this._client.shard?.broadcastEval((c) =>
+                c.guilds.cache.map((guild) => guild.preferredLocale),
+              )
+            )?.flat() ?? []);
+
         const guildLocales: LocaleData[] = [];
-        this._client.guilds.cache.map((current) =>
-          guildLocales.find((x) => x.locale === current.preferredLocale)
-            ? ++guildLocales.find((x) => x.locale === current.preferredLocale)!.number
-            : guildLocales.push({ locale: current.preferredLocale as Locale, number: 1 }),
-        );
+        locales.forEach((locale) => {
+          const existing = guildLocales.find((x) => x.locale === locale);
+          if (existing) existing.number++;
+          else guildLocales.push({ locale: locale as Locale, number: 1 });
+        });
 
         this.stats_data.guildLocales = guildLocales;
 

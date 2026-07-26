@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@anolilab/multi-semantic-release':
-        specifier: 4.4.5
-        version: 4.4.5(semantic-release@25.0.8(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)(typescript@6.0.3)
+        specifier: 4.4.6
+        version: 4.4.6(json5@2.2.3)(semantic-release@25.0.8(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)(typescript@6.0.3)
       '@anolilab/semantic-release-pnpm':
         specifier: 8.1.16
         version: 8.1.16(@types/node@25.9.5)(supports-color@7.2.0)(yaml@2.9.0)
@@ -118,8 +118,8 @@ packages:
   '@actions/io@3.0.2':
     resolution: {integrity: sha512-nRBchcMM+QK1pdjO7/idu86rbJI5YHUKCvKs0KxnSYbVe3F51UfGxuZX4Qy/fWlp6l7gWFwIkrOzN+oUK03kfw==}
 
-  '@anolilab/multi-semantic-release@4.4.5':
-    resolution: {integrity: sha512-nkZwZqrcyaOLnnPCJLa3WjKKkl/T+TAquEbCFW3aM4zTzKpGOryKV7BKerjEdvR0i1eyFjV65nlNA0qOApRkuw==}
+  '@anolilab/multi-semantic-release@4.4.6':
+    resolution: {integrity: sha512-GZ1M+t20K+7bkmQNoCXpBzoo94smfSG7kxEDfoGkqgSjdGqLnFm8R11hDmtKzWBN9XihNcdLnDtlB9I0ebmGtw==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
     hasBin: true
@@ -1022,6 +1022,28 @@ packages:
       yaml:
         optional: true
 
+  '@visulima/fs@5.0.5':
+    resolution: {integrity: sha512-XIRmzMskrFg+NfG6xWiK6WzN6WDdvokR+W8+U78FTRCzokRz+WGG0eS6sxmLJvAGsyWrssSArngEyiD7GCCkvg==}
+    engines: {node: ^22.14.0 || >=24.10.0}
+    os: [darwin, linux, win32]
+    peerDependencies:
+      ini: ^7.0.0
+      json5: ^2.2.3
+      jsonc-parser: ^3.3.1
+      smol-toml: ^1.7.0
+      yaml: '>=2.9.0'
+    peerDependenciesMeta:
+      ini:
+        optional: true
+      json5:
+        optional: true
+      jsonc-parser:
+        optional: true
+      smol-toml:
+        optional: true
+      yaml:
+        optional: true
+
   '@visulima/package@4.1.7':
     resolution: {integrity: sha512-xGzw2GFlHBleNgLYip6ZULKMZZAZrLGE5RJ2shKj4MUcAsv7IQzafyGa3m2PRw6HJSYeEpboobPVxf8SbCfm+w==}
     engines: {node: '>=20.19 <=25.x'}
@@ -1030,6 +1052,11 @@ packages:
   '@visulima/path@2.0.5':
     resolution: {integrity: sha512-DBQe4IeEn1Yx03HQUlxog4sDJEQiVKnr2Kdm1acK6CgdcNN0fveoTfSvPsrxTKmMqdTgBbvB6UMUFh53cV+jgg==}
     engines: {node: '>=20.19 <=25.x'}
+    os: [darwin, linux, win32]
+
+  '@visulima/path@3.0.0':
+    resolution: {integrity: sha512-l9vlDaoFrmPlG3OFuC+ZitAT8fMB2AJu1ILNZhgToVQ0HCAFVG8X1pIM/GIBQeDULveW+unIRYR4HOhS+plsCA==}
+    engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
 
   '@vitest/coverage-v8@4.1.10':
@@ -1586,6 +1613,10 @@ packages:
   esutils@2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
+
+  execa@10.0.0:
+    resolution: {integrity: sha512-Cxl6MKxB1dr1H0FHmiizJ+lavKF7pV+fcDZFyqMB8d5m7qUPm/OtZYcD5vPWePKxSnTQ57KuBd9mtdZ3oNCvyQ==}
+    engines: {node: '>=22'}
 
   execa@5.1.1:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
@@ -2921,6 +2952,11 @@ packages:
   web-worker@1.5.0:
     resolution: {integrity: sha512-RiMReJrTAiA+mBjGONMnjVDP2u3p9R1vkcGz6gDIrOMT3oGuYwX2WRMYI9ipkphSuE5XKEhydbhNEJh4NY9mlw==}
 
+  which-command@0.1.0:
+    resolution: {integrity: sha512-XZyoF5/5hZtXitIwzrU4NKK+Wtbb9aB9CezUEw2Q0wlYK8NUYQxC1rRXgNueYLtBAJwXIb+/tFVk4dozciNJMA==}
+    engines: {node: '>=22'}
+    hasBin: true
+
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
     engines: {node: '>= 8'}
@@ -3030,26 +3066,30 @@ snapshots:
 
   '@actions/io@3.0.2': {}
 
-  '@anolilab/multi-semantic-release@4.4.5(semantic-release@25.0.8(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)(typescript@6.0.3)':
+  '@anolilab/multi-semantic-release@4.4.6(json5@2.2.3)(semantic-release@25.0.8(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)(typescript@6.0.3)':
     dependencies:
       '@semrel-extra/topo': 1.14.1
-      '@visulima/fs': 4.1.0(yaml@2.9.0)
-      '@visulima/path': 2.0.5
+      '@visulima/fs': 5.0.5(json5@2.2.3)(yaml@2.9.0)
+      '@visulima/path': 3.0.0
       cosmiconfig: 9.0.2(typescript@6.0.3)
       debug: 4.4.3(supports-color@7.2.0)
       detect-indent: 7.0.2
       detect-newline: 4.0.1
-      execa: 9.6.1
+      execa: 10.0.0
       git-log-parser: 1.2.1
       lodash-es: 4.18.1
       resolve-from: 5.0.0
       semantic-release: 25.0.8(supports-color@7.2.0)(typescript@6.0.3)
-      semver: 7.8.4
+      semver: 7.8.5
       signale: 1.4.0
       stream-buffers: 3.0.3
       yaml: 2.9.0
       yargs: 18.0.0
     transitivePeerDependencies:
+      - ini
+      - json5
+      - jsonc-parser
+      - smol-toml
       - supports-color
       - typescript
 
@@ -3891,6 +3931,13 @@ snapshots:
     optionalDependencies:
       yaml: 2.9.0
 
+  '@visulima/fs@5.0.5(json5@2.2.3)(yaml@2.9.0)':
+    dependencies:
+      '@visulima/path': 3.0.0
+    optionalDependencies:
+      json5: 2.2.3
+      yaml: 2.9.0
+
   '@visulima/package@4.1.7(@types/node@25.9.5)':
     dependencies:
       '@antfu/install-pkg': 1.1.0
@@ -3904,6 +3951,8 @@ snapshots:
       - '@types/node'
 
   '@visulima/path@2.0.5': {}
+
+  '@visulima/path@3.0.0': {}
 
   '@vitest/coverage-v8@4.1.10(vitest@4.1.10)':
     dependencies:
@@ -4424,6 +4473,22 @@ snapshots:
       '@types/estree': 1.0.8
 
   esutils@2.0.3: {}
+
+  execa@10.0.0:
+    dependencies:
+      '@sindresorhus/merge-streams': 4.0.0
+      figures: 6.1.0
+      get-stream: 9.0.1
+      human-signals: 8.0.1
+      is-plain-obj: 4.1.0
+      is-stream: 4.0.1
+      npm-run-path: 6.0.0
+      path-key: 4.0.0
+      pretty-ms: 9.3.0
+      signal-exit: 4.1.0
+      strip-final-newline: 4.0.0
+      which-command: 0.1.0
+      yoctocolors: 2.1.2
 
   execa@5.1.1:
     dependencies:
@@ -5569,6 +5634,8 @@ snapshots:
       - msw
 
   web-worker@1.5.0: {}
+
+  which-command@0.1.0: {}
 
   which@2.0.2:
     dependencies:

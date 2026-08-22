@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@anolilab/multi-semantic-release':
-        specifier: 4.4.7
-        version: 4.4.7(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
+        specifier: 4.4.8
+        version: 4.4.8(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
         specifier: 8.1.18
         version: 8.1.18(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)
@@ -118,8 +118,8 @@ packages:
   '@actions/io@3.0.2':
     resolution: {integrity: sha512-nRBchcMM+QK1pdjO7/idu86rbJI5YHUKCvKs0KxnSYbVe3F51UfGxuZX4Qy/fWlp6l7gWFwIkrOzN+oUK03kfw==}
 
-  '@anolilab/multi-semantic-release@4.4.7':
-    resolution: {integrity: sha512-7pmmjwT5kdFUEdreMosfPszko8U3GDNb/iUj3130PkOwMy75TZqM7AZJvpge7iOmedRcPpH79c60Kt+eTrkDMA==}
+  '@anolilab/multi-semantic-release@4.4.8':
+    resolution: {integrity: sha512-zdmVllnwSkTQ8emnUhplDQv+CsG+98CQo0nwGYa7Fyupk0yg542SUCDudnDio8SrKzeulZ6raFIccwHyWriPYg==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
     hasBin: true
@@ -1001,11 +1001,6 @@ packages:
 
   '@visulima/package@5.0.11':
     resolution: {integrity: sha512-dmpxMnhoGXhWKvE9a2XbdnJbzQ4MaGckEbck/egfj/SapIfHXHKWBTeFwSjIGHGc02VLflqro93GJ+gJ/kcakw==}
-    engines: {node: ^22.14.0 || >=24.10.0}
-    os: [darwin, linux, win32]
-
-  '@visulima/path@3.0.0':
-    resolution: {integrity: sha512-l9vlDaoFrmPlG3OFuC+ZitAT8fMB2AJu1ILNZhgToVQ0HCAFVG8X1pIM/GIBQeDULveW+unIRYR4HOhS+plsCA==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
 
@@ -3035,11 +3030,11 @@ snapshots:
 
   '@actions/io@3.0.2': {}
 
-  '@anolilab/multi-semantic-release@4.4.7(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
+  '@anolilab/multi-semantic-release@4.4.8(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
     dependencies:
       '@semrel-extra/topo': 1.14.1
       '@visulima/fs': 5.1.0(ini@7.0.0)(json5@2.2.3)(yaml@2.9.0)
-      '@visulima/path': 3.0.0
+      '@visulima/path': 3.1.0
       cosmiconfig: 10.0.0
       debug: 4.4.3(supports-color@7.2.0)
       detect-indent: 7.0.2
@@ -3886,8 +3881,6 @@ snapshots:
       - ini
       - jsonc-parser
       - smol-toml
-
-  '@visulima/path@3.0.0': {}
 
   '@visulima/path@3.1.0': {}
 

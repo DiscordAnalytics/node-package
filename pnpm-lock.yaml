@@ -12,8 +12,8 @@ importers:
         specifier: 4.4.9
         version: 4.4.9(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
-        specifier: 8.1.19
-        version: 8.1.19(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)
+        specifier: 8.1.20
+        version: 8.1.20(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)
       '@semantic-release/changelog':
         specifier: 6.0.3
         version: 6.0.3(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))
@@ -126,12 +126,12 @@ packages:
     peerDependencies:
       semantic-release: '>=24.2.9'
 
-  '@anolilab/rc@4.0.6':
-    resolution: {integrity: sha512-frHkuBeMNW+3JUEpa0GbLvrvE6O+9xvJg6IET89r9lfaMURZYk8brKFjAS0Y+v1l1JDjuW8cyarYaECtsLbBAg==}
+  '@anolilab/rc@4.0.7':
+    resolution: {integrity: sha512-ek/9gVQagmbj+09/qlfu9bz7DBb03JUcgw7O7A+qEmXw6H2LfBUVlSJwFsKYSnIcH6MukHo9VlaMX/nWkVWFFw==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
-  '@anolilab/semantic-release-pnpm@8.1.19':
-    resolution: {integrity: sha512-lTMyCctRwKZWNRyey0pYYXyDWBupgpL2Vl/ZUrdLztnpw16YOl6Tmcmg0TxoFUOeBaS4FLCjivCpbp0XDDr3kQ==}
+  '@anolilab/semantic-release-pnpm@8.1.20':
+    resolution: {integrity: sha512-mjSTUAKlEk77cZX8i5MnfMPVpd/Fe1hEwP5NcryxbTWIOP0YqslAGSz5oRoqeXZJ81pXcq78S80nIPWpaRvmaw==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
   '@antfu/install-pkg@1.1.0':
@@ -3056,15 +3056,15 @@ snapshots:
       - smol-toml
       - supports-color
 
-  '@anolilab/rc@4.0.6':
+  '@anolilab/rc@4.0.7':
     dependencies:
       ini: 7.0.0
       ts-deepmerge: 8.0.0
 
-  '@anolilab/semantic-release-pnpm@8.1.19(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)':
+  '@anolilab/semantic-release-pnpm@8.1.20(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)':
     dependencies:
       '@actions/core': 3.0.1
-      '@anolilab/rc': 4.0.6
+      '@anolilab/rc': 4.0.7
       '@semantic-release/error': 4.0.0
       '@visulima/fs': 5.1.0(ini@7.0.0)(json5@2.2.3)(yaml@2.9.0)
       '@visulima/package': 5.0.11(ini@7.0.0)

@@ -12,8 +12,8 @@ importers:
         specifier: 4.4.9
         version: 4.4.9(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
-        specifier: 8.1.20
-        version: 8.1.20(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)
+        specifier: 8.1.21
+        version: 8.1.21(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)
       '@semantic-release/changelog':
         specifier: 6.0.3
         version: 6.0.3(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))
@@ -130,8 +130,8 @@ packages:
     resolution: {integrity: sha512-ek/9gVQagmbj+09/qlfu9bz7DBb03JUcgw7O7A+qEmXw6H2LfBUVlSJwFsKYSnIcH6MukHo9VlaMX/nWkVWFFw==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
-  '@anolilab/semantic-release-pnpm@8.1.20':
-    resolution: {integrity: sha512-mjSTUAKlEk77cZX8i5MnfMPVpd/Fe1hEwP5NcryxbTWIOP0YqslAGSz5oRoqeXZJ81pXcq78S80nIPWpaRvmaw==}
+  '@anolilab/semantic-release-pnpm@8.1.21':
+    resolution: {integrity: sha512-jWW37vszT5JcysgGeQKtDUePjhUDyY3T7juJcCTrRKuWL9S3bx7Xe0LCNDDkKXTcmmbX53VZYRha8aZYErvH0A==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
   '@antfu/install-pkg@1.1.0':
@@ -3061,7 +3061,7 @@ snapshots:
       ini: 7.0.0
       ts-deepmerge: 8.0.0
 
-  '@anolilab/semantic-release-pnpm@8.1.20(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)':
+  '@anolilab/semantic-release-pnpm@8.1.21(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)':
     dependencies:
       '@actions/core': 3.0.1
       '@anolilab/rc': 4.0.7
@@ -3070,6 +3070,7 @@ snapshots:
       '@visulima/package': 5.0.11(ini@7.0.0)
       '@visulima/path': 3.1.0
       debug: 4.4.3(supports-color@7.2.0)
+      detect-indent: 7.0.2
       env-ci: 11.2.0
       execa: 10.0.1
       ini: 7.0.0

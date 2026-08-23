@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@anolilab/multi-semantic-release':
-        specifier: 4.4.8
-        version: 4.4.8(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
+        specifier: 4.4.9
+        version: 4.4.9(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
         specifier: 8.1.19
         version: 8.1.19(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)
@@ -118,8 +118,8 @@ packages:
   '@actions/io@3.0.2':
     resolution: {integrity: sha512-nRBchcMM+QK1pdjO7/idu86rbJI5YHUKCvKs0KxnSYbVe3F51UfGxuZX4Qy/fWlp6l7gWFwIkrOzN+oUK03kfw==}
 
-  '@anolilab/multi-semantic-release@4.4.8':
-    resolution: {integrity: sha512-zdmVllnwSkTQ8emnUhplDQv+CsG+98CQo0nwGYa7Fyupk0yg542SUCDudnDio8SrKzeulZ6raFIccwHyWriPYg==}
+  '@anolilab/multi-semantic-release@4.4.9':
+    resolution: {integrity: sha512-QmFf/1cvloUAeSys30OKi2jVZxdmTGBT8Kyvd9xxyUSj/oXUlTCMeXmzszwlMqrmuE0/JRMMfmy3vllfWPPFCA==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
     hasBin: true
@@ -3030,7 +3030,7 @@ snapshots:
 
   '@actions/io@3.0.2': {}
 
-  '@anolilab/multi-semantic-release@4.4.8(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
+  '@anolilab/multi-semantic-release@4.4.9(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
     dependencies:
       '@semrel-extra/topo': 1.14.1
       '@visulima/fs': 5.1.0(ini@7.0.0)(json5@2.2.3)(yaml@2.9.0)

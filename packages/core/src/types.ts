@@ -9,6 +9,7 @@ export const ApiEndpoints = {
 export const ErrorCodes = {
   INVALID_CLIENT_TYPE: 'Invalid client type, please use a valid client.',
   CLIENT_NOT_READY: 'Client is not ready, please start the client first.',
+  NOT_PRODUCTION_ENV: "NODE_ENV != 'production', initialization skipped.",
   INVALID_RESPONSE: 'Invalid response from the API, please try again later.',
   INVALID_API_TOKEN:
     'Invalid API token, please get one at ' +

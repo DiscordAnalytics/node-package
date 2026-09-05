@@ -56,10 +56,9 @@ export default class DiscordAnalytics extends AnalyticsBase {
    */
   public async init(): Promise<void> {
     if (process.env.NODE_ENV !== 'production')
-      return console.log("[DISCORDANALYTICS] NODE_ENV != 'production', initialization skipped");
+      return this.error(ErrorCodes.NOT_PRODUCTION_ENV);
 
-    if (!this._client.user)
-      return console.log('[DISCORDANALYTICS] client is not ready, initialization skipped');
+    if (!this._client.user) return this.error(ErrorCodes.CLIENT_NOT_READY);
 
     this.client_id = this._client.user.id;
 

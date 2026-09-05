@@ -148,3 +148,20 @@ test('should not double count the remote value when the same event key is reques
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
 });
+
+test('getEvents should return an empty array and not call the API when client_id is not set', async () => {
+  const instance = new AnalyticsBase('test_api_key', ApiEndpoints.BASE_URL, true);
+  const fetchSpy = vi.spyOn(global, 'fetch').mockImplementation(() => {
+    throw new Error('fetch should not have been called');
+  });
+  const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+  const events = await CustomEvent.getEvents(instance);
+
+  expect(events).toEqual([]);
+  expect(fetchSpy).not.toHaveBeenCalled();
+  expect(consoleSpy).toHaveBeenCalledWith(ErrorCodes.INSTANCE_NOT_INITIALIZED);
+
+  fetchSpy.mockRestore();
+  consoleSpy.mockRestore();
+});

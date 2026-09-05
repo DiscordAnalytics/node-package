@@ -177,6 +177,8 @@ export class AnalyticsBase {
     version: string,
     avatar: string | null,
   ): Promise<void> {
+    if (!this.client_id) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
+
     const endpoint = ApiEndpoints.EDIT_SETTINGS_URL.replace('{id}', this.client_id);
     const body = JSON.stringify({
       avatar,
@@ -273,6 +275,8 @@ export class CustomEvent {
     defaultValue: number | null = null,
   ): Promise<void> {
     analytics.debug(`[DISCORDANALYTICS] Creating event ${eventKey}`);
+    if (!analytics.client_id) return analytics.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
+
     const endpoint = ApiEndpoints.EVENTS_URL.replace('{id}', analytics.client_id);
     const body = JSON.stringify({
       defaultValue,
@@ -289,6 +293,11 @@ export class CustomEvent {
    */
   public static async getEvents(analytics: AnalyticsBase): Promise<CustomEventData[]> {
     analytics.debug(`[DISCORDANALYTICS] Fetching events`);
+    if (!analytics.client_id) {
+      analytics.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
+      return [];
+    }
+
     const endpoint = ApiEndpoints.EVENTS_URL.replace('{id}', analytics.client_id);
     const res = await analytics.api_call_with_retries('GET', endpoint);
     if (res instanceof Response) return await res.json();

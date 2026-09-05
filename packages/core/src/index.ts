@@ -1,4 +1,4 @@
-import { ApiEndpoints, ErrorCodes, StatsData, TrackGuildType } from './types';
+import { ApiEndpoints, ErrorCodes, Locale, LocaleData, StatsData, TrackGuildType } from './types';
 
 /**
  * DiscordAnalytics Base Class
@@ -93,6 +93,20 @@ export class AnalyticsBase {
     const item = array.find(match);
     if (item) update(item);
     else array.push(insert());
+  }
+
+  /**
+   * Increment a locale's counter in a LocaleData array, inserting it with a count of 1 if absent.
+   * @param array The LocaleData array to update (e.g. stats_data.guildLocales)
+   * @param locale The locale to record
+   */
+  public trackLocale(array: LocaleData[], locale: string): void {
+    this.updateOrInsert(
+      array,
+      (x) => x.locale === locale,
+      (x) => x.number++,
+      (): LocaleData => ({ locale: locale as Locale, number: 1 }),
+    );
   }
 
   public calculateGuildMembers(guildMembers: number[]): {

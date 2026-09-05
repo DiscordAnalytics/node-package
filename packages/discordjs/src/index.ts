@@ -5,9 +5,9 @@ import {
   ErrorCodes,
   InteractionType,
   LocaleData,
-  Locale,
   InteractionData,
   GuildData,
+  PermissionBits,
 } from '@discordanalytics/core';
 import type { CacheType, Client, GuildMember, Interaction } from 'discord.js';
 import npmPackageData from '../package.json';
@@ -55,8 +55,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * /!\ Must be used when the client is ready (recommended to use in ready event to prevent problems)
    */
   public async init(): Promise<void> {
-    if (process.env.NODE_ENV !== 'production')
-      return this.error(ErrorCodes.NOT_PRODUCTION_ENV);
+    if (process.env.NODE_ENV !== 'production') return this.error(ErrorCodes.NOT_PRODUCTION_ENV);
 
     if (!this._client.user) return this.error(ErrorCodes.CLIENT_NOT_READY);
 
@@ -118,11 +117,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
             )?.flat() ?? []);
 
         const guildLocales: LocaleData[] = [];
-        locales.forEach((locale) => {
-          const existing = guildLocales.find((x) => x.locale === locale);
-          if (existing) existing.number++;
-          else guildLocales.push({ locale: locale as Locale, number: 1 });
-        });
+        locales.forEach((locale) => this.trackLocale(guildLocales, locale));
 
         this.stats_data.guildLocales = guildLocales;
 
@@ -152,12 +147,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
     this.debug(`[DISCORDANALYTICS] trackInteractions(${interaction.type}) triggered`);
     if (!this._isReady) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
-    this.updateOrInsert(
-      this.stats_data.interactionsLocales,
-      (x) => x.locale === interaction.locale,
-      (x) => x.number++,
-      (): LocaleData => ({ locale: interaction.locale as Locale, number: 1 }),
-    );
+    this.trackLocale(this.stats_data.interactionsLocales, interaction.locale);
 
     if (interaction.type === InteractionType.ApplicationCommand) {
       const commandType = interaction.command
@@ -215,18 +205,18 @@ export default class DiscordAnalytics extends AnalyticsBase {
 
     if (!interaction.inGuild() || !interaction.guild) ++this.stats_data.usersType.privateMessage;
     else if (
-      (interaction.member && interaction.memberPermissions.has(8n)) ||
-      interaction.memberPermissions.has(32n)
+      (interaction.member && interaction.memberPermissions.has(PermissionBits.ADMINISTRATOR)) ||
+      interaction.memberPermissions.has(PermissionBits.MANAGE_GUILD)
     )
       ++this.stats_data.usersType.admin;
     else if (
-      (interaction.member && interaction.memberPermissions.has(8192n)) ||
-      interaction.memberPermissions.has(2n) ||
-      interaction.memberPermissions.has(4n) ||
-      interaction.memberPermissions.has(4194304n) ||
-      interaction.memberPermissions.has(8388608n) ||
-      interaction.memberPermissions.has(16777216n) ||
-      interaction.memberPermissions.has(1099511627776n)
+      (interaction.member && interaction.memberPermissions.has(PermissionBits.MANAGE_MESSAGES)) ||
+      interaction.memberPermissions.has(PermissionBits.KICK_MEMBERS) ||
+      interaction.memberPermissions.has(PermissionBits.BAN_MEMBERS) ||
+      interaction.memberPermissions.has(PermissionBits.MUTE_MEMBERS) ||
+      interaction.memberPermissions.has(PermissionBits.DEAFEN_MEMBERS) ||
+      interaction.memberPermissions.has(PermissionBits.MOVE_MEMBERS) ||
+      interaction.memberPermissions.has(PermissionBits.MODERATE_MEMBERS)
     )
       ++this.stats_data.usersType.moderator;
     else if (

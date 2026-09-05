@@ -26,6 +26,22 @@ export const ErrorCodes = {
     'Max retries exceeded, please check your network connection or the API status.',
 };
 
+/**
+ * Discord permission flag bits used to classify interaction authors.
+ * @see https://discord.com/developers/docs/topics/permissions#permissions-bitwise-permission-flags
+ */
+export const PermissionBits = {
+  KICK_MEMBERS: 2n,
+  BAN_MEMBERS: 4n,
+  ADMINISTRATOR: 8n,
+  MANAGE_GUILD: 32n,
+  MANAGE_MESSAGES: 8192n,
+  MUTE_MEMBERS: 4194304n,
+  DEAFEN_MEMBERS: 8388608n,
+  MOVE_MEMBERS: 16777216n,
+  MODERATE_MEMBERS: 1099511627776n,
+} as const;
+
 export type Locale =
   | 'id'
   | 'en-US'

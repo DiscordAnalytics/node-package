@@ -123,13 +123,6 @@ export default class DiscordAnalytics extends AnalyticsBase {
     if (!this._isReady) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
     this.updateOrInsert(
-      this.stats_data.guildLocales,
-      (x) => x.locale === interaction.guildLocale,
-      (x) => x.number++,
-      (): LocaleData => ({ locale: interaction.guildLocale as Locale, number: 1 }),
-    );
-
-    this.updateOrInsert(
       this.stats_data.interactionsLocales,
       (x) => x.locale === interaction.locale,
       (x) => x.number++,

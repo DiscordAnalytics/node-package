@@ -37,6 +37,12 @@ test('should update the event value', () => {
   expect(event.get()).toBe(49);
 });
 
+test('should throw an error when decrementing a never-set event below zero', () => {
+  const instance = new AnalyticsBase('test_api_key', ApiEndpoints.BASE_URL, true);
+  const event = instance.events('unset_custom_event');
+  expect(() => event.decrement(1)).toThrow(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
+});
+
 test('should throw an error if the event key is not a string', () => {
   const instance = new AnalyticsBase('test_api_key', ApiEndpoints.BASE_URL, true);
   expect(() => instance.events(123 as unknown as string)).toThrow(

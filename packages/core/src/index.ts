@@ -352,10 +352,12 @@ export class CustomEvent {
     if (typeof value !== 'number')
       throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
-    if (value < 0 || this.get() - value < 0)
+    const currentValue = this._analytics.stats_data.customEvents[this._event_key] || 0;
+
+    if (value < 0 || currentValue - value < 0)
       throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
-    this._analytics.stats_data.customEvents[this._event_key] -= value;
+    this._analytics.stats_data.customEvents[this._event_key] = currentValue - value;
     this._last_action = 'decrement';
   }
 

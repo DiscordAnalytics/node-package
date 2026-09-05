@@ -115,3 +115,36 @@ test('api_call_with_retries should not retry on a 401 response', async () => {
   fetchSpy.mockRestore();
   consoleSpy.mockRestore();
 });
+
+test('should not double count the remote value when the same event key is requested concurrently', async () => {
+  vi.stubEnv('NODE_ENV', 'production');
+
+  const fetchMock = vi.fn(
+    () =>
+      new Promise<Response>((resolve) =>
+        setTimeout(
+          () => resolve(new Response(JSON.stringify({ currentValue: 5 }), { status: 200 })),
+          20,
+        ),
+      ),
+  );
+  vi.stubGlobal('fetch', fetchMock);
+
+  const instance = new AnalyticsBase('test_api_key', ApiEndpoints.BASE_URL, true);
+
+  // Simulates two concurrent event triggers, each doing
+  // `analytics.events('race_event').increment(1)`, before either instance's
+  // background fetch of the current server-side value has resolved.
+  const event1 = instance.events('race_event');
+  const event2 = instance.events('race_event');
+  event1.increment(1);
+  event2.increment(1);
+
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  expect(fetchMock).toHaveBeenCalledTimes(1);
+  expect(instance.stats_data.customEvents['race_event']).toBe(7);
+
+  vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
+});

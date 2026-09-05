@@ -236,6 +236,9 @@ export class AnalyticsBase {
   }
 }
 
+// Event keys, per AnalyticsBase instance, whose initial remote value fetch is in flight or done.
+const claimedEventFetches = new WeakMap<AnalyticsBase, Set<string>>();
+
 /**
  * CustomEvent class
  * @class CustomEvent
@@ -305,6 +308,14 @@ export class CustomEvent {
       typeof this._analytics.stats_data.customEvents[this._event_key] !== 'number' &&
       process.env.NODE_ENV === 'production'
     ) {
+      let claimedKeys = claimedEventFetches.get(this._analytics);
+      if (!claimedKeys) {
+        claimedKeys = new Set();
+        claimedEventFetches.set(this._analytics, claimedKeys);
+      }
+      if (claimedKeys.has(this._event_key)) return;
+      claimedKeys.add(this._event_key);
+
       this._analytics.debug(`[DISCORDANALYTICS] Fetching value for event ${this._event_key}`);
       const endpoint = ApiEndpoints.EVENT_URL.replace('{id}', this._analytics.client_id).replace(
         '{event}',
@@ -317,6 +328,9 @@ export class CustomEvent {
         this._analytics.stats_data.customEvents[this._event_key] =
           (this._analytics.stats_data.customEvents[this._event_key] || 0) +
           (data.currentValue || 0);
+      } else if (!(res instanceof Response)) {
+        // Fetch failed - release the claim so a later construction can retry.
+        claimedKeys.delete(this._event_key);
       }
       this._analytics.debug(`[DISCORDANALYTICS] Value fetched for event ${this._event_key}`);
     }

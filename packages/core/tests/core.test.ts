@@ -80,3 +80,38 @@ test('should update the added and removed guilds', () => {
   expect(instance.trackGuilds('create'));
   expect(instance.trackGuilds('delete'));
 });
+
+test('api_call_with_retries should retry on a transient error status and eventually succeed', async () => {
+  const instance = new AnalyticsBase('test_api_key', ApiEndpoints.BASE_URL, true);
+  const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const successResponse = new Response('ok', { status: 200 });
+  const fetchSpy = vi
+    .spyOn(globalThis, 'fetch')
+    .mockResolvedValueOnce(new Response('server error', { status: 500 }))
+    .mockResolvedValueOnce(successResponse);
+
+  const result = await instance.api_call_with_retries('GET', '/test', undefined, 5, 0);
+
+  expect(fetchSpy).toHaveBeenCalledTimes(2);
+  expect(result).toBe(successResponse);
+
+  fetchSpy.mockRestore();
+  consoleSpy.mockRestore();
+});
+
+test('api_call_with_retries should not retry on a 401 response', async () => {
+  const instance = new AnalyticsBase('test_api_key', ApiEndpoints.BASE_URL, true);
+  const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const fetchSpy = vi
+    .spyOn(globalThis, 'fetch')
+    .mockResolvedValue(new Response('unauthorized', { status: 401 }));
+
+  const result = await instance.api_call_with_retries('GET', '/test', undefined, 5, 0);
+
+  expect(fetchSpy).toHaveBeenCalledTimes(1);
+  expect(result).toBeUndefined();
+  expect(consoleSpy).toHaveBeenCalledWith(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_API_TOKEN}`);
+
+  fetchSpy.mockRestore();
+  consoleSpy.mockRestore();
+});

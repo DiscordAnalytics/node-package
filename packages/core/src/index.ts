@@ -159,10 +159,7 @@ export class AnalyticsBase {
           return this.error(`[DISCORDANALYTICS] ${ErrorCodes.SUSPENDED_BOT}`);
         else if (response.status === 404 && endpoint.match(/\/events\/.+/))
           return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENT_KEY}`, true);
-        else if (response.status !== 200)
-          return this.error(
-            `[DISCORDANALYTICS] ${ErrorCodes.INVALID_RESPONSE}\n${await response.text()}`,
-          );
+        else throw new Error(`${ErrorCodes.INVALID_RESPONSE}\n${await response.text()}`);
       } catch (error) {
         retries++;
         const retry_after = Math.pow(2, retries) * backoff_factor;

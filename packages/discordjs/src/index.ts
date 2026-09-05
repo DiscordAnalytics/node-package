@@ -96,13 +96,10 @@ export default class DiscordAnalytics extends AnalyticsBase {
             )?.reduce((a: number, b: number) => a + b, 0) || 0
           : this._client.guilds.cache.reduce((a: number, g) => a + (g.memberCount || 0), 0);
 
-        const userInstallCount = this._sharded
-          ? (
-              await this._client.shard?.broadcastEval(
-                (c) => c.application!.approximateUserInstallCount,
-              )
-            )?.reduce((a, b) => a! + b!, 0) || 0
-          : this._client.application!.approximateUserInstallCount || 0;
+        // approximateUserInstallCount describes the whole application, not a per-shard
+        // subset, so every shard reports the same value: read it once instead of
+        // summing it across shards via broadcastEval.
+        const userInstallCount = this._client.application!.approximateUserInstallCount || 0;
 
         const guildMembers: number[] = !this._sharded
           ? this._client.guilds.cache.map((guild) => guild.memberCount)

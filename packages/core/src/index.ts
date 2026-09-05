@@ -1,4 +1,4 @@
-import { ApiEndpoints, ErrorCodes, StatsData, TrackGuildType } from './types';
+import { ApiEndpoints, ErrorCodes, Locale, LocaleData, StatsData, TrackGuildType } from './types';
 
 /**
  * DiscordAnalytics Base Class
@@ -95,6 +95,20 @@ export class AnalyticsBase {
     else array.push(insert());
   }
 
+  /**
+   * Increment a locale's counter in a LocaleData array, inserting it with a count of 1 if absent.
+   * @param array The LocaleData array to update (e.g. stats_data.guildLocales)
+   * @param locale The locale to record
+   */
+  public trackLocale(array: LocaleData[], locale: string): void {
+    this.updateOrInsert(
+      array,
+      (x) => x.locale === locale,
+      (x) => x.number++,
+      (): LocaleData => ({ locale: locale as Locale, number: 1 }),
+    );
+  }
+
   public calculateGuildMembers(guildMembers: number[]): {
     little: number;
     medium: number;
@@ -159,10 +173,7 @@ export class AnalyticsBase {
           return this.error(`[DISCORDANALYTICS] ${ErrorCodes.SUSPENDED_BOT}`);
         else if (response.status === 404 && endpoint.match(/\/events\/.+/))
           return this.error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENT_KEY}`, true);
-        else if (response.status !== 200)
-          return this.error(
-            `[DISCORDANALYTICS] ${ErrorCodes.INVALID_RESPONSE}\n${await response.text()}`,
-          );
+        else throw new Error(`${ErrorCodes.INVALID_RESPONSE}\n${await response.text()}`);
       } catch (error) {
         retries++;
         const retry_after = Math.pow(2, retries) * backoff_factor;
@@ -180,6 +191,8 @@ export class AnalyticsBase {
     version: string,
     avatar: string | null,
   ): Promise<void> {
+    if (!this.client_id) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
+
     const endpoint = ApiEndpoints.EDIT_SETTINGS_URL.replace('{id}', this.client_id);
     const body = JSON.stringify({
       avatar,
@@ -239,6 +252,9 @@ export class AnalyticsBase {
   }
 }
 
+// Event keys, per AnalyticsBase instance, whose initial remote value fetch is in flight or done.
+const claimedEventFetches = new WeakMap<AnalyticsBase, Set<string>>();
+
 /**
  * CustomEvent class
  * @class CustomEvent
@@ -273,6 +289,8 @@ export class CustomEvent {
     defaultValue: number | null = null,
   ): Promise<void> {
     analytics.debug(`[DISCORDANALYTICS] Creating event ${eventKey}`);
+    if (!analytics.client_id) return analytics.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
+
     const endpoint = ApiEndpoints.EVENTS_URL.replace('{id}', analytics.client_id);
     const body = JSON.stringify({
       defaultValue,
@@ -289,6 +307,11 @@ export class CustomEvent {
    */
   public static async getEvents(analytics: AnalyticsBase): Promise<CustomEventData[]> {
     analytics.debug(`[DISCORDANALYTICS] Fetching events`);
+    if (!analytics.client_id) {
+      analytics.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
+      return [];
+    }
+
     const endpoint = ApiEndpoints.EVENTS_URL.replace('{id}', analytics.client_id);
     const res = await analytics.api_call_with_retries('GET', endpoint);
     if (res instanceof Response) return await res.json();
@@ -308,6 +331,14 @@ export class CustomEvent {
       typeof this._analytics.stats_data.customEvents[this._event_key] !== 'number' &&
       process.env.NODE_ENV === 'production'
     ) {
+      let claimedKeys = claimedEventFetches.get(this._analytics);
+      if (!claimedKeys) {
+        claimedKeys = new Set();
+        claimedEventFetches.set(this._analytics, claimedKeys);
+      }
+      if (claimedKeys.has(this._event_key)) return;
+      claimedKeys.add(this._event_key);
+
       this._analytics.debug(`[DISCORDANALYTICS] Fetching value for event ${this._event_key}`);
       const endpoint = ApiEndpoints.EVENT_URL.replace('{id}', this._analytics.client_id).replace(
         '{event}',
@@ -320,6 +351,9 @@ export class CustomEvent {
         this._analytics.stats_data.customEvents[this._event_key] =
           (this._analytics.stats_data.customEvents[this._event_key] || 0) +
           (data.currentValue || 0);
+      } else if (!(res instanceof Response)) {
+        // Fetch failed - release the claim so a later construction can retry.
+        claimedKeys.delete(this._event_key);
       }
       this._analytics.debug(`[DISCORDANALYTICS] Value fetched for event ${this._event_key}`);
     }
@@ -352,10 +386,12 @@ export class CustomEvent {
     if (typeof value !== 'number')
       throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_VALUE_TYPE}`);
 
-    if (value < 0 || this.get() - value < 0)
+    const currentValue = this._analytics.stats_data.customEvents[this._event_key] || 0;
+
+    if (value < 0 || currentValue - value < 0)
       throw new Error(`[DISCORDANALYTICS] ${ErrorCodes.INVALID_EVENTS_COUNT}`);
 
-    this._analytics.stats_data.customEvents[this._event_key] -= value;
+    this._analytics.stats_data.customEvents[this._event_key] = currentValue - value;
     this._last_action = 'decrement';
   }
 

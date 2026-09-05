@@ -6,8 +6,8 @@ import {
   LocaleData,
   InteractionData,
   GuildData,
-  Locale,
   ApplicationCommandType,
+  PermissionBits,
 } from '@discordanalytics/core';
 import { InteractionTypes, type AnyInteractionGateway, type Client } from 'oceanic.js';
 import npmPackageData from '../package.json';
@@ -55,11 +55,9 @@ export default class DiscordAnalytics extends AnalyticsBase {
    * /!\ Must be used when the client is ready (recommended to use in ready event to prevent problems)
    */
   public async init(): Promise<void> {
-    if (process.env.NODE_ENV !== 'production')
-      return console.log("[DISCORDANALYTICS] NODE_ENV != 'production', initialization skipped");
+    if (process.env.NODE_ENV !== 'production') return this.error(ErrorCodes.NOT_PRODUCTION_ENV);
 
-    if (!this._client.user)
-      return console.log('[DISCORDANALYTICS] client is not ready, initialization skipped');
+    if (!this._client.user) return this.error(ErrorCodes.CLIENT_NOT_READY);
 
     this.client_id = this._client.user.id;
 
@@ -90,9 +88,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
 
         const guildLocales: LocaleData[] = [];
         this._client.guilds.map((current) =>
-          guildLocales.find((x) => x.locale === current.preferredLocale)
-            ? ++guildLocales.find((x) => x.locale === current.preferredLocale)!.number
-            : guildLocales.push({ locale: current.preferredLocale as Locale, number: 1 }),
+          this.trackLocale(guildLocales, current.preferredLocale),
         );
 
         this.stats_data.guildLocales = guildLocales;
@@ -123,19 +119,7 @@ export default class DiscordAnalytics extends AnalyticsBase {
     this.debug('[DISCORDANALYTICS] trackInteractions() triggered');
     if (!this._isReady) return this.error(ErrorCodes.INSTANCE_NOT_INITIALIZED);
 
-    this.updateOrInsert(
-      this.stats_data.guildLocales,
-      (x) => x.locale === interaction.guildLocale,
-      (x) => x.number++,
-      (): LocaleData => ({ locale: interaction.guildLocale as Locale, number: 1 }),
-    );
-
-    this.updateOrInsert(
-      this.stats_data.interactionsLocales,
-      (x) => x.locale === interaction.locale,
-      (x) => x.number++,
-      (): LocaleData => ({ locale: interaction.locale as Locale, number: 1 }),
-    );
+    this.trackLocale(this.stats_data.interactionsLocales, interaction.locale);
 
     if (interaction.type === InteractionTypes.APPLICATION_COMMAND) {
       const commandType = interaction.data.type;
@@ -198,18 +182,19 @@ export default class DiscordAnalytics extends AnalyticsBase {
     else if (
       interaction.member &&
       interaction.memberPermissions &&
-      (interaction.memberPermissions.has(8n) || interaction.memberPermissions.has(32n))
+      (interaction.memberPermissions.has(PermissionBits.ADMINISTRATOR) ||
+        interaction.memberPermissions.has(PermissionBits.MANAGE_GUILD))
     )
       ++this.stats_data.usersType.admin;
     else if (
       interaction.member &&
       interaction.memberPermissions &&
-      (interaction.memberPermissions.has(8192n) ||
-        interaction.memberPermissions.has(2n) ||
-        interaction.memberPermissions.has(4194304n) ||
-        interaction.memberPermissions.has(8388608n) ||
-        interaction.memberPermissions.has(16777216n) ||
-        interaction.memberPermissions.has(1099511627776n))
+      (interaction.memberPermissions.has(PermissionBits.MANAGE_MESSAGES) ||
+        interaction.memberPermissions.has(PermissionBits.KICK_MEMBERS) ||
+        interaction.memberPermissions.has(PermissionBits.MUTE_MEMBERS) ||
+        interaction.memberPermissions.has(PermissionBits.DEAFEN_MEMBERS) ||
+        interaction.memberPermissions.has(PermissionBits.MOVE_MEMBERS) ||
+        interaction.memberPermissions.has(PermissionBits.MODERATE_MEMBERS))
     )
       ++this.stats_data.usersType.moderator;
     else if (

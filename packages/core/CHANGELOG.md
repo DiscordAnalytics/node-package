@@ -1,3 +1,16 @@
+## @discordanalytics/core [2.10.1](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/core@2.10.0...@discordanalytics/core@2.10.1) (2026-09-14)
+
+
+### Bug Fixes
+
+* **core:** dedupe concurrent CustomEvent fetches for the same key ([14af86d](https://github.com/DiscordAnalytics/node-package/commit/14af86d0232373576eb56c7c9df20b23437cbdb8))
+* **core:** guard client_id use before init is called ([1d7bf72](https://github.com/DiscordAnalytics/node-package/commit/1d7bf7245b6e2bf7689848b6464f7db5b3e6786b))
+* **core:** retry transient HTTP failures in api_call_with_retries ([0b82d05](https://github.com/DiscordAnalytics/node-package/commit/0b82d05042fc3cf74bc7ffccebe0c59d21d17684))
+* **core:** sync package.json version with published 2.10.0 release ([bb5894c](https://github.com/DiscordAnalytics/node-package/commit/bb5894c5393460a601b50bb94208727df801e7b1))
+* **core:** treat unset custom event as zero before decrementing ([b2cde8c](https://github.com/DiscordAnalytics/node-package/commit/b2cde8c15ed2ef1121aa3192d095c3fa81d2e0c1))
+* **logging:** route init() bail-out messages through error() instead of console.log ([4736c71](https://github.com/DiscordAnalytics/node-package/commit/4736c71155384f92362866ae8f7df47896375087))
+* reliability and data-integrity issues across core/discordjs/oceanic ([#390](https://github.com/DiscordAnalytics/node-package/issues/390)) ([1e25413](https://github.com/DiscordAnalytics/node-package/commit/1e2541304b0e0de3a1940f7b02984242ee67cb55))
+
 # @discordanalytics/core [2.10.0](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/core@2.9.1...@discordanalytics/core@2.10.0) (2026-07-09)
 
 

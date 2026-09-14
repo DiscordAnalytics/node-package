@@ -1,6 +1,6 @@
 {
   "name": "@discordanalytics/discordjs",
-  "version": "2.9.2",
+  "version": "2.9.3",
   "description": "Discord.js package for working with Discord Analytics",
   "license": "LGPL-2.1-only",
   "files": [
@@ -38,7 +38,7 @@
     "build": "tsdown"
   },
   "dependencies": {
-    "@discordanalytics/core": "2.10.0"
+    "@discordanalytics/core": "2.10.1"
   },
   "devDependencies": {
     "discord.js": "14.27.0",

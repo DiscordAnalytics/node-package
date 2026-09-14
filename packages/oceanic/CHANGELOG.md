@@ -1,3 +1,17 @@
+## @discordanalytics/oceanic [2.9.3](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/oceanic@2.9.2...@discordanalytics/oceanic@2.9.3) (2026-09-14)
+
+
+### Bug Fixes
+
+* **logging:** route init() bail-out messages through error() instead of console.log ([4736c71](https://github.com/DiscordAnalytics/node-package/commit/4736c71155384f92362866ae8f7df47896375087))
+* **oceanic:** stop overwriting guildLocales stats on every interaction ([b8fae85](https://github.com/DiscordAnalytics/node-package/commit/b8fae855fb3a5104a3af61df0a7a4c75998c3287))
+* reliability and data-integrity issues across core/discordjs/oceanic ([#390](https://github.com/DiscordAnalytics/node-package/issues/390)) ([1e25413](https://github.com/DiscordAnalytics/node-package/commit/1e2541304b0e0de3a1940f7b02984242ee67cb55))
+
+
+### Dependencies
+
+* **@discordanalytics/core:** upgraded to 2.10.1
+
 ## @discordanalytics/oceanic [2.9.2](https://github.com/DiscordAnalytics/node-package/compare/@discordanalytics/oceanic@2.9.1...@discordanalytics/oceanic@2.9.2) (2026-07-09)
 
 

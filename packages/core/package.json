@@ -37,7 +37,7 @@
     "build": "tsdown"
   },
   "devDependencies": {
-    "@types/node": "22.15.2",
+    "@types/node": "22.20.2",
     "tsdown": "0.23.0",
     "typescript": "6.0.3"
   }

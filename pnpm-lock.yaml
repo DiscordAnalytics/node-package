@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@anolilab/multi-semantic-release':
-        specifier: 4.4.13
-        version: 4.4.13(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
+        specifier: 4.4.14
+        version: 4.4.14(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
         specifier: 8.1.23
         version: 8.1.23(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)
@@ -75,8 +75,8 @@ importers:
   packages/discordjs:
     dependencies:
       '@discordanalytics/core':
-        specifier: 2.10.0
-        version: 2.10.0
+        specifier: 2.10.1
+        version: 2.10.1
     devDependencies:
       discord.js:
         specifier: 14.27.0
@@ -91,8 +91,8 @@ importers:
   packages/oceanic:
     dependencies:
       '@discordanalytics/core':
-        specifier: 2.10.0
-        version: 2.10.0
+        specifier: 2.10.1
+        version: 2.10.1
     devDependencies:
       oceanic.js:
         specifier: 1.15.0
@@ -118,8 +118,8 @@ packages:
   '@actions/io@3.0.2':
     resolution: {integrity: sha512-nRBchcMM+QK1pdjO7/idu86rbJI5YHUKCvKs0KxnSYbVe3F51UfGxuZX4Qy/fWlp6l7gWFwIkrOzN+oUK03kfw==}
 
-  '@anolilab/multi-semantic-release@4.4.13':
-    resolution: {integrity: sha512-gw9MMDamaK1YalOnn2e54w1NJU+Su3pVd6/4KMprBkt1w8TUsjooANJ9aIVPPl6lzJwQU0ALs8xVG8+ee4vv9A==}
+  '@anolilab/multi-semantic-release@4.4.14':
+    resolution: {integrity: sha512-VB+8aBfNUuzjrGLl3uTYb/EbTSpzRZFtVSSKvxtA3Fi/pqgWB0n6BUHsn4PSZgr7FbLVvxSUZmY7LZaKYYa4XA==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
     hasBin: true
@@ -172,8 +172,8 @@ packages:
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
 
-  '@discordanalytics/core@2.10.0':
-    resolution: {integrity: sha512-Ns9hPBRqPKGtD2+GLutRahghUqbZZLHS43EwkbxPRriJki1wCuZSo5Ih2C5DkSrmqP0fyl0yYbJaY/tFfnhDQg==}
+  '@discordanalytics/core@2.10.1':
+    resolution: {integrity: sha512-/1o7eSV9cSeVj1ihX8CiYocuiBEofot9akSQlyL/RoQQA5mgx1YDI3FhmWwQIiNBbNkiSZ4SjuI/P7LaWqRl9A==}
 
   '@discordjs/builders@1.14.1':
     resolution: {integrity: sha512-gSKkhXLqs96TCzk66VZuHHl8z2bQMJFGwrXC0f33ngK+FLNau4hU1PYny3DNJfNdSH+gVMzE85/d5FQ2BpcNwQ==}
@@ -2778,7 +2778,7 @@ snapshots:
 
   '@actions/io@3.0.2': {}
 
-  '@anolilab/multi-semantic-release@4.4.13(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
+  '@anolilab/multi-semantic-release@4.4.14(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
     dependencies:
       '@semrel-extra/topo': 1.14.1
       '@visulima/fs': 5.1.0(ini@7.0.0)(json5@2.2.3)(yaml@2.9.0)
@@ -2872,7 +2872,7 @@ snapshots:
   '@colors/colors@1.5.0':
     optional: true
 
-  '@discordanalytics/core@2.10.0': {}
+  '@discordanalytics/core@2.10.1': {}
 
   '@discordjs/builders@1.14.1':
     dependencies:

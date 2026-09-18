@@ -12,8 +12,8 @@ importers:
         specifier: 4.4.15
         version: 4.4.15(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
-        specifier: 8.1.24
-        version: 8.1.24(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)
+        specifier: 8.1.25
+        version: 8.1.25(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)
       '@semantic-release/changelog':
         specifier: 7.0.0
         version: 7.0.0(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))
@@ -130,8 +130,8 @@ packages:
     resolution: {integrity: sha512-e3KBrm9Fr2xCmSyKc17cWyL6jOwHJWciiSb6FbRveAmykn0vwYQT1Bf4BJNkuEhCUXNsJL1aN70czA5atzlGzw==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
-  '@anolilab/semantic-release-pnpm@8.1.24':
-    resolution: {integrity: sha512-CPPy5IfydogRG+iFKvyhP1QqSmN6YTv2d8wW2eLWNs0wfms4XF9fkbDlft/cKw+ET9UPBgtuorjQTW1oFdS40g==}
+  '@anolilab/semantic-release-pnpm@8.1.25':
+    resolution: {integrity: sha512-BwuelGC5KA6Q9wZlsRd1+jN31KLH37R4Pu4lciwuFOAlCQ2awUzqJgE0GbJz9b+rJ5oOARfuJn4llu+0ePFWxA==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
   '@antfu/install-pkg@2.1.0':
@@ -2838,7 +2838,7 @@ snapshots:
       ini: 7.0.0
       ts-deepmerge: 8.0.0
 
-  '@anolilab/semantic-release-pnpm@8.1.24(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)':
+  '@anolilab/semantic-release-pnpm@8.1.25(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.0)':
     dependencies:
       '@actions/core': 3.0.1
       '@anolilab/rc': 4.0.9

@@ -12,8 +12,8 @@ importers:
         specifier: 4.4.23
         version: 4.4.23(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
-        specifier: 8.1.31
-        version: 8.1.31(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)
+        specifier: 8.1.32
+        version: 8.1.32(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)
       '@semantic-release/changelog':
         specifier: 7.0.0
         version: 7.0.0(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))
@@ -130,8 +130,8 @@ packages:
     resolution: {integrity: sha512-e3KBrm9Fr2xCmSyKc17cWyL6jOwHJWciiSb6FbRveAmykn0vwYQT1Bf4BJNkuEhCUXNsJL1aN70czA5atzlGzw==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
-  '@anolilab/semantic-release-pnpm@8.1.31':
-    resolution: {integrity: sha512-GLPt0ND58mrRdu91DY9RbprXUgZaYirmdO+10WjbI8P4zF8cJLW8RDAR5cIzeG5itAGUzgaH4Mtk0e1xC4D8cQ==}
+  '@anolilab/semantic-release-pnpm@8.1.32':
+    resolution: {integrity: sha512-WPHFn44USBTtbKcnI/fOTYUeCSOYCYQ4v0IzCg0k5OMQGFlc3EUPEW2Ouic8w6cJSVlqnS2x7JEVtRd7gtq1Xg==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
   '@antfu/install-pkg@2.1.0':
@@ -760,8 +760,8 @@ packages:
       yaml:
         optional: true
 
-  '@visulima/fs@6.0.8':
-    resolution: {integrity: sha512-BoVsr9dMAXrC9kjKUxPCblf5fVmbVNVIFdeVpJlUJmjj+lnC72ouHyHoS0KkWuDtQI01Of7rl1ArHCE3ppl+ew==}
+  '@visulima/fs@6.0.18':
+    resolution: {integrity: sha512-9i1ylvVpKwowZusVxFzD8BTNGbHdWfzC3mTqID8vrcvV5FQ5cHSu12tCa/33EdrxBM/N2iQrkrtyik2iCq9ddQ==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
     peerDependencies:
@@ -782,8 +782,8 @@ packages:
       smol-toml:
         optional: true
 
-  '@visulima/package@5.0.21':
-    resolution: {integrity: sha512-YX//NFvxxhSNZDKPVenbbcvWvEp+O9TKPp0MQNsU5IFhy4gIYJRKaYJa3P/OOEYYvd3MB12hbRwFO6Xbb5oOhQ==}
+  '@visulima/package@5.0.31':
+    resolution: {integrity: sha512-hth405IWJe+oikG46T0H5lwDsjkvCpLNjwVPZ+/Anct9/amDQ5Xzbv8MC4mGMuygjiPzv8eJ5OMn5M7U+YhpQQ==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
 
@@ -2837,13 +2837,13 @@ snapshots:
       ini: 7.0.0
       ts-deepmerge: 8.0.0
 
-  '@anolilab/semantic-release-pnpm@8.1.31(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)':
+  '@anolilab/semantic-release-pnpm@8.1.32(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)':
     dependencies:
       '@actions/core': 3.0.1
       '@anolilab/rc': 4.0.9
       '@semantic-release/error': 4.0.0
       '@visulima/fs': 5.1.0(ini@7.0.0)(json5@2.2.3)(yaml@2.9.1)
-      '@visulima/package': 5.0.21(ini@7.0.0)
+      '@visulima/package': 5.0.31(ini@7.0.0)
       '@visulima/path': 3.1.0
       debug: 4.4.3(supports-color@7.2.0)
       detect-indent: 7.0.2
@@ -3529,17 +3529,17 @@ snapshots:
       json5: 2.2.3
       yaml: 2.9.1
 
-  '@visulima/fs@6.0.8(ini@7.0.0)(json5@2.2.3)':
+  '@visulima/fs@6.0.18(ini@7.0.0)(json5@2.2.3)':
     dependencies:
       '@visulima/path': 4.0.0
     optionalDependencies:
       ini: 7.0.0
       json5: 2.2.3
 
-  '@visulima/package@5.0.21(ini@7.0.0)':
+  '@visulima/package@5.0.31(ini@7.0.0)':
     dependencies:
       '@antfu/install-pkg': 2.1.0
-      '@visulima/fs': 6.0.8(ini@7.0.0)(json5@2.2.3)
+      '@visulima/fs': 6.0.18(ini@7.0.0)(json5@2.2.3)
       '@visulima/path': 4.0.0
       json5: 2.2.3
       normalize-package-data: 9.0.0

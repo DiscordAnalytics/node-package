@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@anolilab/multi-semantic-release':
-        specifier: 4.4.23
-        version: 4.4.23(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
+        specifier: 4.4.24
+        version: 4.4.24(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
         specifier: 8.1.32
         version: 8.1.32(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)
@@ -118,8 +118,8 @@ packages:
   '@actions/io@3.0.2':
     resolution: {integrity: sha512-nRBchcMM+QK1pdjO7/idu86rbJI5YHUKCvKs0KxnSYbVe3F51UfGxuZX4Qy/fWlp6l7gWFwIkrOzN+oUK03kfw==}
 
-  '@anolilab/multi-semantic-release@4.4.23':
-    resolution: {integrity: sha512-tXie/iVGNAYXLDTwM5wZm4PaBeTrXKzvvRH/qQV6mQvNYdmFaD9csAglfzWCGCDx+OAk4MjrgiBopaK1gYZXhA==}
+  '@anolilab/multi-semantic-release@4.4.24':
+    resolution: {integrity: sha512-PQ3GKNtT3pP6hRZqp59t1bSdLo+HjcQjUlniqvVEMW2Im1t2/KpTASxBP0lA98DYGIA+U0/Sqh6zLS9sYbD3aw==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
     hasBin: true
@@ -1275,6 +1275,10 @@ packages:
 
   execa@10.0.1:
     resolution: {integrity: sha512-ge98qjkRK4IB7tL7Ju/6qmm5LHoH1eEMt5FNZrz3f4UIYhF28lggX20z3FaX1sgc67msLEn0N0BscOs29iuwyw==}
+    engines: {node: '>=22'}
+
+  execa@10.1.1:
+    resolution: {integrity: sha512-yJAC9ulsE6fU0K6wzJBIH+wI+KAtMeu6Ck8rs23OVzvEhqXjGADdI6K+YNIDAjcQQ6AwXTD96cKExJo6xFJXyg==}
     engines: {node: '>=22'}
 
   execa@8.0.1:
@@ -2755,7 +2759,7 @@ snapshots:
 
   '@actions/io@3.0.2': {}
 
-  '@anolilab/multi-semantic-release@4.4.23(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
+  '@anolilab/multi-semantic-release@4.4.24(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
     dependencies:
       '@semrel-extra/topo': 1.14.1
       '@visulima/fs': 5.1.0(ini@7.0.0)(json5@2.2.3)(yaml@2.9.1)
@@ -2763,7 +2767,7 @@ snapshots:
       cosmiconfig: 10.0.1
       debug: 4.4.3(supports-color@7.2.0)
       detect-indent: 7.0.2
-      execa: 10.0.1
+      execa: 10.1.1
       git-log-parser: 1.2.1
       lodash-es: 4.18.1
       resolve-from: 5.0.0
@@ -3938,6 +3942,21 @@ snapshots:
   esutils@2.0.3: {}
 
   execa@10.0.1:
+    dependencies:
+      '@sindresorhus/merge-streams': 4.0.0
+      figures: 6.1.0
+      get-stream: 9.0.1
+      human-signals: 8.0.1
+      is-plain-obj: 4.1.0
+      is-stream: 4.0.1
+      npm-run-path: 6.0.0
+      pretty-ms: 9.3.1
+      signal-exit: 4.1.0
+      strip-final-newline: 4.0.0
+      which-command: 0.1.0
+      yoctocolors: 2.2.0
+
+  execa@10.1.1:
     dependencies:
       '@sindresorhus/merge-streams': 4.0.0
       figures: 6.1.0

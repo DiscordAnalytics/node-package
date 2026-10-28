@@ -12,8 +12,8 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
-        specifier: 8.1.35
-        version: 8.1.35(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)
+        specifier: 8.1.36
+        version: 8.1.36(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)
       '@semantic-release/changelog':
         specifier: 7.0.0
         version: 7.0.0(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))
@@ -130,8 +130,8 @@ packages:
     resolution: {integrity: sha512-e3KBrm9Fr2xCmSyKc17cWyL6jOwHJWciiSb6FbRveAmykn0vwYQT1Bf4BJNkuEhCUXNsJL1aN70czA5atzlGzw==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
-  '@anolilab/semantic-release-pnpm@8.1.35':
-    resolution: {integrity: sha512-vVj4uK19ngCqglz3b9mMz1/CKzBfjVYZ/VOfl0WVoPC3I3HFar6TdPLcau3fABCHnADQyVSiQ80gf6/4dTeCoA==}
+  '@anolilab/semantic-release-pnpm@8.1.36':
+    resolution: {integrity: sha512-oPvhZuZ0YlKUSLBpcGvqtmVp61cAXXo0pYUNT3gKF6QE3oCSMy2kLvHDoSGxm6qEcpK2F8VRF5FLXAjcBu10cw==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
   '@antfu/install-pkg@2.1.0':
@@ -1282,10 +1282,6 @@ packages:
 
   execa@10.0.1:
     resolution: {integrity: sha512-ge98qjkRK4IB7tL7Ju/6qmm5LHoH1eEMt5FNZrz3f4UIYhF28lggX20z3FaX1sgc67msLEn0N0BscOs29iuwyw==}
-    engines: {node: '>=22'}
-
-  execa@10.1.1:
-    resolution: {integrity: sha512-yJAC9ulsE6fU0K6wzJBIH+wI+KAtMeu6Ck8rs23OVzvEhqXjGADdI6K+YNIDAjcQQ6AwXTD96cKExJo6xFJXyg==}
     engines: {node: '>=22'}
 
   execa@10.2.1:
@@ -2788,7 +2784,7 @@ snapshots:
       ini: 7.0.0
       ts-deepmerge: 8.0.0
 
-  '@anolilab/semantic-release-pnpm@8.1.35(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)':
+  '@anolilab/semantic-release-pnpm@8.1.36(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)':
     dependencies:
       '@actions/core': 3.0.1
       '@anolilab/rc': 4.0.9
@@ -2799,7 +2795,7 @@ snapshots:
       debug: 4.4.3(supports-color@7.2.0)
       detect-indent: 7.0.2
       env-ci: 11.2.0
-      execa: 10.1.1
+      execa: 10.2.1
       ini: 7.0.0
       normalize-url: 9.0.1
       registry-auth-token: 5.1.1
@@ -3944,21 +3940,6 @@ snapshots:
   esutils@2.0.3: {}
 
   execa@10.0.1:
-    dependencies:
-      '@sindresorhus/merge-streams': 4.0.0
-      figures: 6.1.0
-      get-stream: 9.0.1
-      human-signals: 8.0.1
-      is-plain-obj: 4.1.0
-      is-stream: 4.0.1
-      npm-run-path: 6.0.0
-      pretty-ms: 9.3.1
-      signal-exit: 4.1.0
-      strip-final-newline: 4.0.0
-      which-command: 0.1.0
-      yoctocolors: 2.2.0
-
-  execa@10.1.1:
     dependencies:
       '@sindresorhus/merge-streams': 4.0.0
       figures: 6.1.0

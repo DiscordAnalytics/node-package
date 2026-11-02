@@ -79,8 +79,8 @@ importers:
         version: 2.10.1
     devDependencies:
       discord.js:
-        specifier: 14.27.0
-        version: 14.27.0
+        specifier: 14.28.0
+        version: 14.28.0
       tsdown:
         specifier: 0.23.4
         version: 0.23.4(typescript@6.0.3)
@@ -175,8 +175,8 @@ packages:
   '@discordanalytics/core@2.10.1':
     resolution: {integrity: sha512-/1o7eSV9cSeVj1ihX8CiYocuiBEofot9akSQlyL/RoQQA5mgx1YDI3FhmWwQIiNBbNkiSZ4SjuI/P7LaWqRl9A==}
 
-  '@discordjs/builders@1.14.1':
-    resolution: {integrity: sha512-gSKkhXLqs96TCzk66VZuHHl8z2bQMJFGwrXC0f33ngK+FLNau4hU1PYny3DNJfNdSH+gVMzE85/d5FQ2BpcNwQ==}
+  '@discordjs/builders@1.15.0':
+    resolution: {integrity: sha512-AifaDWTw6WUDhKBn8E6mwwoyjDAcfsYq+ZE0nKSu1dMH1NLR22D3hGkNx+ctEv8NqHEHdAZnP5REteHDmn1lkA==}
     engines: {node: '>=16.11.0'}
 
   '@discordjs/collection@1.5.3':
@@ -670,9 +670,6 @@ packages:
   '@types/node@22.20.2':
     resolution: {integrity: sha512-xlvWf4Vs9n1PEVYwP1n4vvG07M6y8WgvJ2t0vbrWTmijsIHp1cS+uJ2kMIRdY3nHZK0nCYKrPeD171+SzF4/zw==}
 
-  '@types/node@25.9.5':
-    resolution: {integrity: sha512-OScDchr2fwuUmWdf4kZ9h7PcJiYDVInhJizG/biAq3cAvqwYktuy/TYGGdZNMtNTFUP7rnb0NU4TUdm82kt4Rg==}
-
   '@types/node@25.9.9':
     resolution: {integrity: sha512-b4e2xxj/yMeT2hNlD6x7zNFiQK2Dlmkb9CQ6v3/1G2RezKN4YS2lcEv8lzGm1mhs4f2lM4yNAMI/zUDBZBBt7w==}
 
@@ -1144,8 +1141,8 @@ packages:
   discord-api-types@0.38.55:
     resolution: {integrity: sha512-ytuaRTzdnHUCXJ6KjL9MrItQX0xKncBKEeYI1Bst4+ud47eejH3cG6gaesYakjpPcUhh68XYS2YwGq3mmujFsA==}
 
-  discord.js@14.27.0:
-    resolution: {integrity: sha512-qHbFlFG2N7y3LjPySYsL6A1+BnX6bkTVgo842EX0CqVPk/KTMwZkojPHEXKsQUpWZNyz5BISNHK1cPpQw0+m4A==}
+  discord.js@14.28.0:
+    resolution: {integrity: sha512-l/mIllvqvWQDWqa8NPw7b2AU2tM9oPWiWR6Jk54DTNlUdyArXbi+Y0m0sLIUtQ9O0x+tyVpDMCG6K6Kf0yeAWQ==}
     engines: {node: '>=18'}
 
   dot-prop@5.3.0:
@@ -2852,7 +2849,7 @@ snapshots:
 
   '@discordanalytics/core@2.10.1': {}
 
-  '@discordjs/builders@1.14.1':
+  '@discordjs/builders@1.15.0':
     dependencies:
       '@discordjs/formatters': 0.6.2
       '@discordjs/util': 1.2.0
@@ -3366,10 +3363,6 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/node@25.9.5':
-    dependencies:
-      undici-types: 7.24.6
-
   '@types/node@25.9.9':
     dependencies:
       undici-types: 7.24.6
@@ -3378,7 +3371,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 25.9.5
+      '@types/node': 25.9.9
 
   '@typescript-eslint/eslint-plugin@8.72.1(@typescript-eslint/parser@8.72.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)':
     dependencies:
@@ -3796,9 +3789,9 @@ snapshots:
 
   discord-api-types@0.38.55: {}
 
-  discord.js@14.27.0:
+  discord.js@14.28.0:
     dependencies:
-      '@discordjs/builders': 1.14.1
+      '@discordjs/builders': 1.15.0
       '@discordjs/collection': 1.5.3
       '@discordjs/formatters': 0.6.2
       '@discordjs/rest': 2.6.3

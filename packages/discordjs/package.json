@@ -41,7 +41,7 @@
     "@discordanalytics/core": "2.10.1"
   },
   "devDependencies": {
-    "discord.js": "14.27.0",
+    "discord.js": "14.28.0",
     "tsdown": "0.23.4",
     "typescript": "6.0.3"
   },

@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@anolilab/multi-semantic-release':
-        specifier: 4.6.1
-        version: 4.6.1(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
+        specifier: 4.6.2
+        version: 4.6.2(@visulima/yaml@1.0.0)(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
         specifier: 8.1.36
         version: 8.1.36(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)
@@ -118,8 +118,8 @@ packages:
   '@actions/io@3.0.2':
     resolution: {integrity: sha512-nRBchcMM+QK1pdjO7/idu86rbJI5YHUKCvKs0KxnSYbVe3F51UfGxuZX4Qy/fWlp6l7gWFwIkrOzN+oUK03kfw==}
 
-  '@anolilab/multi-semantic-release@4.6.1':
-    resolution: {integrity: sha512-a901zDHLGG6ain4BfTwPQFESDlwSogUCAwlZhWMU873szvvCw60rhGH5Po7RXMlBG/uu06RCMcSxJKcYQX6PMQ==}
+  '@anolilab/multi-semantic-release@4.6.2':
+    resolution: {integrity: sha512-QMWoTrk9pXxs5rqZsNTgd2SqLu50kmbuREESbnhcpiyTWzlfYzfaC/ig7m5My8NXyzpAQtueGGjnRrsvBeolXQ==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
     hasBin: true
@@ -782,6 +782,28 @@ packages:
       smol-toml:
         optional: true
 
+  '@visulima/fs@7.0.0':
+    resolution: {integrity: sha512-6XPkHW+d4t8jZjXl7a9r7DjvoMPjbzVbQVklmHQmvDYaSAYX5jEpBrAL4ZpuS9voSw2Mfzj8cccaZuGcMZYkyA==}
+    engines: {node: ^22.14.0 || >=24.10.0}
+    os: [darwin, linux, win32]
+    peerDependencies:
+      '@visulima/yaml': 2.0.0
+      ini: ^7.0.0
+      json5: ^2.2.3
+      jsonc-parser: ^3.3.1
+      smol-toml: ^1.8.1
+    peerDependenciesMeta:
+      '@visulima/yaml':
+        optional: true
+      ini:
+        optional: true
+      json5:
+        optional: true
+      jsonc-parser:
+        optional: true
+      smol-toml:
+        optional: true
+
   '@visulima/package@5.0.43':
     resolution: {integrity: sha512-4uGq87bp1ZJ751bMomGx3njMrpOoGcgMer8BZxejRHZSvd9Sm4iVna59yCqxp/Ikx9E8kmFgbGjDWGrvgEJiKw==}
     engines: {node: ^22.14.0 || >=24.10.0}
@@ -794,6 +816,11 @@ packages:
 
   '@visulima/path@4.0.0':
     resolution: {integrity: sha512-M9cTzZNtTbOl975YAgUzzzwg9xOMqqC2Y2Jy1uFDQufK0sBNgbFnvR0o14jIfNDxACXyhEN3DSuFa4W7U7Hf2g==}
+    engines: {node: ^22.14.0 || >=24.10.0}
+    os: [darwin, linux, win32]
+
+  '@visulima/path@5.0.0':
+    resolution: {integrity: sha512-4OBtMLJYmAWPHMxqpC2yijvdq1DLyX8aiG5H/qQLBHaeh7H2vCDGamXGA3hi9zvcA7NULAXpgLjQIHHgt5p1eQ==}
     engines: {node: ^22.14.0 || >=24.10.0}
     os: [darwin, linux, win32]
 
@@ -1144,6 +1171,7 @@ packages:
   discord.js@14.28.0:
     resolution: {integrity: sha512-l/mIllvqvWQDWqa8NPw7b2AU2tM9oPWiWR6Jk54DTNlUdyArXbi+Y0m0sLIUtQ9O0x+tyVpDMCG6K6Kf0yeAWQ==}
     engines: {node: '>=18'}
+    deprecated: Please upgrade to 14.28.1 or newer as those versions solve a potential security issue related to the new permission fields on channels
 
   dot-prop@5.3.0:
     resolution: {integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==}
@@ -2753,10 +2781,10 @@ snapshots:
 
   '@actions/io@3.0.2': {}
 
-  '@anolilab/multi-semantic-release@4.6.1(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
+  '@anolilab/multi-semantic-release@4.6.2(@visulima/yaml@1.0.0)(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
     dependencies:
       '@semrel-extra/topo': 1.14.1
-      '@visulima/fs': 5.1.0(ini@7.0.0)(json5@2.2.3)(yaml@2.9.1)
+      '@visulima/fs': 7.0.0(@visulima/yaml@1.0.0)(ini@7.0.0)(json5@2.2.3)
       '@visulima/path': 3.1.0
       cosmiconfig: 10.0.1
       debug: 4.4.3(supports-color@7.2.0)
@@ -2772,6 +2800,7 @@ snapshots:
       yaml: 2.9.1
       yargs: 18.2.0
     transitivePeerDependencies:
+      - '@visulima/yaml'
       - ini
       - json5
       - jsonc-parser
@@ -3480,6 +3509,14 @@ snapshots:
       ini: 7.0.0
       json5: 2.2.3
 
+  '@visulima/fs@7.0.0(@visulima/yaml@1.0.0)(ini@7.0.0)(json5@2.2.3)':
+    dependencies:
+      '@visulima/path': 5.0.0
+    optionalDependencies:
+      '@visulima/yaml': 1.0.0
+      ini: 7.0.0
+      json5: 2.2.3
+
   '@visulima/package@5.0.43(ini@7.0.0)':
     dependencies:
       '@antfu/install-pkg': 2.1.0
@@ -3496,6 +3533,8 @@ snapshots:
   '@visulima/path@3.1.0': {}
 
   '@visulima/path@4.0.0': {}
+
+  '@visulima/path@5.0.0': {}
 
   '@visulima/yaml@1.0.0': {}
 

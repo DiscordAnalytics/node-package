@@ -12,8 +12,8 @@ importers:
         specifier: 4.6.2
         version: 4.6.2(@visulima/yaml@1.0.0)(ini@7.0.0)(json5@2.2.3)(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
       '@anolilab/semantic-release-pnpm':
-        specifier: 8.1.36
-        version: 8.1.36(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)
+        specifier: 8.1.37
+        version: 8.1.37(@visulima/yaml@1.0.0)(json5@2.2.3)(supports-color@7.2.0)
       '@semantic-release/changelog':
         specifier: 7.0.0
         version: 7.0.0(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))
@@ -130,8 +130,8 @@ packages:
     resolution: {integrity: sha512-e3KBrm9Fr2xCmSyKc17cWyL6jOwHJWciiSb6FbRveAmykn0vwYQT1Bf4BJNkuEhCUXNsJL1aN70czA5atzlGzw==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
-  '@anolilab/semantic-release-pnpm@8.1.36':
-    resolution: {integrity: sha512-oPvhZuZ0YlKUSLBpcGvqtmVp61cAXXo0pYUNT3gKF6QE3oCSMy2kLvHDoSGxm6qEcpK2F8VRF5FLXAjcBu10cw==}
+  '@anolilab/semantic-release-pnpm@8.1.37':
+    resolution: {integrity: sha512-Sph1jRQnw3+//dfq5qqAK9Fmim1jvN7KP+EHYtQStMBui2myQha++LbuynT89Ev7WHhGp5Ec6ydni3BpksfVDQ==}
     engines: {node: ^22.14.0 || >=24.10.0}
 
   '@antfu/install-pkg@2.1.0':
@@ -737,28 +737,6 @@ packages:
   '@typescript-eslint/visitor-keys@8.72.1':
     resolution: {integrity: sha512-SB8xqipSzZHUePCCLNeYxqnxq83X61/qzNhjQGbTfjxGZIeOEP7tBgWYX05Tcd6CgE02WdTJnh5b8kMZJ/+bnQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@visulima/fs@5.1.0':
-    resolution: {integrity: sha512-KJmLA9iJAwx+GOhjLT1kcqBhY/s1uOU8eJrBz+TeyZX0h2p5USYKHlNd1p+VaB4/9ltl1MR4oRuXgY5jLP0vOA==}
-    engines: {node: ^22.14.0 || >=24.10.0}
-    os: [darwin, linux, win32]
-    peerDependencies:
-      ini: ^7.0.0
-      json5: ^2.2.3
-      jsonc-parser: ^3.3.1
-      smol-toml: ^1.7.0
-      yaml: '>=2.9.0'
-    peerDependenciesMeta:
-      ini:
-        optional: true
-      json5:
-        optional: true
-      jsonc-parser:
-        optional: true
-      smol-toml:
-        optional: true
-      yaml:
-        optional: true
 
   '@visulima/fs@6.1.0':
     resolution: {integrity: sha512-t+yQaST3uNKYOW3ekZ4wD5jHteDZURiBUu5M3YXoVSNqciTMBpbIsugQlw1TqdIs3cU67uYU65qEQ78IHnGjRA==}
@@ -2812,12 +2790,12 @@ snapshots:
       ini: 7.0.0
       ts-deepmerge: 8.0.0
 
-  '@anolilab/semantic-release-pnpm@8.1.36(json5@2.2.3)(supports-color@7.2.0)(yaml@2.9.1)':
+  '@anolilab/semantic-release-pnpm@8.1.37(@visulima/yaml@1.0.0)(json5@2.2.3)(supports-color@7.2.0)':
     dependencies:
       '@actions/core': 3.0.1
       '@anolilab/rc': 4.0.9
       '@semantic-release/error': 4.0.0
-      '@visulima/fs': 5.1.0(ini@7.0.0)(json5@2.2.3)(yaml@2.9.1)
+      '@visulima/fs': 7.0.0(@visulima/yaml@1.0.0)(ini@7.0.0)(json5@2.2.3)
       '@visulima/package': 5.0.43(ini@7.0.0)
       '@visulima/path': 3.1.0
       debug: 4.4.3(supports-color@7.2.0)
@@ -2829,11 +2807,11 @@ snapshots:
       registry-auth-token: 5.1.1
       semver: 7.8.5
     transitivePeerDependencies:
+      - '@visulima/yaml'
       - json5
       - jsonc-parser
       - smol-toml
       - supports-color
-      - yaml
 
   '@antfu/install-pkg@2.1.0':
     dependencies:
@@ -3492,14 +3470,6 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.72.1
       eslint-visitor-keys: 5.0.1
-
-  '@visulima/fs@5.1.0(ini@7.0.0)(json5@2.2.3)(yaml@2.9.1)':
-    dependencies:
-      '@visulima/path': 3.1.0
-    optionalDependencies:
-      ini: 7.0.0
-      json5: 2.2.3
-      yaml: 2.9.1
 
   '@visulima/fs@6.1.0(@visulima/yaml@1.0.0)(ini@7.0.0)(json5@2.2.3)':
     dependencies:

@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install pnpm
-        uses: pnpm/action-setup@71c92474e7e4f5bca283fb17ef80fba9cdb2b4b1 # v6
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6
         with:
           version: 12
       - name: Setup Node.js
